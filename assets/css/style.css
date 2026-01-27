@@ -488,27 +488,56 @@ body {
     outline: none;
 }
 
-.quick-actions {
-    display: flex;
-    gap: 0.5rem;
+/* MISSION CONTROL BUTTONS */
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
     margin-top: 1rem;
-    flex-wrap: wrap;
+    padding: 0 0.5rem;
 }
 
 .action-btn {
-    background: #111;
-    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.75rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.02);
     color: #888;
-    padding: 0.3rem 0.6rem;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
     cursor: pointer;
     transition: all 0.2s;
+    font-family: var(--font-mono);
+    font-weight: 600;
 }
 
 .action-btn:hover {
+    background: rgba(255,255,255,0.08);
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+.neon-btn:hover {
     border-color: var(--accent-teal);
     color: var(--accent-teal);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+.warning-btn:hover {
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+    box-shadow: 0 0 10px rgba(255, 72, 0, 0.3);
+}
+
+.success-btn:hover {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
 }
 
 /* HERO IMAGE ANIMATIONS */

@@ -90,10 +90,22 @@
                 <input type="text" id="command-input" placeholder="Enter command..." autocomplete="off" autofocus>
             </div>
             
-            <div class="quick-actions">
-                <button class="action-btn" onclick="executeCommand('START_SYSTEM')">START_SYSTEM</button>
-                <button class="action-btn" onclick="executeCommand('RUN_DIAGNOSTICS')">DIAGNOSTICS</button>
-                <button class="action-btn" onclick="executeCommand('DEPLOY_DUNE')">SIM: DUNE_DUST</button>
+            <div class="quick-actions-grid">
+                <button class="action-btn neon-btn" onclick="executeCommand('START_SYSTEM')">
+                    <span class="btn-icon">⚡</span> SYSTEM_INIT
+                </button>
+                <button class="action-btn neon-btn" onclick="executeCommand('RUN_DIAGNOSTICS')">
+                    <span class="btn-icon">🩺</span> DIAGNOSTICS
+                </button>
+                <button class="action-btn neon-btn" onclick="executeCommand('DEPLOY_DUNE')">
+                    <span class="btn-icon">🏜️</span> SIM: DUNE
+                </button>
+                <button class="action-btn neon-btn warning-btn" onclick="executeCommand('CRISIS_MODE')">
+                    <span class="btn-icon">🚨</span> SIM: CRISIS
+                </button>
+                <button class="action-btn neon-btn success-btn" onclick="executeCommand('VIRAL_LOOP')">
+                    <span class="btn-icon">📈</span> SIM: VIRAL
+                </button>
             </div>
         </aside>
     </div>
