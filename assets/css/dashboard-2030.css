@@ -365,3 +365,101 @@
     height: 100px;
     border-top: 1px solid var(--border-color);
 }
+
+/* ============================================
+   VOICE COMMAND INTERFACE
+   ============================================ */
+
+.mic-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 0.5rem;
+    position: relative;
+    transition: all 0.3s;
+    filter: grayscale(100%);
+}
+
+.mic-btn:hover {
+    filter: grayscale(0%);
+    transform: scale(1.1);
+}
+
+.mic-btn.listening {
+    filter: grayscale(0%);
+    animation: mic-pulse 1s infinite alternate;
+}
+
+@keyframes mic-pulse {
+    from { text-shadow: 0 0 10px var(--accent-teal); transform: scale(1); }
+    to { text-shadow: 0 0 20px var(--accent-magenta); transform: scale(1.2); }
+}
+
+.voice-status {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent-magenta);
+    letter-spacing: 2px;
+    margin-top: 0.5rem;
+    animation: blink 1s infinite;
+}
+
+.voice-status.hidden {
+    display: none;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ============================================
+   NEURAL DIAGNOSTICS LAYER
+   ============================================ */
+
+.neural-diagnostics-layer {
+    width: 100%;
+    height: 500px;
+    position: relative;
+    background: rgba(0, 5, 10, 0.5);
+    border: 1px solid rgba(0, 243, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 2rem;
+    display: none; /* Controlled by JS via style.display */
+}
+
+.neural-diagnostics-layer.hidden {
+    display: none !important;
+}
+
+#dashboard-neural-container {
+    width: 100%;
+    height: 100%;
+}
+
+.neural-overlay-stats {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.n-stat {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border-left: 2px solid var(--accent-teal);
+}
+
+.n-stat .highlight {
+    color: var(--accent-teal);
+    font-weight: 700;
+}

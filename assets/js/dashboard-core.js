@@ -22,6 +22,7 @@ class G5Dashboard {
         this.startSystemClock();
         this.startLiveMetrics();
         this.setupEventListeners();
+        this.setupVoiceControl();
         this.renderNodes();
     }
 
@@ -225,6 +226,77 @@ class G5Dashboard {
     }
 
     /* ============================================
+       VOICE COMMAND INTERFACE (V.C.I.)
+       ============================================ */
+    setupVoiceControl() {
+        const micBtn = document.getElementById('voice-command-btn');
+        if (!micBtn) return;
+        
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            this.recognition = new SpeechRecognition();
+            this.recognition.continuous = false;
+            this.recognition.lang = 'en-US';
+            this.recognition.interimResults = false;
+            this.recognition.maxAlternatives = 1;
+
+            this.recognition.onstart = () => {
+                this.isListening = true;
+                micBtn.classList.add('listening');
+                const status = document.getElementById('voice-status');
+                if(status) {
+                    status.classList.remove('hidden');
+                    status.textContent = 'LISTENING...';
+                }
+                // Play Listening Sound
+                this.playSound('open'); 
+            };
+
+            this.recognition.onend = () => {
+                this.isListening = false;
+                micBtn.classList.remove('listening');
+                 const status = document.getElementById('voice-status');
+                if(status) status.classList.add('hidden');
+            };
+
+            this.recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                this.logSystem(`VOICE INPUT DETECTED: "${transcript}"`);
+                
+                // Fill input
+                this.fillInput(transcript);
+                
+                // Auto-execute if confident
+                if (event.results[0][0].confidence > 0.8) {
+                   setTimeout(() => this.executeCommand(transcript), 1000);
+                }
+                
+                this.playSound('success');
+            };
+            
+            this.recognition.onerror = (event) => {
+                 this.logSystem(`VOICE ERROR: ${event.error}`);
+                 this.playSound('error');
+            };
+
+            micBtn.addEventListener('click', () => {
+                if (this.isListening) this.recognition.stop();
+                else this.recognition.start();
+            });
+        } else {
+            micBtn.style.display = 'none';
+            console.log('Voice API not supported');
+        }
+    }
+    
+    playSound(type) {
+        // Simple integration with interactive.js G5Audio if available
+        if (window.G5Audio && window.G5Audio.play) {
+            window.G5Audio.play(type);
+        }
+    }
+
+    /* ============================================
        SYSTEM UTILS
        ============================================ */
     toggleRedTeam() {
@@ -236,19 +308,65 @@ class G5Dashboard {
             this.logSystem('⚠️ RED TEAM PROTOCOL INITIATED. ADVERSARIAL MODE ACTIVE.');
             document.documentElement.style.setProperty('--accent-teal', '#ff4800');
             document.documentElement.style.setProperty('--accent-green', '#ff0000');
+            this.playSound('error'); // Alarm sound
         } else {
             body.classList.remove('red-team-mode');
             this.logSystem('RED TEAM STAND DOWN. NORMAL OPERATIONS RESUMED.');
             document.documentElement.style.setProperty('--accent-teal', '#00f3ff');
             document.documentElement.style.setProperty('--accent-green', '#00ff41');
+            this.playSound('success');
         }
     }
     
     runDiagnostics() {
-        this.logSystem('RUNNING SYSTEM DIAGNOSTICS...');
-        setTimeout(() => this.logSystem('✓ NODES SYNCED'), 500);
-        setTimeout(() => this.logSystem('✓ LATENCY OPTIMIZED'), 1000);
-        setTimeout(() => this.logSystem('✓ MEMORY INTEGRITY CONFIRMED'), 1500);
+        this.logSystem('INITIALIZING NEURAL HOSTING ENVIRONMENT...');
+        
+        const coreView = document.getElementById('core-view');
+        const neuralView = document.getElementById('neural-view');
+        const wfView = document.getElementById('workflow-view');
+        
+        if(coreView) coreView.classList.add('hidden');
+        if(coreView) coreView.style.display = 'none';
+        
+        if(wfView) wfView.classList.add('hidden');
+        if(wfView) wfView.style.display = 'none';
+        
+        if(neuralView) {
+            neuralView.classList.remove('hidden');
+            neuralView.style.display = 'block';
+            
+            // Initialize Neural Network if not already done
+            if (!this.neuralNet) {
+                // Check if NeuralNetwork class is available (from neural-network.js)
+                if (typeof NeuralNetwork !== 'undefined') {
+                    // Slight delay to ensure DOM is ready
+                    setTimeout(() => {
+                         this.neuralNet = new NeuralNetwork('dashboard-neural-container');
+                         this.logSystem('✓ NEURAL FABRIC VISUALIZED');
+                    }, 100);
+                } else {
+                    this.logSystem('⚠ NEURAL SCRIPT NOT LOADED');
+                }
+            }
+        }
+    }
+    
+    toggleView() {
+        // Cycle views: Commander -> Neural -> Commander
+        const neuralView = document.getElementById('neural-view');
+        if (neuralView && neuralView.style.display === 'block') {
+            // Switch back to Commander
+            neuralView.style.display = 'none';
+             const coreView = document.getElementById('core-view');
+             if(coreView) {
+                 coreView.classList.remove('hidden');
+                 coreView.style.display = 'flex';
+             }
+             this.logSystem('VIEW: COMMANDER INTERFACE');
+        } else {
+            // Switch to Diagnostics
+            this.runDiagnostics();
+        }
     }
 
     logSystem(msg) {

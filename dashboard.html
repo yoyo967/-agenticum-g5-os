@@ -25,6 +25,7 @@
     <!-- 2030 EXPERIENCE SCRIPTS -->
     <script src="assets/js/immersive.js" defer></script>
     <script src="assets/js/interactive.js" defer></script>
+    <script src="assets/js/neural-network.js" defer></script>
 
     <!-- TOP BAR: System Status -->
     <header class="console-header">
@@ -182,14 +183,26 @@
                         <label class="input-label">COMMANDER'S INTENT</label>
                         <div class="input-wrapper">
                             <span class="prompt-symbol">&gt;</span>
-                            <input type="text" id="commander-input" class="commander-input" placeholder="Enter strategic directive (e.g. 'Launch Viral Campaign for Tech Product')..." autocomplete="off">
+                            <input type="text" id="commander-input" class="commander-input" placeholder="Enter directive or press MIC..." autocomplete="off">
+                            <button class="mic-btn" id="voice-command-btn" title="Voice Command Protocol">🎙️</button>
                             <button class="execute-btn" id="execute-command-btn">EXECUTE</button>
                         </div>
+                        <div class="voice-status hidden" id="voice-status">LISTENING...</div>
+                        
                         <div class="input-suggestions" id="input-suggestions">
                             <span class="suggestion" data-cmd="Design viral campaign for SaaS launch">Design Viral Campaign</span>
                             <span class="suggestion" data-cmd="Analyze competitor vulnerabilities">Competitor Scan</span>
                             <span class="suggestion" data-cmd="Generate 50 variations of ad copy">Batch Copy Gen</span>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Neural Diagnostics Visualization (New Layer) -->
+                <div class="neural-diagnostics-layer hidden" id="neural-view">
+                    <div id="dashboard-neural-container"></div>
+                    <div class="neural-overlay-stats">
+                        <div class="n-stat">NODES ONLINE: <span class="highlight">52</span></div>
+                        <div class="n-stat">SYNAPSE LOAD: <span class="highlight">84%</span></div>
                     </div>
                 </div>
 
