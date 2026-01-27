@@ -1,5 +1,5 @@
 /**
- * AGENTICUM G5 | LANDING PAGE LOGIC V2.0
+ * AGENTICUM G5 | LANDING PAGE LOGIC V2.1
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,9 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
         });
     });
 });
@@ -41,7 +44,12 @@ function initLandingTerminal() {
         div.className = `line ${lines[i].type || ''}`;
         div.innerHTML = `<span class="prompt">></span> ${lines[i].text}`;
         
-        term.insertBefore(div, term.querySelector('.cursor'));
+        const cursor = term.querySelector('.cursor');
+        if (cursor) {
+            term.insertBefore(div, cursor);
+        } else {
+            term.appendChild(div);
+        }
         i++;
         term.scrollTop = term.scrollHeight;
     }, 1200);
@@ -51,7 +59,7 @@ function initManifestoTyping() {
     const lead = document.querySelector('.manifesto-lead');
     if (!lead) return;
 
-    const text = lead.innerText;
+    const text = "We have pulverized the era of tools.";
     lead.innerText = '';
     let i = 0;
 

@@ -5,7 +5,7 @@
  */
 
 const GENESIS_ASSETS_DATA = [
-    { id: 'GEN_MANIFESTO', name: 'MANIFESTO_V5.md', type: 'text', content: 'Die Architektur des Willens: Wir lizenzieren eine Zivilisation.' },
+    { id: 'GEN_MANIFESTO', name: 'MANIFESTO_V5.md', type: 'text', content: 'The Architecture of Will: We license a civilization.' },
     { id: 'GEN_VEO_PROMPT', name: 'VEO_CINEMATIC.prompt', type: 'video', content: 'Cinematic Noir, Obsidian Pulse Shard, 8k.' },
     { id: 'GEN_SOCIAL_PACK', name: 'VIRAL_HOOKS.json', type: 'data', content: 'Don\'t hire an agency. #GeminiHackathon' }
 ];
@@ -31,7 +31,7 @@ async function initHackathonDemo() {
     const nodes = ['SN-00', 'RA-01', 'SP-99', 'CC-01', 'CC-06', 'MI-01'];
     for (const node of nodes) {
         activateNode(node);
-        writeToTerminal(`>> Node ${node} processing kognitive layer...`, 'node');
+        writeToTerminal(`>> Node ${node} processing cognitive layer...`, 'node');
         if(visualizer) visualizer.triggerPulse();
         await wait(600);
         deactivateNode(node);
@@ -105,7 +105,7 @@ function showCampaignResults() {
     resultsDiv.innerHTML = `
         <div class="result-card" style="border: 2px solid #ff00ff;">
             <h3 style="color:#ff00ff">GENESIS ASSETS READY</h3>
-            <p>Die Assets wurden in Ihren <strong>// ASSET_VAULT</strong> übertragen.</p>
+            <p>Assets have been transferred to your <strong>// ASSET_VAULT</strong>.</p>
             <div class="veo-preview-mock">
                     <div class="obsidian-monolith-visual"></div>
             </div>
