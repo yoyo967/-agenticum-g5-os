@@ -346,6 +346,145 @@
         </aside>
     </div>
 
+    <!-- ENTERPRISE WORKFLOWS PANEL (FLOATING) -->
+    <div class="workflows-panel" id="workflowsPanel">
+        <div class="workflows-panel-header">
+            <h3>// ENTERPRISE_WORKFLOWS</h3>
+            <button class="workflows-toggle" id="workflowsToggle" title="Toggle Workflows">⚡</button>
+        </div>
+        <div class="workflows-panel-content" id="workflowsContent">
+            <!-- Workflow 1: 5-Minute Agency -->
+            <div class="workflow-item" data-workflow="5min-agency">
+                <div class="wf-header">
+                    <span class="wf-icon">⚡</span>
+                    <span class="wf-name">5-MINUTE AGENCY</span>
+                    <span class="wf-status ready">READY</span>
+                </div>
+                <p class="wf-desc">Briefing → Assets in minutes</p>
+                <div class="wf-actions">
+                    <button class="wf-btn start" onclick="WorkflowEngine.start('5min-agency')">START</button>
+                </div>
+            </div>
+
+            <!-- Workflow 2: Algorithmic Senate -->
+            <div class="workflow-item" data-workflow="senate">
+                <div class="wf-header">
+                    <span class="wf-icon">⚖️</span>
+                    <span class="wf-name">ALGORITHMIC SENATE</span>
+                    <span class="wf-status ready">READY</span>
+                </div>
+                <p class="wf-desc">Ethics • Economics • Ecology</p>
+                <div class="wf-actions">
+                    <button class="wf-btn start" onclick="WorkflowEngine.start('senate')">START</button>
+                </div>
+            </div>
+
+            <!-- Workflow 3: Narrative Morphosis -->
+            <div class="workflow-item" data-workflow="morphosis">
+                <div class="wf-header">
+                    <span class="wf-icon">🔄</span>
+                    <span class="wf-name">NARRATIVE MORPHOSIS</span>
+                    <span class="wf-status ready">READY</span>
+                </div>
+                <p class="wf-desc">Data → Multi-channel content</p>
+                <div class="wf-actions">
+                    <button class="wf-btn start" onclick="WorkflowEngine.start('morphosis')">START</button>
+                </div>
+            </div>
+
+            <!-- Workflow 4: Just-in-Time Reality -->
+            <div class="workflow-item" data-workflow="jit-reality">
+                <div class="wf-header">
+                    <span class="wf-icon">🔮</span>
+                    <span class="wf-name">JUST-IN-TIME REALITY</span>
+                    <span class="wf-status ready">READY</span>
+                </div>
+                <p class="wf-desc">Market scan → Opportunity alerts</p>
+                <div class="wf-actions">
+                    <button class="wf-btn start" onclick="WorkflowEngine.start('jit-reality')">START</button>
+                </div>
+            </div>
+
+            <!-- Workflow 5: Autopoiesis -->
+            <div class="workflow-item" data-workflow="autopoiesis">
+                <div class="wf-header">
+                    <span class="wf-icon">🔧</span>
+                    <span class="wf-name">AUTOPOIESIS</span>
+                    <span class="wf-status active">ACTIVE 24/7</span>
+                </div>
+                <p class="wf-desc">Self-healing system protocols</p>
+                <div class="wf-actions">
+                    <button class="wf-btn monitor" onclick="WorkflowEngine.monitor('autopoiesis')">MONITOR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WORKFLOW EXECUTION MODAL -->
+    <div class="workflow-modal hidden" id="workflowModal">
+        <div class="workflow-modal-content">
+            <div class="wfm-header">
+                <div class="wfm-title">
+                    <span class="wfm-icon" id="wfmIcon">⚡</span>
+                    <h3 id="wfmName">5-MINUTE AGENCY</h3>
+                </div>
+                <button class="wfm-close" onclick="WorkflowEngine.close()">✕</button>
+            </div>
+            
+            <div class="wfm-body">
+                <!-- Input Section -->
+                <div class="wfm-input-section" id="wfmInputSection">
+                    <label class="wfm-label">INPUT BRIEFING</label>
+                    <textarea class="wfm-textarea" id="wfmInput" placeholder="Enter your briefing, paste content, or describe your objective..."></textarea>
+                    <div class="wfm-input-actions">
+                        <button class="wfm-upload" onclick="WorkflowEngine.uploadFile()">📎 UPLOAD FILE</button>
+                        <input type="file" id="wfmFileInput" class="hidden" accept=".txt,.pdf,.doc,.docx">
+                        <button class="wfm-execute" id="wfmExecute" onclick="WorkflowEngine.execute()">EXECUTE WORKFLOW →</button>
+                    </div>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="wfm-progress-section hidden" id="wfmProgressSection">
+                    <div class="wfm-progress-header">
+                        <span class="wfm-progress-label">WORKFLOW EXECUTION</span>
+                        <span class="wfm-progress-percent" id="wfmPercent">0%</span>
+                    </div>
+                    <div class="wfm-progress-bar">
+                        <div class="wfm-progress-fill" id="wfmProgressFill"></div>
+                    </div>
+                    
+                    <div class="wfm-steps" id="wfmSteps">
+                        <!-- Steps will be populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Output Section -->
+                <div class="wfm-output-section hidden" id="wfmOutputSection">
+                    <label class="wfm-label">GENERATED OUTPUT</label>
+                    <div class="wfm-output" id="wfmOutput">
+                        <!-- Output will appear here -->
+                    </div>
+                    <div class="wfm-output-actions">
+                        <button class="wfm-copy" onclick="WorkflowEngine.copyOutput()">📋 COPY</button>
+                        <button class="wfm-download" onclick="WorkflowEngine.downloadOutput()">⬇ DOWNLOAD</button>
+                        <button class="wfm-new" onclick="WorkflowEngine.reset()">↻ NEW EXECUTION</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wfm-footer">
+                <div class="wfm-nodes">
+                    <span class="wfm-node-label">ACTIVE NODES:</span>
+                    <div class="wfm-node-list" id="wfmNodes">
+                        <span class="wfm-node">SN-00</span>
+                        <span class="wfm-node">SP-01</span>
+                        <span class="wfm-node">CC-01</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- 
@@ -426,6 +565,8 @@
     <script src="assets/js/command-interface.js?v=ENTERPRISE_V1"></script>
     <!-- JURY MODE / HACKATHON DEMO -->
     <script src="assets/js/jury-mode.js?v=ENTERPRISE_V1"></script>
+    <!-- ENTERPRISE WORKFLOWS ENGINE -->
+    <script src="assets/js/workflow-engine.js?v=WORKFLOWS_V1"></script>
     <!-- CORE DASHBOARD LOGIC -->
     <script src="assets/js/dashboard-core.js?v=ENTERPRISE_V1"></script>
 </body>
