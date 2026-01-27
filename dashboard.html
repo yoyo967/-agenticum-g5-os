@@ -10,6 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/future-2030.css">
+    <link rel="stylesheet" href="assets/css/dashboard-2030.css">
+    <link rel="stylesheet" href="assets/css/immersive.css">
+    <link rel="stylesheet" href="assets/css/interactive.css">
 </head>
 <body class="console-body">
     <!-- Visual Overlays -->
@@ -17,6 +21,10 @@
     <div class="scan-line"></div>
     <div class="vignette"></div>
     <canvas id="dashboard-particles"></canvas>
+
+    <!-- 2030 EXPERIENCE SCRIPTS -->
+    <script src="assets/js/immersive.js" defer></script>
+    <script src="assets/js/interactive.js" defer></script>
 
     <!-- TOP BAR: System Status -->
     <header class="console-header">
@@ -145,68 +153,88 @@
         </aside>
 
         <!-- CENTER PANEL: WAR ROOM (VISUALIZATION) -->
+        <!-- CENTER PANEL: HEGEMONY COMMAND CENTER -->
         <main class="panel center-panel">
             <div class="panel-header center-header">
                 <div class="header-title">
-                    <h2>HEGEMONY_MATRIX</h2>
-                    <span class="subtitle">// WAR_ROOM</span>
+                    <h2>// HEGEMONY_COMMAND</h2>
+                    <span class="subtitle">ORCHESTRATION LAYER</span>
                 </div>
                 <div class="header-actions">
-                    <button class="header-btn" onclick="toggleFullscreen()">
-                        <span>⛶</span>
-                    </button>
+                    <button class="header-btn" title="Initiate Red Team Attack" onclick="G5Dashboard.toggleRedTeam()">🛡️ RED_TEAM</button>
+                    <button class="header-btn" title="System Diagnostics" onclick="G5Dashboard.runDiagnostics()">⚙️ DIAGNOSTICS</button>
+                    <button class="header-btn active" title="Switch View" onclick="G5Dashboard.toggleView()">👁️ VIEW</button>
                 </div>
             </div>
-            
-            <div class="war-room-display" id="war-room-display">
-                <div class="map-overlay">
-                    <div class="strategy-canvas" id="strategy-canvas">
-                        <!-- Center Core -->
-                        <div class="center-core">
-                            <div class="core-ring ring-1"></div>
-                            <div class="core-ring ring-2"></div>
-                            <div class="core-ring ring-3"></div>
-                            <div class="core-center">
-                                <span class="core-id">SN-00</span>
-                            </div>
+
+            <div class="commander-interface">
+                <!-- Central Core Visualization or Input -->
+                <div class="commander-core-view" id="core-view">
+                    <div class="core-center pulsing">
+                        <span class="core-logo">G5</span>
+                    </div>
+                    <div class="orbit-ring r1"></div>
+                    <div class="orbit-ring r2"></div>
+                    <div class="orbit-ring r3"></div>
+                    
+                    <!-- Dynamic Input Interface -->
+                    <div class="commander-input-container">
+                        <label class="input-label">COMMANDER'S INTENT</label>
+                        <div class="input-wrapper">
+                            <span class="prompt-symbol">&gt;</span>
+                            <input type="text" id="commander-input" class="commander-input" placeholder="Enter strategic directive (e.g. 'Launch Viral Campaign for Tech Product')..." autocomplete="off">
+                            <button class="execute-btn" id="execute-command-btn">EXECUTE</button>
                         </div>
-                        <div class="radar-sweep"></div>
-                        
-                        <!-- Connection Lines -->
-                        <svg class="connection-layer" id="connection-layer">
-                            <!-- Dynamic connections drawn by JS -->
-                        </svg>
+                        <div class="input-suggestions" id="input-suggestions">
+                            <span class="suggestion" data-cmd="Design viral campaign for SaaS launch">Design Viral Campaign</span>
+                            <span class="suggestion" data-cmd="Analyze competitor vulnerabilities">Competitor Scan</span>
+                            <span class="suggestion" data-cmd="Generate 50 variations of ad copy">Batch Copy Gen</span>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="active-operation-card" id="active-op-card">
-                    <div class="op-header">
-                        <div class="op-id-container">
-                            <span class="op-label">OPERATION</span>
-                            <span class="op-id">OP-ID: NULL</span>
-                        </div>
-                        <span class="op-status standby">STANDBY</span>
+
+                <!-- Active Workflow Visualization (Hidden by default) -->
+                <div class="workflow-visualizer hidden" id="workflow-view">
+                    <div class="workflow-status">
+                        <span class="wf-label">ACTIVE PROTOCOL:</span>
+                        <span class="wf-name" id="active-workflow-name">CAMPAIGN_GENESIS_V4</span>
+                        <span class="wf-progress">PROCESSING</span>
                     </div>
-                    <div class="op-content">
-                        <p class="placeholder-text">AWAITING INPUT COMMAND...</p>
-                        <div class="op-progress" style="display:none;">
-                            <div class="progress-bar"></div>
-                        </div>
-                    </div>
-                    <div class="op-footer">
-                        <span class="op-timestamp" id="op-timestamp">--:--:--</span>
+                    <div class="node-pipeline" id="node-pipeline">
+                        <!-- Dynamic Pipeline Steps -->
                     </div>
                 </div>
             </div>
 
-            <div class="log-stream-container">
+            <!-- ASSET VAULT (RESULTS) -->
+            <div class="asset-vault-section">
+                <div class="vault-header">
+                    <h4>// ASSET_VAULT (GENERATED OUTPUTS)</h4>
+                    <div class="vault-filters">
+                        <span class="filter active" data-filter="all">ALL</span>
+                        <span class="filter" data-filter="video">VIDEO</span>
+                        <span class="filter" data-filter="image">IMAGE</span>
+                        <span class="filter" data-filter="text">TEXT</span>
+                    </div>
+                </div>
+                <div class="vault-grid" id="asset-vault-grid">
+                    <!-- Example Empty State -->
+                    <div class="empty-state">
+                        <span class="empty-icon">📂</span>
+                        <span>Awaiting Generation Output...</span>
+                        <span class="empty-sub">Execute a command to start generation.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Live Reasoning Log (Compact) -->
+             <div class="log-stream-container compact-log">
                 <div class="log-header">
-                    <span class="log-title">// ACTIVITY_LOG</span>
+                    <span class="log-title">// LIVE_REASONING_TRACE</span>
                     <button class="log-clear-btn" onclick="clearLog()">CLEAR</button>
                 </div>
                 <div class="log-stream" id="log-stream">
-                    <div class="log-entry"><span class="time">09:14:00</span> <span class="sys">[SYS]</span> ENCLOSURE SEALED. SYSTEM READY.</div>
-                    <div class="log-entry"><span class="time">09:14:01</span> <span class="node">[SN-00]</span> Orchestrator online. Awaiting directives.</div>
+                    <div class="log-entry"><span class="time">NOW</span> <span class="sys">[SYS]</span> Command Center Online.</div>
                 </div>
             </div>
         </main>
@@ -301,11 +329,15 @@
         </div>
     </div>
 
+    <!-- 
     <script src="assets/js/nodes.js?v=2.0"></script>
     <script src="assets/js/visualizer.js?v=2.0"></script>
     <script src="assets/js/g5_api.js?v=2.0"></script>
     <script src="assets/js/app.js?v=2.0"></script>
     <script src="assets/js/g5_core_v4.js?v=4.2"></script>
     <script src="assets/js/dashboard-enhancements.js?v=1.0"></script>
+    -->
+    <!-- CORE DASHBOARD LOGIC -->
+    <script src="assets/js/dashboard-core.js"></script>
 </body>
 </html>
