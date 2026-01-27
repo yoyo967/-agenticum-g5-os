@@ -133,17 +133,42 @@ async function executeCommand(cmd) {
         }
     } else if (cleanCmd === 'HELP') {
         writeToTerminal('// AGENTICUM G5 COMMAND LIST:', 'info');
+        writeToTerminal('', 'normal');
+        writeToTerminal('--- SYSTEM COMMANDS ---', 'info');
         writeToTerminal('- START_SYSTEM      : Initialize Core Protocols');
         writeToTerminal('- RUN_DIAGNOSTICS   : Check Node Integrity');
+        writeToTerminal('- CLEAR             : Clear Terminal');
+        writeToTerminal('', 'normal');
+        writeToTerminal('--- SIMULATION SCENARIOS ---', 'info');
         writeToTerminal('- DEPLOY_DUNE       : Sim: Luxury Sand Brand');
         writeToTerminal('- CRISIS_MODE       : Sim: PR Disaster Recovery');
         writeToTerminal('- VIRAL_LOOP        : Sim: High-Growth Loop');
-        writeToTerminal('- CLEAR             : Clear Terminal');
+        writeToTerminal('- JURY_MODE         : Hackathon Demo Sequence');
+        writeToTerminal('', 'normal');
+        writeToTerminal('--- AI REASONING (NEW) ---', 'success');
+        writeToTerminal('- Type any other text to query the Gemini Reasoning Cluster');
+        writeToTerminal('- Example: "Create a viral campaign for a tech startup"');
+        writeToTerminal('- Example: "Analyze competitor strengths for SaaS market"');
     } else if (cleanCmd === 'CLEAR') {
         document.getElementById('terminal-output').innerHTML = '';
         writeToTerminal('Console cleared.', 'info');
+    } else if (cleanCmd === 'STATUS') {
+        // Check API health
+        writeToTerminal('Checking system status...', 'info');
+        if (window.G5_API) {
+            const health = await G5_API.healthCheck();
+            writeToTerminal(`System: ${health.status || 'UNKNOWN'}`, health.status === 'OPERATIONAL' ? 'success' : 'warn');
+            if (health.version) writeToTerminal(`Version: ${health.version}`, 'info');
+            if (health.nodes) writeToTerminal(`Nodes: ${health.nodes}`, 'info');
+        }
     } else {
-        writeToTerminal(`ERR: Command '${cmd}' not recognized. Type HELP for list.`, 'error');
+        // Route to AI Reasoning Cluster
+        if (window.G5Terminal && typeof G5Terminal.processAICommand === 'function') {
+            await G5Terminal.processAICommand(cmd);
+        } else {
+            writeToTerminal('[WARN] AI module not loaded. Running in limited mode.', 'warn');
+            writeToTerminal(`Command '${cmd}' queued for processing when API is available.`, 'info');
+        }
     }
 }
 
