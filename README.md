@@ -28,10 +28,11 @@ The system is NOT a chatbot. It is a decision engine organized into 7 clusters:
 
 ## ⚡ FEATURES
 
-- **Reasoning Trace**: Visualizes the "Chain of Thought" in real-time.
-- **Sovereign Enclosure**: Privacy-first architecture (GDPR compliant).
-- **Multimodal Native**: Text, Code, Video (Veo), and Audio (Flash) orchestration.
-- **War Room Visualizer**: Real-time neural activity monitoring.
+- **Reasoning Trace**: Live visualization of the "Chain of Thought" using Gemini 3 Pro Thinking Config.
+- **Sovereign Enclosure**: Privacy-first GCP architecture (Frankfurt Enclave).
+- **Jury Mode Protocol**: Automated end-to-end campaign generation tailored for the Gemini API Competition criteria.
+- **Multimodal Native**: Orchestrates Veo 3.1 (Video), Flash Audio (Voice), and Imagen 3 (Visuals).
+- **War Room Visualizer**: Real-time neural monitoring of agent connections.
 
 ## 🛠️ INSTALLATION & DEPLOYMENT
 

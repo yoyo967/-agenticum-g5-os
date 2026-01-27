@@ -1,34 +1,50 @@
+/**
+ * AGENTICUM G5 | LANDING PAGE LOGIC
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
     initLandingTerminal();
+    
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
 });
 
 function initLandingTerminal() {
-    const terminal = document.getElementById('landing-terminal');
-    // Clear initial static content if you want to animate from scratch, 
-    // but the HTML has some static lines. Let's add more dynamically.
+    const term = document.getElementById('landing-terminal');
+    if (!term) return;
 
-    const sequence = [
-        { text: '> DETECTING OPERATOR...', delay: 1000 },
-        { text: '> IDENTITY CONFIRMED: YAHYA YILDIRIM', delay: 2000 },
-        { text: '> LOADING AGENTICUM G5 PROTOCOLS...', delay: 3000 },
-        { text: '> [SN-00] ORCHESTRATOR ONLINE', delay: 4000 },
-        { text: '> WAITING FOR COMMAND.', delay: 5000 }
+    const lines = [
+        { text: '>> AGENTICUM_G5_CORE_BOOT: READY', type: 'success' },
+        { text: '>> LOADING_REASONING_CLUSTER... OK', type: 'info' },
+        { text: '>> ATTACHING_52_NODES... OK', type: 'info' },
+        { text: '>> TARGET_ACQUIRED: GOOGLE_DEEPMIND_HACKATHON', type: 'warn' },
+        { text: '>> MISSION: LICENSE_A_CIVILIZATION', type: 'success' },
+        { text: '>> SYSTEM_STATUS: MAXIMUM_EXCELLENCE', type: 'info' }
     ];
 
-    let delayAccumulator = 0;
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i >= lines.length) {
+            clearInterval(interval);
+            return;
+        }
 
-    sequence.forEach(step => {
-        delayAccumulator += step.delay;
-        setTimeout(() => {
-            const lines = terminal.querySelectorAll('.line');
-            if(lines.length > 8) lines[0].remove(); // Keep it clean
-
-            const div = document.createElement('div');
-            div.className = 'line';
-            div.innerHTML = `<span class="prompt">></span> ${step.text}`;
-            // Insert before the cursor
-            const cursor = terminal.querySelector('.cursor').parentNode;
-            terminal.insertBefore(div, cursor);
-        }, delayAccumulator);
-    });
+        const div = document.createElement('div');
+        div.className = `line ${lines[i].type || ''}`;
+        div.innerHTML = `<span class="prompt">></span> ${lines[i].text}`;
+        
+        // Insert before the cursor
+        term.insertBefore(div, term.querySelector('.cursor'));
+        i++;
+        
+        // Auto-scroll terminal
+        term.scrollTop = term.scrollHeight;
+    }, 1200);
 }
