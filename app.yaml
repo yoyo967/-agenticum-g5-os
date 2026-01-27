@@ -1,0 +1,14 @@
+runtime: nodejs18
+service: default
+handlers:
+  - url: /
+    static_files: index.html
+    upload: index.html
+  - url: /dashboard.html
+    static_files: dashboard.html
+    upload: dashboard.html
+  - url: /assets
+    static_dir: assets
+  - url: /(.*)
+    static_files: index.html
+    upload: index.html
