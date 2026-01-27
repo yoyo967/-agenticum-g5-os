@@ -383,19 +383,74 @@ class G5Dashboard {
     }
 
     renderNodes() {
-        // Simple visual filler for left panel node grids if they are empty
         const clusters = ['strategy-nodes', 'creation-nodes', 'intel-nodes'];
         clusters.forEach(id => {
             const el = document.getElementById(id);
-            if (el && el.children.length === 0) {
+            if (el) {
+                el.innerHTML = ''; // Clear to prevent dupes
                 for(let i=0; i<6; i++) {
                     const node = document.createElement('div');
                     node.className = 'node-dot';
-                    node.style.cssText = `width: 8px; height: 8px; background: var(--accent-teal); border-radius: 50%; opacity: 0.5; margin: 2px; box-shadow: 0 0 5px var(--accent-teal);`;
+                    const nodeId = `SN-${Math.floor(Math.random()*90)+10}`;
+                    node.title = `${nodeId}: Click to Configure`;
+                    // CSS for interaction
+                    node.style.cssText = `width: 10px; height: 10px; background: var(--accent-teal); border-radius: 50%; border: 1px solid rgba(0,0,0,0.5); opacity: 0.6; margin: 3px; cursor: pointer; transition: all 0.2s;`;
+                    
+                    node.addEventListener('mouseenter', () => node.style.transform = 'scale(1.5)');
+                    node.addEventListener('mouseleave', () => node.style.transform = 'scale(1)');
+                    node.addEventListener('click', () => this.openNodeConfig(nodeId));
+                    
                     el.appendChild(node);
                 }
             }
         });
+    }
+    
+    /* ============================================
+       MODAL & CONFIGURATION LOGIC
+       ============================================ */
+    openNodeConfig(nodeId) {
+        const modal = document.getElementById('node-config-modal');
+        const title = document.getElementById('modal-node-id');
+        if (modal && title) {
+            title.innerHTML = `// NODE_CONFIG: <span class="highlight">${nodeId}</span>`;
+            modal.classList.remove('hidden');
+            this.playSound('open');
+        }
+    }
+    
+    closeModal() {
+        document.querySelectorAll('.overlay-modal').forEach(el => el.classList.add('hidden'));
+        this.playSound('close');
+    }
+    
+    saveNodeConfig() {
+        this.logSystem('✓ NODE CONFIGURATION UPDATED');
+        this.closeModal();
+    }
+    
+    /* ============================================
+       FILE UPLOAD LOGIC
+       ============================================ */
+    handleUpload(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            this.logSystem(`INITIATING UPLOAD: ${file.name} (${(file.size/1024).toFixed(1)} KB)...`);
+            
+            setTimeout(() => {
+                this.logSystem('✓ UPLOAD COMPLETE. ASSET INDEXED.');
+                
+                // Add to Vault
+                this.assets.unshift({
+                    id: `FILE_${Math.floor(Math.random()*1000)}`,
+                    type: file.type.includes('image') ? 'image' : 'text',
+                    title: file.name,
+                    date: new Date().toLocaleTimeString()
+                });
+                this.renderVault();
+                this.playSound('success');
+            }, 1000);
+        }
     }
 
     startSystemClock() {

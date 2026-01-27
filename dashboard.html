@@ -222,12 +222,26 @@
             <!-- ASSET VAULT (RESULTS) -->
             <div class="asset-vault-section">
                 <div class="vault-header">
-                    <h4>// ASSET_VAULT (GENERATED OUTPUTS)</h4>
-                    <div class="vault-filters">
-                        <span class="filter active" data-filter="all">ALL</span>
-                        <span class="filter" data-filter="video">VIDEO</span>
-                        <span class="filter" data-filter="image">IMAGE</span>
-                        <span class="filter" data-filter="text">TEXT</span>
+                    <h4>// ASSET_VAULT</h4>
+                    
+                    <!-- NEW: PRO ASSET TOOLS -->
+                    <div class="vault-tools">
+                        <button class="tool-btn" title="Upload Reference" onclick="document.getElementById('file-upload').click()">
+                            <span>📤 UPLOAD</span>
+                        </button>
+                        <input type="file" id="file-upload" style="display:none" onchange="G5Dashboard.handleUpload(this)">
+                        
+                        <select class="tool-select">
+                            <option>ALL FORMATS</option>
+                            <option>MP4 (Video)</option>
+                            <option>PNG (Image)</option>
+                            <option>TXT (Copy)</option>
+                            <option>JSON (Data)</option>
+                        </select>
+                        
+                        <button class="tool-btn action" id="batch-download-btn" title="Batch Download Selected">
+                            <span>⬇ BATCH DL</span>
+                        </button>
                     </div>
                 </div>
                 <div class="vault-grid" id="asset-vault-grid">
@@ -350,6 +364,47 @@
     <script src="assets/js/g5_core_v4.js?v=4.2"></script>
     <script src="assets/js/dashboard-enhancements.js?v=1.0"></script>
     -->
+    <!-- NODE CONFIGURATION MODAL -->
+    <div class="overlay-modal hidden" id="node-config-modal">
+        <div class="modal-panel">
+            <div class="modal-header">
+                <h3 id="modal-node-id">// NODE_CONFIG: <span class="highlight">SN-00</span></h3>
+                <button class="modal-close" onclick="G5Dashboard.closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="config-group">
+                    <label>OPERATIONAL STATUS</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="node-status-toggle" checked>
+                        <span class="slider round"></span>
+                    </div>
+                </div>
+                <div class="config-group">
+                    <label>CREATIVITY INDEX (TEMP)</label>
+                    <input type="range" min="0" max="100" value="70" class="range-slider" id="node-temp">
+                    <span class="range-value">0.7</span>
+                </div>
+                <div class="config-group">
+                    <label>MODEL BACKEND</label>
+                    <select class="config-select">
+                        <option>Gemini 3 Pro (Reasoning)</option>
+                        <option>Gemini 2 Flash (Speed)</option>
+                        <option>Imagen 3 (Visual)</option>
+                        <option>Veo (Video)</option>
+                    </select>
+                </div>
+                <div class="config-group">
+                    <label>CUSTOM INSTRUCTION</label>
+                    <textarea class="config-textarea" placeholder="Override system prompt for this node..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="G5Dashboard.closeModal()">CANCEL</button>
+                <button class="btn-primary" onclick="G5Dashboard.saveNodeConfig()">APPLY CONFIG</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- CORE DASHBOARD LOGIC -->
     <script src="assets/js/dashboard-core.js"></script>
 </body>

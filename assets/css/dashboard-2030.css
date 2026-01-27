@@ -4,6 +4,48 @@
  */
 
 /* ============================================
+   HYPER-PROFESSIONAL "OBSIDIAN" THEME (ZEN MODE)
+   ============================================ */
+:root {
+    --bg-core: #050505;
+    --bg-panel: #0a0a0a;
+    --bg-surface: #111111;
+    --border-color: #2a2a2a;
+    
+    /* Muted accents for professional use */
+    --accent-teal: #00a3bf; 
+    --accent-magenta: #bf007a;
+    
+    /* Typography for data density */
+    --font-ui: 'Inter', system-ui, sans-serif;
+}
+
+/* ZEN MODE: Reduce motion to zero unless interacting */
+.orbit-ring, .pulsing, .core-center {
+    animation-play-state: paused !important;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+/* "Wake up" the system on hover */
+.commander-interface:hover .orbit-ring,
+.commander-interface:hover .pulsing,
+.commander-interface:hover .core-center {
+    animation-play-state: running !important;
+    opacity: 1;
+}
+
+.panel {
+    background: var(--bg-panel) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: none !important; /* Flat design for utilitarian feel */
+}
+
+.commander-interface {
+    background: none !important; /* Remove ambient glow */
+}
+
+/* ============================================
    COMMANDER INTERFACE (CENTER PANEL)
    ============================================ */
 
@@ -459,7 +501,185 @@
     border-left: 2px solid var(--accent-teal);
 }
 
-.n-stat .highlight {
-    color: var(--accent-teal);
-    font-weight: 700;
+
+/* ============================================
+   ASSET VAULT TOOLBAR
+   ============================================ */
+
+.vault-tools {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 }
+
+.tool-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.4rem 0.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+}
+
+.tool-btn:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: var(--accent-teal);
+    color: white;
+}
+
+.tool-btn.action {
+    background: rgba(0, 163, 191, 0.1);
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+}
+
+.tool-btn.action:hover {
+    background: var(--accent-teal);
+    color: black;
+}
+
+.tool-select {
+    background: #000;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    border-radius: 4px;
+}
+
+/* ============================================
+   MODALS & OVERLAYS
+   ============================================ */
+
+.overlay-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    z-index: 20000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-modal.hidden {
+    display: none;
+}
+
+.modal-panel {
+    width: 500px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-panel);
+}
+
+.modal-header h3 {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: white;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.modal-close:hover { color: white; }
+
+.modal-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.config-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.config-group label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent-teal);
+    letter-spacing: 1px;
+}
+
+.config-select, .config-textarea {
+    width: 100%;
+    background: #050505;
+    border: 1px solid var(--border-color);
+    color: white;
+    padding: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    border-radius: 4px;
+}
+
+.config-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: var(--bg-panel);
+}
+
+.btn-primary {
+    background: var(--accent-teal);
+    color: black;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #888;
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1.5rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-secondary:hover { border-color: #666; color: white; }
+
+/* Range Slider */
+.range-slider {
+    width: 100%;
+    
+}
+
