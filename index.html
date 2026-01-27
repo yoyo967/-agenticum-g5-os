@@ -27,26 +27,78 @@
     <link rel="stylesheet" href="assets/css/million-dollar.css" />
     <link rel="stylesheet" href="assets/css/future-2030.css" />
     <link rel="stylesheet" href="assets/css/immersive.css" />
+    <!-- ENTERPRISE PROFESSIONAL THEME -->
+    <link rel="stylesheet" href="assets/css/landing-enterprise.css" />
+    <!-- MILLION DOLLAR V2.0 -->
+    <link rel="stylesheet" href="assets/css/million-dollar-v2.css" />
   </head>
-  <body class="landing-body">
-    <div class="crt-overlay"></div>
-    <div class="noise-overlay"></div>
+  <body class="landing-body premium-mode">
+    <!-- PREMIUM LOADING SCREEN -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loader-content">
+        <div class="loader-logo">
+          <span class="loader-text">AGENTICUM</span>
+          <span class="loader-version">G5</span>
+        </div>
+        <div class="loader-bar">
+          <div class="loader-progress" id="loaderProgress"></div>
+        </div>
+        <div class="loader-status">INITIALIZING SYSTEM...</div>
+      </div>
+    </div>
+
+    <!-- ANIMATED GRADIENT BACKGROUND -->
+    <canvas id="gradient-canvas"></canvas>
+    
+    <!-- SUBTLE OVERLAYS -->
     <div class="grid-overlay"></div>
     <canvas id="particle-canvas"></canvas>
 
+    <!-- SECTION DOTS NAVIGATION -->
+    <nav class="section-dots" id="sectionDots">
+      <a href="#hero" class="dot active" data-section="hero" title="Hero"></a>
+      <a href="#manifesto" class="dot" data-section="manifesto" title="Manifesto"></a>
+      <a href="#capabilities" class="dot" data-section="capabilities" title="Capabilities"></a>
+      <a href="#demo" class="dot" data-section="demo" title="Demo"></a>
+      <a href="#perfect-twin" class="dot featured" data-section="perfect-twin" title="The Perfect Twin"></a>
+      <a href="#roadmap" class="dot" data-section="roadmap" title="Roadmap"></a>
+      <a href="#cta" class="dot" data-section="cta" title="Get Started"></a>
+    </nav>
+
     <header class="landing-header">
-      <div class="logo">AGENTICUM <span class="version">G5</span></div>
+      <div class="logo-container">
+        <div class="logo">AGENTICUM <span class="version">G5</span><sup class="trademark">™</sup></div>
+        <div class="logo-slogan">THE PERFECT TWIN</div>
+      </div>
       <nav>
         <a href="#manifesto" class="nav-link">MANIFESTO</a>
         <a href="#capabilities" class="nav-link">CAPABILITIES</a>
-        <a href="#architecture" class="nav-link">ARCHITECTURE</a>
+        <a href="#perfect-twin" class="nav-link featured-nav">THE TWIN</a>
+        <a href="#roadmap" class="nav-link">ROADMAP</a>
         <a href="dashboard.html" class="cta-button">ENTER CONSOLE</a>
       </nav>
     </header>
 
+    <!-- FLOATING SIDE NAVIGATION -->
+    <nav class="floating-nav">
+      <button class="float-btn scroll-top" id="scrollTopBtn" title="Scroll to Top">
+        <span class="float-icon">↑</span>
+        <span class="float-label">TOP</span>
+      </button>
+      <div class="float-divider"></div>
+      <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+      </div>
+      <div class="float-divider"></div>
+      <button class="float-btn scroll-bottom" id="scrollBottomBtn" title="Scroll to Bottom">
+        <span class="float-icon">↓</span>
+        <span class="float-label">END</span>
+      </button>
+    </nav>
+
     <main>
       <!-- HERO SECTION -->
-      <section class="hero-section">
+      <section id="hero" class="hero-section">
         <div class="hero-content">
           <!-- Trust Badge -->
           <div class="trust-badge">
@@ -96,32 +148,39 @@
             </div>
           </div>
         </div>
-        <div class="hero-visual">
-            <div class="hero-image-container">
-                <img src="assets/img/hero_obsidian_v2.png" alt="AGENTICUM Core Artifact" class="floating-artifact">
-                <div class="artifact-glow"></div>
-            </div>
-        </div>
+        
+        <!-- 3D HERO VISUALIZATION -->
+        <div id="hero-3d-container"></div>
       </section>
 
-      <!-- STATS BAR -->
+      <!-- STATS BAR - ENHANCED -->
       <section class="stats-bar">
         <div class="stat-item">
+          <span class="stat-icon">🧠</span>
           <span class="stat-value" data-target="52">52</span>
           <span class="stat-label">AUTONOMOUS NODES</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-value">2M</span>
+          <span class="stat-icon">📊</span>
+          <span class="stat-value">2M+</span>
           <span class="stat-label">TOKEN CONTEXT</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
+          <span class="stat-icon">⚡</span>
           <span class="stat-value">&lt;100ms</span>
-          <span class="stat-label">LATENCY</span>
+          <span class="stat-label">INFERENCE LATENCY</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
+          <span class="stat-icon">🔒</span>
+          <span class="stat-value">GDPR</span>
+          <span class="stat-label">FRANKFURT ENCLAVE</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-icon">∞</span>
           <span class="stat-value">24/7</span>
           <span class="stat-label">AUTONOMOUS OPS</span>
         </div>
@@ -382,49 +441,186 @@
         </div>
       </section>
 
-      <!-- THE PERFECT TWIN SECTION -->
-      <section class="perfect-twin-section">
+      <!-- THE PERFECT TWIN SECTION - HERO FEATURE -->
+      <section id="perfect-twin" class="perfect-twin-section featured-section">
+        <div id="twin-3d-container"></div>
         <div class="twin-container">
-          <div class="twin-visual">
+          <div class="twin-header">
+            <span class="section-tag featured-tag">// CORE_PHILOSOPHY</span>
+            <h2 class="twin-main-title">THE PERFECT TWIN</h2>
+            <p class="twin-subtitle">The paradigm that separates G5 from every other AI system</p>
+          </div>
+          
+          <div class="twin-visual-advanced">
             <div class="twin-orb human-orb">
-              <span class="orb-label">OPERATOR</span>
+              <div class="orb-glow human-glow"></div>
               <div class="orb-core human"></div>
+              <span class="orb-label">OPERATOR</span>
+              <span class="orb-sublabel">Your Strategic DNA</span>
             </div>
-            <div class="twin-connection">
-              <div class="connection-line"></div>
+            
+            <div class="twin-connection-advanced">
+              <div class="connection-beam"></div>
               <div class="data-stream">
+                <span class="data-bit">◆</span>
+                <span class="data-bit">◆</span>
                 <span class="data-bit">◆</span>
                 <span class="data-bit">◆</span>
                 <span class="data-bit">◆</span>
               </div>
               <span class="connection-label">STRATEGIC DNA CLONING</span>
             </div>
+            
             <div class="twin-orb machine-orb">
-              <span class="orb-label">G5 SYSTEM</span>
+              <div class="orb-glow machine-glow"></div>
               <div class="orb-core machine"></div>
+              <span class="orb-label">G5 SYSTEM</span>
+              <span class="orb-sublabel">Infinite Replication</span>
             </div>
           </div>
           
-          <div class="twin-content">
-            <span class="section-tag">// THE_PERFECT_TWIN</span>
-            <h2 class="twin-title">Your Vision. Infinitely Replicated.</h2>
-            <p class="twin-text">The system is designed to clone your strategic DNA. Through deep context ingestion, G5 learns not just what you know, but <em>how you think</em>—your intuition, your ethics, your risk tolerance, and your aesthetic preferences.</p>
+          <div class="twin-content-grid">
+            <div class="twin-philosophy-card">
+              <div class="philosophy-icon">🧠</div>
+              <h3>Deep Context Ingestion</h3>
+              <p>G5 learns not just <em>what</em> you know, but <em>how</em> you think—your intuition, ethics, risk tolerance, and aesthetic preferences.</p>
+            </div>
             
-            <div class="twin-features">
-              <div class="twin-feature">
-                <span class="feature-icon">✦</span>
-                <div class="feature-text">
-                  <strong>The Human Spark</strong>
-                  <p>"Obsidian & Chrome" — hard, precise, industrial aesthetics.</p>
-                </div>
+            <div class="twin-philosophy-card featured-card">
+              <div class="philosophy-icon">⚡</div>
+              <h3>The Human Spark</h3>
+              <p>"Obsidian & Chrome" — hard, precise, industrial aesthetics. Your unique vision encoded into machine-executable form.</p>
+            </div>
+            
+            <div class="twin-philosophy-card">
+              <div class="philosophy-icon">∞</div>
+              <h3>Infinite Scaling</h3>
+              <p>Your vision replicated a million times without distortion, dilution, or fatigue. 24/7. Forever.</p>
+            </div>
+          </div>
+          
+          <blockquote class="twin-manifesto-quote">
+            "We are no longer paid for what we <em>do</em>, but for what we <em>want</em> and what we <em>allow</em>."
+            <cite>— AGENTICUM G5 Manifesto</cite>
+          </blockquote>
+        </div>
+      </section>
+
+      <!-- ROADMAP 2026-2030 SECTION -->
+      <section id="roadmap" class="roadmap-section">
+        <div id="roadmap-3d-container"></div>
+        <div class="roadmap-container">
+          <div class="section-header">
+            <span class="section-tag">// EVOLUTION_TIMELINE</span>
+            <h2 class="section-title">ROADMAP TO 2030</h2>
+            <p class="section-subtitle">From Hackathon prototype to global autonomous intelligence infrastructure</p>
+          </div>
+          
+          <div class="roadmap-timeline">
+            <!-- 2026 - NOW -->
+            <div class="roadmap-milestone current">
+              <div class="milestone-marker">
+                <div class="marker-pulse"></div>
+                <span class="marker-year">2026</span>
               </div>
-              <div class="twin-feature">
-                <span class="feature-icon">✦</span>
-                <div class="feature-text">
-                  <strong>Machine Scaling</strong>
-                  <p>Your vision replicated a million times without distortion or fatigue.</p>
-                </div>
+              <div class="milestone-content">
+                <h3 class="milestone-title">GENESIS PROTOCOL</h3>
+                <span class="milestone-status">CURRENT PHASE</span>
+                <ul class="milestone-features">
+                  <li>✓ 52-Node Reasoning Cluster deployed</li>
+                  <li>✓ Google DeepMind Gemini 3 Pro integration</li>
+                  <li>✓ Veo 3.1 + Imagen 3 + Flash Audio native stack</li>
+                  <li>✓ Real-time Chain-of-Thought transparency</li>
+                  <li>✓ Sovereign Enclave (Frankfurt GDPR compliance)</li>
+                </ul>
               </div>
+            </div>
+            
+            <!-- 2027 -->
+            <div class="roadmap-milestone">
+              <div class="milestone-marker">
+                <span class="marker-year">2027</span>
+              </div>
+              <div class="milestone-content">
+                <h3 class="milestone-title">AUTOPOIESIS ENGINE</h3>
+                <span class="milestone-status">SELF-EVOLUTION</span>
+                <ul class="milestone-features">
+                  <li>→ SP-77 Logic Patcher: Self-patching code systems</li>
+                  <li>→ Continuous evolution without version updates</li>
+                  <li>→ Darwinian optimization in digital market</li>
+                  <li>→ Automatic inefficiency detection & correction</li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- 2028 -->
+            <div class="roadmap-milestone">
+              <div class="milestone-marker">
+                <span class="marker-year">2028</span>
+              </div>
+              <div class="milestone-content">
+                <h3 class="milestone-title">INFINITE HORIZON</h3>
+                <span class="milestone-status">MARKET PREDICTION</span>
+                <ul class="milestone-features">
+                  <li>→ Latent desire identification in global psyche</li>
+                  <li>→ Automated Category Creation engine</li>
+                  <li>→ Just-in-Time Reality: Products on demand</li>
+                  <li>→ Neural Density as new investment metric</li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- 2029 -->
+            <div class="roadmap-milestone">
+              <div class="milestone-marker">
+                <span class="marker-year">2029</span>
+              </div>
+              <div class="milestone-content">
+                <h3 class="milestone-title">ALGORITHMIC SENATE</h3>
+                <span class="milestone-status">AI GOVERNANCE</span>
+                <ul class="milestone-features">
+                  <li>→ Ethics Node (UN Human Rights Charter)</li>
+                  <li>→ Economics Node (Sustainable Growth)</li>
+                  <li>→ Ecology Node (Environmental Impact)</li>
+                  <li>→ Real-time checks & balances for AI decisions</li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- 2030 -->
+            <div class="roadmap-milestone future">
+              <div class="milestone-marker">
+                <span class="marker-year">2030</span>
+              </div>
+              <div class="milestone-content">
+                <h3 class="milestone-title">ZERO-PERSON UNICORN</h3>
+                <span class="milestone-status">ULTIMATE VISION</span>
+                <ul class="milestone-features">
+                  <li>→ First $1B company with zero employees</li>
+                  <li>→ 1 Operator + 52 Nodes = Total Market Dominance</li>
+                  <li>→ Post-Labor Economics realized</li>
+                  <li>→ Strategic Singularity: Human as Ethical Anchor</li>
+                  <li>→ Self-Driving Companies operating 24/7</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="roadmap-vision">
+            <div class="vision-card">
+              <span class="vision-icon">🎯</span>
+              <h4>FROM STUDENT TO ARCHITECT</h4>
+              <p>The shift from Homo Faber (tool user) to Homo Architectus (system orchestrator)</p>
+            </div>
+            <div class="vision-card">
+              <span class="vision-icon">💎</span>
+              <h4>MICRO-MULTINATIONAL</h4>
+              <p>Every Operator becomes a sovereign entity with enterprise-level capabilities</p>
+            </div>
+            <div class="vision-card">
+              <span class="vision-icon">∞</span>
+              <h4>INFINITE BETA</h4>
+              <p>No final version — permanent evolution through recursive self-improvement</p>
             </div>
           </div>
         </div>
@@ -462,12 +658,12 @@
         </div>
       </section>
 
-      <!-- ALPHABET NATIVE STACK - PREMIUM REDESIGN -->
+      <!-- GOOGLE NATIVE STACK - PREMIUM REDESIGN -->
       <section class="stack-section">
         <div class="stack-container">
           <div class="stack-header">
             <span class="section-tag">// MODAL_COHERENCE</span>
-            <h2 class="stack-title">THE ALPHABET NATIVE STACK</h2>
+            <h2 class="stack-title">THE GOOGLE NATIVE STACK</h2>
             <p class="stack-desc">Unlike "Frankenstein Stacks" that patch together disparate models, Gemini 3 Pro encodes all modes in the same latent space. Text, Image, Video, Audio — unified cognition.</p>
           </div>
           
@@ -534,8 +730,67 @@
         </div>
       </section>
 
+      <!-- CO-CREATOR / OPERATOR SECTION -->
+      <section class="operator-section">
+        <div class="operator-container">
+          <div class="operator-header">
+            <span class="section-tag">// THE_ARCHITECT</span>
+            <h2 class="operator-title">CO-CREATOR & OPERATOR</h2>
+          </div>
+          
+          <div class="operator-card">
+            <div class="operator-avatar">
+              <div class="avatar-ring"></div>
+              <div class="avatar-core">YY</div>
+            </div>
+            
+            <div class="operator-info">
+              <h3 class="operator-name">Yahya Yildirim</h3>
+              <div class="operator-role">Student Visionary // DCI Digital Career Institute</div>
+              
+              <div class="operator-credentials">
+                <div class="credential">
+                  <span class="cred-icon">🎓</span>
+                  <span>DCI Digital Career Institute Berlin</span>
+                </div>
+                <div class="credential">
+                  <span class="cred-icon">🏆</span>
+                  <span>Google DeepMind Gemini Hackathon 2026</span>
+                </div>
+                <div class="credential">
+                  <span class="cred-icon">🧠</span>
+                  <span>52-Node Autonomous System Architect</span>
+                </div>
+              </div>
+              
+              <blockquote class="operator-quote">
+                "We don't wait for the future as if it were a bus that comes on schedule. We compile it, line by line, thought by thought, function by function."
+              </blockquote>
+            </div>
+          </div>
+          
+          <div class="operator-philosophy">
+            <div class="philosophy-item">
+              <span class="phi-icon">⚡</span>
+              <h4>FROM STUDENT TO ARCHITECT</h4>
+              <p>The shift from learner to system creator</p>
+            </div>
+            <div class="philosophy-item">
+              <span class="phi-icon">🔥</span>
+              <h4>HACKATHON MINDSET</h4>
+              <p>48 hours of pure innovation under pressure</p>
+            </div>
+            <div class="philosophy-item">
+              <span class="phi-icon">💎</span>
+              <h4>OBSIDIAN & CHROME</h4>
+              <p>Hard, precise, industrial aesthetics</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- FINAL CTA - OBSIDIAN & CHROME -->
-      <section class="final-cta-section">
+      <section id="cta" class="final-cta-section">
         <div class="cta-background">
           <div class="cta-grid-lines"></div>
         </div>
@@ -617,9 +872,21 @@
         </div>
     </footer>
 
+    <!-- THREE.JS for 3D Visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP for Premium Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    
+    <!-- CORE SCRIPTS -->
     <script src="assets/js/landing.js"></script>
     <script src="assets/js/particles.js"></script>
     <script src="assets/js/immersive.js"></script>
     <script src="assets/js/neural-network.js"></script>
+    
+    <!-- MILLION DOLLAR EXPERIENCE V2.0 -->
+    <script src="assets/js/million-dollar-v2.js"></script>
   </body>
 </html>

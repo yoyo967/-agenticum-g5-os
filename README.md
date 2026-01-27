@@ -1,38 +1,140 @@
-# AGENTICUM G5 | INDUSTRIAL AUTONOMOUS MARKETING OS
+# AGENTICUM G5™ | INDUSTRIAL AUTONOMOUS MARKETING OS
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Status](https://img.shields.io/badge/status-OPERATIONAL-green.svg)
 ![Core](https://img.shields.io/badge/core-GEMINI_3_PRO-purple.svg)
 ![Architecture](https://img.shields.io/badge/architecture-52_NODES-orange.svg)
+![Version](https://img.shields.io/badge/version-6.0-brightgreen.svg)
 
 > **"Don't hire an Agency. License a Civilization."**
+>
+> _THE PERFECT TWIN_
 
-**AGENTICUM G5** is a sovereign, autonomous operating system designed to scale human will through algorithmic precision. Built for the **Google DeepMind Gemini Hackathon**, it replaces the traditional agency model with a 52-node swarm of specialized AI agents.
+**AGENTICUM G5** is a sovereign, autonomous operating system designed to scale human will through algorithmic precision. Built for the **Google DeepMind Gemini Hackathon 2026**, it replaces the traditional agency model with a 52-node swarm of specialized AI agents.
 
 ## 🌍 LIVE ACCESS
 
-- **Console (OS):** [https://tutorai-e39uu.web.app/dashboard.html](https://tutorai-e39uu.web.app/dashboard.html)
-- **Landing Page:** [https://tutorai-e39uu.web.app](https://tutorai-e39uu.web.app)
+| Environment          | URL                                                                                          |
+| -------------------- | -------------------------------------------------------------------------------------------- |
+| **Landing Page**     | [https://tutorai-e39uu.web.app](https://tutorai-e39uu.web.app)                               |
+| **Hegemony Console** | [https://tutorai-e39uu.web.app/dashboard.html](https://tutorai-e39uu.web.app/dashboard.html) |
+
+---
+
+## 🎬 LANDING PAGE FEATURES (V6.0)
+
+### Premium Interactive Experience
+
+| Feature                      | Description                                        |
+| ---------------------------- | -------------------------------------------------- |
+| **Loading Screen**           | Animated logo with progress bar                    |
+| **Section Dots Navigation**  | Left-side navigation dots with tooltips            |
+| **Floating Side Navigation** | Right-side scroll controls with progress indicator |
+| **3D Tilt Cards**            | Cards follow mouse with 3D perspective             |
+| **Animated Counters**        | Numbers count up on scroll                         |
+| **Keyboard Navigation**      | Home/End/PageUp/PageDown support                   |
+
+### Visual Excellence
+
+| Element                 | Technology                 |
+| ----------------------- | -------------------------- |
+| **Full-Screen 3D Hero** | Three.js Obsidian Core     |
+| **Particle Systems**    | Multiple animated canvases |
+| **Glassmorphism UI**    | Backdrop blur + gradients  |
+| **Premium Typography**  | Inter/JetBrains Mono       |
+| **Smooth Animations**   | CSS transitions + GSAP     |
+
+### Page Sections
+
+1. **Hero** - "Don't hire an Agency. License a Civilization."
+2. **Stats Bar** - 52 Nodes | 2M+ Tokens | <100ms | GDPR | 24/7
+3. **Manifesto** - The Prophecy
+4. **Capabilities** - 52-Node Architecture
+5. **Demo** - Live Reasoning Trace
+6. **Transformation** - Homo Faber → Homo Architectus
+7. **The Perfect Twin** - Core Philosophy (Featured)
+8. **Roadmap 2026-2030** - Evolution Timeline
+9. **Zero-Person Unicorn** - Future Vision
+10. **Google Native Stack** - Gemini 3 Pro Ecosystem
+11. **Co-Creator** - Operator Profile
+12. **CTA** - "The cursor is blinking..."
+
+---
+
+## 🖥️ DASHBOARD (HEGEMONY CONSOLE)
+
+### G5 OS Features
+
+| Component                   | Description                            |
+| --------------------------- | -------------------------------------- |
+| **Terminal Interface**      | Full command-line with 15+ commands    |
+| **52-Node Navigator**       | Interactive node cluster visualization |
+| **Chain-of-Thought Viewer** | Real-time reasoning trace              |
+| **Asset Vault**             | Upload and preview generated assets    |
+| **Omni-Preview Window**     | Universal file previewer               |
+| **Jury Mode Protocol**      | Automated hackathon demo               |
+
+---
 
 ## 🧠 ARCHITECTURE (THE 52-NODE FABRIC)
 
 The system is NOT a chatbot. It is a decision engine organized into 7 clusters:
 
-1.  **APEX (Decisions)**: `SN-00 Orchestrator`
-2.  **STRATEGY (Architects)**: `SP-01 Campaign Strategist`, `SP-99 Hegemony Matrix`
-3.  **INTELLIGENCE (Scanners)**: `RA-06 Trend Forecaster`, `RA-52 Red Team`
-4.  **CREATION (Factory)**: `CC-06 Video Director`, `CC-01 Copy Chief`
-5.  **GOVERNANCE (Law)**: `MI-01 Compliance Officer`
-6.  **FINANCE (Yield)**: `DT-02 Pricing Algorithm`
-7.  **EDUCATION (Academy)**: `ED-01 The Autodidact`
+| Cluster          | Nodes              | Function                     |
+| ---------------- | ------------------ | ---------------------------- |
+| **APEX**         | SN-00 Orchestrator | Central decision making      |
+| **STRATEGY**     | SP-01 to SP-99     | Campaign architecture        |
+| **INTELLIGENCE** | RA-01 to RA-52     | Market scanning, Red Team    |
+| **CREATION**     | CC-01 to CC-08     | Copy, Video (Veo 3.1), Voice |
+| **GOVERNANCE**   | MI-01 to MI-07     | EU AI Act, GDPR compliance   |
+| **FINANCE**      | DT-02 to DT-04     | Pricing algorithms           |
+| **EDUCATION**    | ED-01              | Self-learning protocols      |
 
-## ⚡ FEATURES
+---
 
-- **Reasoning Trace**: Live visualization of the "Chain of Thought" using Gemini 3 Pro Thinking Config.
-- **Sovereign Enclosure**: Privacy-first GCP architecture (Frankfurt Enclave).
-- **Jury Mode Protocol**: Automated end-to-end campaign generation tailored for the Gemini API Competition criteria.
-- **Multimodal Native**: Orchestrates Veo 3.1 (Video), Flash Audio (Voice), and Imagen 3 (Visuals).
-- **War Room Visualizer**: Real-time neural monitoring of agent connections.
+## 🎮 COMMAND REFERENCE
+
+Type these into the dashboard terminal:
+
+### System Commands
+
+| Command           | Description                    |
+| ----------------- | ------------------------------ |
+| `HELP`            | Display all available commands |
+| `START_SYSTEM`    | Initialize all 52 nodes        |
+| `RUN_DIAGNOSTICS` | Execute system diagnostics     |
+| `STATUS`          | Show current system status     |
+| `CLEAR`           | Clear terminal output          |
+
+### Simulation Commands
+
+| Command       | Description                         |
+| ------------- | ----------------------------------- |
+| `DEPLOY_DUNE` | DUNE cinematic marketing simulation |
+| `CRISIS_MODE` | Crisis management protocol          |
+| `VIRAL_LOOP`  | Viral marketing optimization        |
+
+### Node Commands
+
+| Command       | Description           |
+| ------------- | --------------------- |
+| `NODES`       | List all active nodes |
+| `NODE_STATUS` | Detailed node status  |
+
+### Asset Commands
+
+| Command    | Description                   |
+| ---------- | ----------------------------- |
+| `ASSETS`   | List assets in vault          |
+| `GENERATE` | Generate new marketing assets |
+
+### Special Modes
+
+| Command          | Description                           |
+| ---------------- | ------------------------------------- |
+| **🏆 JURY MODE** | Full hackathon demo sequence (button) |
+
+---
 
 ## 🛠️ INSTALLATION & DEPLOYMENT
 
@@ -50,47 +152,138 @@ cd -agenticum-g5-os
 npm install
 ```
 
-### Local Operator Mode
+### Local Development
 
 ```bash
-# Open index.html directly or serve
+# Option 1: Simple serve
 npx serve .
+
+# Option 2: Live reload
+npx live-server --port=8080
 ```
 
 ### Cloud Deployment
 
 ```bash
-firebase deploy
+firebase deploy --only hosting
 ```
-
-## 🌌 SYSTEM CORE V4.1: "THE PERFECT TWIN"
-
-**STATUS:** [OPERATIONAL // MAXIMUM_EXCELLENCE]
-**PROVIDER:** Google Cloud / Vertex AI (Frankfurt Sovereign Enclave)
-**REASONING:** 2M Token Context Cluster (Gemini 3 Pro)
-
-### 🏗️ THE 52-NODE FABRIC
-
-AGENTICUM G5 orchestrates a complex mesh of specialized nodes:
-
-- **[STRATEGY]**: SN-00 Oracle, SP-33 Hegemony, PS-00 Psy-Ops.
-- **[CREATION]**: CC-06 Veo Native, CC-08 Flash Voice, CC-13 Brand.
-- **[INTEL]**: RA-01 Authority, RA-09 Red Team, RA-06 Grounding.
-- **[OPS]**: DT-04 EU AI Compliance, MT-05 Health Monitor.
-
-## 🎮 COMMANDS (HEGEMONY CONSOLE)
-
-Type these into the dashboard terminal:
-
-- `START_SYSTEM`: Initialize the reasoning cluster.
-- `DEPLOY_DUNE`: Run the "Sell Sand in the Desert" simulation.
-- `CRISIS_MODE`: Simulate a PR disaster response.
-- `VIRAL_LOOP`: Generate a high-growth viral loop.
-
-## 📜 MANIFESTO
-
-Read the full [HANDBOOK](AGENTICUM_G5_HANDBOOK.md) to understand the philosophy of the **Post-Agency Era**.
 
 ---
 
-_Built by Operator Yahya Yildirim // Powered by Google Cloud Vertex AI_
+## 📊 TECHNOLOGY STACK
+
+### Google Native Stack
+
+| Technology           | Purpose                            |
+| -------------------- | ---------------------------------- |
+| **Gemini 3 Pro**     | 2M Token Context, Chain-of-Thought |
+| **Veo 3.1**          | Video Generation                   |
+| **Imagen 3**         | Visual Content Creation            |
+| **Flash Audio**      | Voice Synthesis                    |
+| **Vertex AI**        | Model Deployment                   |
+| **Firebase Hosting** | Static Site Delivery               |
+| **GCP Frankfurt**    | GDPR-Compliant Infrastructure      |
+
+### Frontend Stack
+
+| Technology            | Purpose            |
+| --------------------- | ------------------ |
+| **Vanilla JS (ES6+)** | Core Logic         |
+| **Three.js**          | 3D Visualizations  |
+| **CSS3**              | Premium Styling    |
+| **HTML5**             | Semantic Structure |
+
+---
+
+## 🌌 SYSTEM CORE V6.0: "THE PERFECT TWIN"
+
+| Attribute     | Value                                                  |
+| ------------- | ------------------------------------------------------ |
+| **STATUS**    | `OPERATIONAL // MAXIMUM_EXCELLENCE`                    |
+| **PROVIDER**  | Google Cloud / Vertex AI (Frankfurt Sovereign Enclave) |
+| **REASONING** | 2M Token Context Cluster (Gemini 3 Pro)                |
+| **THEME**     | Obsidian & Chrome                                      |
+| **SLOGAN**    | THE PERFECT TWIN                                       |
+
+---
+
+## 📜 PHILOSOPHY
+
+### The Perfect Twin Concept
+
+Read the full [AGENTICUM G5 HANDBOOK](AGENTICUM_G5_HANDBOOK.md) to understand:
+
+- **Post-Agency Era**: Why traditional agencies are obsolete
+- **Homo Faber → Homo Architectus**: The ontological shift
+- **Zero-Person Unicorn**: The first billion-dollar company without employees
+- **Strategic DNA Cloning**: How G5 learns to think like you
+- **Obsidian & Chrome Aesthetic**: Industrial Autonomous Design
+
+### Core Manifesto
+
+> "We have pulverized the era of tools. We entered the age of agentic entities.
+> The 'tool' still requires an artisan. The AGENT acts as a co-author with delegated sovereignty."
+
+---
+
+## 🗺️ ROADMAP 2026-2030
+
+| Year     | Milestone           | Status     |
+| -------- | ------------------- | ---------- |
+| **2026** | GENESIS PROTOCOL    | ✅ CURRENT |
+| **2027** | AUTOPOIESIS ENGINE  | 🔄 Planned |
+| **2028** | INFINITE HORIZON    | 🔄 Planned |
+| **2029** | ALGORITHMIC SENATE  | 🔄 Planned |
+| **2030** | ZERO-PERSON UNICORN | 🎯 Vision  |
+
+---
+
+## 🏆 HACKATHON SUBMISSION
+
+| Field           | Value                                     |
+| --------------- | ----------------------------------------- |
+| **Competition** | Google DeepMind Gemini API Hackathon 2026 |
+| **Category**    | Agentic AI / Marketing Automation         |
+| **Operator**    | Yahya Yildirim                            |
+| **Institution** | DCI Digital Career Institute Berlin       |
+
+---
+
+## 📁 PROJECT STRUCTURE
+
+```
+agenticum-g5-os/
+├── index.html                 # Landing Page
+├── dashboard.html             # Hegemony Console
+├── README.md                  # This file
+├── AGENTICUM_G5_HANDBOOK.md   # Philosophy & Vision
+├── assets/
+│   ├── css/
+│   │   ├── dashboard.css      # Console Styling
+│   │   ├── landing-enterprise.css
+│   │   └── million-dollar-v2.css  # Premium Design System
+│   └── js/
+│       ├── dashboard.js       # Console Logic
+│       ├── gemini-integration.js
+│       └── million-dollar-v2.js   # Premium Features
+├── firebase.json              # Hosting Config
+└── .firebaserc               # Project Config
+```
+
+---
+
+## 📄 LICENSE
+
+MIT License - See LICENSE file for details.
+
+---
+
+<div align="center">
+
+**Built with 💎 by Operator Yahya Yildirim**
+
+_Powered by Google Cloud Vertex AI_
+
+**AGENTICUM G5™ | THE PERFECT TWIN**
+
+</div>

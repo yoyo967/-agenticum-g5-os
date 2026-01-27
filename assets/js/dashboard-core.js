@@ -29,8 +29,8 @@ class G5Dashboard {
             // Visual Confirmation
             const core = document.querySelector('.core-logo');
             if(core) {
-                core.style.color = '#00ff41';
-                setTimeout(() => core.style.color = 'white', 1000);
+                core.style.color = '#34d399';  // Enterprise success green
+                setTimeout(() => core.style.color = 'var(--text-primary)', 1000);
             }
         } catch (e) {
             console.error('CRITICAL INIT ERROR:', e);
@@ -160,9 +160,9 @@ class G5Dashboard {
         const icon = el.querySelector('.p-node-icon');
         icon.style.cssText = `
             width: 40px; height: 40px; border-radius: 50%;
-            border: 2px solid var(--accent-teal); 
-            background: rgba(0,243,255,0.1);
-            box-shadow: 0 0 15px var(--accent-teal);
+            border: 2px solid var(--accent-primary, #4a9eff); 
+            background: rgba(74, 158, 255, 0.1);
+            box-shadow: 0 0 10px rgba(74, 158, 255, 0.2);
         `;
         
         container.appendChild(el);
@@ -198,41 +198,6 @@ class G5Dashboard {
         this.renderVault();
     }
 
-    renderVault(filter = 'all') {
-        const grid = document.getElementById('asset-vault-grid');
-        if (!grid) return;
-        
-        grid.innerHTML = '';
-        
-        const filtered = filter === 'all' ? this.assets : this.assets.filter(a => a.type === filter);
-        
-        if (filtered.length === 0) {
-             grid.innerHTML = `
-                <div class="empty-state">
-                    <span class="empty-icon">📂</span>
-                    <span>No assets found.</span>
-                </div>`;
-             return;
-        }
-
-        filtered.forEach(asset => {
-            const card = document.createElement('div');
-            card.className = 'asset-card';
-            card.innerHTML = `
-                <div class="asset-preview">
-                    <span class="asset-type-badge">${asset.type.toUpperCase()}</span>
-                    <!-- Placeholder Visual -->
-                    <div style="width: 40px; height: 40px; background: linear-gradient(45deg, var(--accent-teal), var(--accent-magenta)); border-radius: 50%; opacity: 0.5"></div>
-                </div>
-                <div class="asset-info">
-                    <span class="asset-title">${asset.title}</span>
-                    <span class="asset-meta">${asset.id} | ${asset.date}</span>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-    
     filterVault(type) {
         this.renderVault(type);
     }
@@ -318,14 +283,14 @@ class G5Dashboard {
         if (this.state.isRedTeamActive) {
             body.classList.add('red-team-mode');
             this.logSystem('⚠️ RED TEAM PROTOCOL INITIATED. ADVERSARIAL MODE ACTIVE.');
-            document.documentElement.style.setProperty('--accent-teal', '#ff4800');
-            document.documentElement.style.setProperty('--accent-green', '#ff0000');
+            document.documentElement.style.setProperty('--accent-teal', '#f87171');
+            document.documentElement.style.setProperty('--accent-green', '#f87171');
             this.playSound('error'); // Alarm sound
         } else {
             body.classList.remove('red-team-mode');
             this.logSystem('RED TEAM STAND DOWN. NORMAL OPERATIONS RESUMED.');
-            document.documentElement.style.setProperty('--accent-teal', '#00f3ff');
-            document.documentElement.style.setProperty('--accent-green', '#00ff41');
+            document.documentElement.style.setProperty('--accent-teal', '#4a9eff');
+            document.documentElement.style.setProperty('--accent-green', '#34d399');
             this.playSound('success');
         }
     }

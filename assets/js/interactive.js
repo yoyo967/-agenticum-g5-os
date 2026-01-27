@@ -527,7 +527,7 @@ class KonamiCode {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.backgroundColor = ['#00f3ff', '#ff00ff', '#ff4800', '#00ff41'][Math.floor(Math.random() * 4)];
+        confetti.style.backgroundColor = ['#4a9eff', '#9775fa', '#f59e0b', '#34d399'][Math.floor(Math.random() * 4)];
         confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
         document.body.appendChild(confetti);
         

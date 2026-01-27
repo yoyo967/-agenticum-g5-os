@@ -18,12 +18,12 @@ class WarRoomVisualizer {
         window.addEventListener('resize', () => this.resize());
         this.animate();
         
-        // Color Palette
+        // Enterprise Color Palette
         this.colors = {
-            accent: '#00f3ff',
-            subtle: 'rgba(0, 243, 255, 0.1)',
-            connect: 'rgba(0, 243, 255, 0.05)',
-            glow: '#ff00ff'
+            accent: '#4a9eff',
+            subtle: 'rgba(74, 158, 255, 0.08)',
+            connect: 'rgba(74, 158, 255, 0.04)',
+            glow: '#9775fa'
         };
     }
 
@@ -114,7 +114,7 @@ class WarRoomVisualizer {
             this.pulseRadius += 5;
             this.ctx.beginPath();
             this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2, this.pulseRadius, 0, Math.PI * 2);
-            this.ctx.strokeStyle = `rgba(255, 0, 255, ${Math.max(0, 1 - this.pulseRadius / 400)})`;
+            this.ctx.strokeStyle = `rgba(151, 117, 250, ${Math.max(0, 0.6 - this.pulseRadius / 400)})`;
             this.ctx.lineWidth = 2;
             this.ctx.stroke();
             

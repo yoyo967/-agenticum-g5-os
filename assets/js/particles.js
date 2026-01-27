@@ -48,11 +48,12 @@ class ParticleSystem {
     }
     
     getRandomColor() {
+        // Enterprise color palette - muted, professional
         const colors = [
-            'rgba(0, 243, 255, 0.6)',   // Teal
-            'rgba(255, 72, 0, 0.4)',     // Orange
-            'rgba(255, 0, 255, 0.3)',    // Magenta
-            'rgba(255, 255, 255, 0.2)'   // White
+            'rgba(74, 158, 255, 0.4)',    // Professional Blue
+            'rgba(107, 122, 153, 0.3)',   // Slate Gray
+            'rgba(151, 117, 250, 0.25)',  // Muted Purple
+            'rgba(255, 255, 255, 0.15)'   // White
         ];
         return colors[Math.floor(Math.random() * colors.length)];
     }
@@ -89,7 +90,7 @@ class ParticleSystem {
                     this.ctx.beginPath();
                     this.ctx.moveTo(p.x, p.y);
                     this.ctx.lineTo(p2.x, p2.y);
-                    this.ctx.strokeStyle = `rgba(0, 243, 255, ${0.15 * (1 - dist / 120)})`;
+                    this.ctx.strokeStyle = `rgba(74, 158, 255, ${0.12 * (1 - dist / 120)})`;
                     this.ctx.lineWidth = 0.5;
                     this.ctx.stroke();
                 }
@@ -104,7 +105,7 @@ class ParticleSystem {
                 this.ctx.beginPath();
                 this.ctx.moveTo(p.x, p.y);
                 this.ctx.lineTo(this.mouseX, this.mouseY);
-                this.ctx.strokeStyle = `rgba(255, 0, 255, ${0.4 * (1 - mouseDist / 150)})`;
+                this.ctx.strokeStyle = `rgba(151, 117, 250, ${0.25 * (1 - mouseDist / 150)})`;
                 this.ctx.lineWidth = 0.8;
                 this.ctx.stroke();
             }

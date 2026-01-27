@@ -42,12 +42,13 @@ class NeuralNetwork {
             { id: 'MI-07', name: 'Ethics Guardian', cluster: 'meta', tier: 2 }
         ];
         
+        // Enterprise color palette - professional and muted
         this.clusterColors = {
-            strategy: { primary: '#00f3ff', secondary: 'rgba(0, 243, 255, 0.3)' },
-            creation: { primary: '#ff00ff', secondary: 'rgba(255, 0, 255, 0.3)' },
-            intel: { primary: '#ff4800', secondary: 'rgba(255, 72, 0, 0.3)' },
-            data: { primary: '#00ff41', secondary: 'rgba(0, 255, 65, 0.3)' },
-            meta: { primary: '#7b2dff', secondary: 'rgba(123, 45, 255, 0.3)' }
+            strategy: { primary: '#4a9eff', secondary: 'rgba(74, 158, 255, 0.2)' },
+            creation: { primary: '#9775fa', secondary: 'rgba(151, 117, 250, 0.2)' },
+            intel: { primary: '#f59e0b', secondary: 'rgba(245, 158, 11, 0.2)' },
+            data: { primary: '#34d399', secondary: 'rgba(52, 211, 153, 0.2)' },
+            meta: { primary: '#6b7a99', secondary: 'rgba(107, 122, 153, 0.2)' }
         };
         
         this.init();

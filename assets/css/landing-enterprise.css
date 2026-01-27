@@ -1,0 +1,651 @@
+/**
+ * AGENTICUM G5 | LANDING PAGE ENTERPRISE THEME
+ * Professional styling for C-Level executives and investors
+ */
+
+/* ============================================
+   OVERRIDE NEON COLORS FOR ENTERPRISE
+   ============================================ */
+:root {
+    /* Professional color palette */
+    --accent-teal: #4a9eff !important;
+    --accent-orange: #f59e0b !important;
+    --accent-green: #34d399 !important;
+    --accent-magenta: #9775fa !important;
+    
+    /* Muted backgrounds */
+    --bg-dark: #0d0f12 !important;
+    --bg-panel: #12151a !important;
+}
+
+/* ============================================
+   REMOVE GAMING EFFECTS
+   ============================================ */
+.crt-overlay,
+.noise-overlay,
+.grid-overlay,
+.glitch::before,
+.glitch::after {
+    display: none !important;
+}
+
+/* Reduce particle intensity */
+#particle-canvas {
+    opacity: 0.15 !important;
+}
+
+/* Remove glitch animations */
+.glitch {
+    animation: none !important;
+}
+
+.glitch::before,
+.glitch::after {
+    content: none !important;
+}
+
+/* ============================================
+   PROFESSIONAL HEADER
+   ============================================ */
+.landing-header {
+    background: rgba(13, 15, 18, 0.95) !important;
+    border-bottom-color: #2a2e36 !important;
+}
+
+.version {
+    color: #4a9eff !important;
+    text-shadow: none !important;
+}
+
+.nav-link {
+    color: #9aa0aa !important;
+}
+
+.nav-link:hover {
+    color: #e8eaed !important;
+}
+
+.cta-button {
+    background: #4a9eff !important;
+    color: white !important;
+    box-shadow: none !important;
+}
+
+.cta-button:hover {
+    background: #5eaaff !important;
+}
+
+/* ============================================
+   HERO SECTION - PROFESSIONAL
+   ============================================ */
+.hero-section {
+    background: radial-gradient(ellipse at center, #12151a 0%, #0d0f12 100%) !important;
+}
+
+.hero-title {
+    text-shadow: none !important;
+}
+
+.sub-hero {
+    color: #f59e0b !important;
+    text-shadow: none !important;
+}
+
+.hero-subtitle {
+    color: #9aa0aa !important;
+}
+
+/* Trust Badge */
+.trust-badge {
+    background: rgba(74, 158, 255, 0.08) !important;
+    border-color: rgba(74, 158, 255, 0.2) !important;
+}
+
+.trust-badge .badge-text {
+    color: #4a9eff !important;
+}
+
+/* Tech Badges */
+.tech-badge {
+    background: rgba(74, 158, 255, 0.05) !important;
+    border-color: rgba(74, 158, 255, 0.15) !important;
+    color: #9aa0aa !important;
+}
+
+/* Primary Button */
+.primary-btn {
+    background: linear-gradient(135deg, #4a9eff 0%, #3d8ce6 100%) !important;
+    box-shadow: 0 4px 15px rgba(74, 158, 255, 0.2) !important;
+}
+
+.primary-btn:hover {
+    background: linear-gradient(135deg, #5eaaff 0%, #4a9eff 100%) !important;
+}
+
+.btn-glow {
+    display: none !important;
+}
+
+/* Secondary Button */
+.secondary-btn {
+    border-color: #3d4554 !important;
+    color: #9aa0aa !important;
+}
+
+.secondary-btn:hover {
+    border-color: #4a9eff !important;
+    color: #e8eaed !important;
+}
+
+/* ============================================
+   STATS BAR - SUBTLE
+   ============================================ */
+.stats-bar {
+    background: #12151a !important;
+    border-color: #2a2e36 !important;
+}
+
+.stat-value {
+    color: #4a9eff !important;
+    text-shadow: none !important;
+}
+
+.stat-label {
+    color: #6b7a99 !important;
+}
+
+.stat-divider {
+    background: #2a2e36 !important;
+}
+
+/* ============================================
+   MANIFESTO SECTION
+   ============================================ */
+.manifesto-section {
+    background: #0d0f12 !important;
+}
+
+.manifesto-section h2 {
+    color: #4a9eff !important;
+    text-shadow: none !important;
+}
+
+.manifesto-lead {
+    color: #e8eaed !important;
+}
+
+.manifesto-content p {
+    color: #9aa0aa !important;
+}
+
+.manifesto-quote {
+    border-left-color: #4a9eff !important;
+    color: #9aa0aa !important;
+    background: rgba(74, 158, 255, 0.05) !important;
+}
+
+.m-card {
+    background: #12151a !important;
+    border-color: #2a2e36 !important;
+}
+
+.m-card:hover {
+    border-color: #4a9eff !important;
+    background: rgba(74, 158, 255, 0.05) !important;
+}
+
+.m-val {
+    color: #e8eaed !important;
+    text-shadow: none !important;
+}
+
+.m-lbl {
+    color: #4a9eff !important;
+}
+
+/* ============================================
+   CAPABILITIES SECTION
+   ============================================ */
+.capabilities-section {
+    background: #12151a !important;
+}
+
+.section-tag {
+    color: #6b7a99 !important;
+}
+
+.section-title {
+    color: #e8eaed !important;
+    text-shadow: none !important;
+}
+
+.section-subtitle {
+    color: #9aa0aa !important;
+}
+
+.capability-card {
+    background: #181b21 !important;
+    border-color: #2a2e36 !important;
+}
+
+.capability-card:hover {
+    border-color: #4a9eff !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.capability-card.featured {
+    border-color: #4a9eff !important;
+    background: linear-gradient(180deg, rgba(74, 158, 255, 0.05) 0%, #181b21 100%) !important;
+}
+
+.cap-badge {
+    background: #4a9eff !important;
+}
+
+.cap-node {
+    color: #6b7a99 !important;
+}
+
+/* ============================================
+   ARCHITECTURE SECTION
+   ============================================ */
+.architecture-section {
+    background: #0d0f12 !important;
+}
+
+.cluster-id {
+    color: #4a9eff !important;
+}
+
+.node-pill {
+    background: #12151a !important;
+    border-color: #2a2e36 !important;
+    color: #9aa0aa !important;
+}
+
+.node-pill:hover {
+    border-color: #4a9eff !important;
+    color: #e8eaed !important;
+}
+
+.node-pill.active-pill {
+    background: rgba(74, 158, 255, 0.1) !important;
+    border-color: #4a9eff !important;
+    color: #4a9eff !important;
+}
+
+.node-pill.warning-pill {
+    background: rgba(248, 113, 113, 0.1) !important;
+    border-color: rgba(248, 113, 113, 0.3) !important;
+    color: #f87171 !important;
+}
+
+/* Legend */
+.legend-dot.strategy { background: #4a9eff !important; }
+.legend-dot.creation { background: #9775fa !important; }
+.legend-dot.intel { background: #34d399 !important; }
+.legend-dot.data { background: #f59e0b !important; }
+.legend-dot.meta { background: #6b7a99 !important; }
+
+/* ============================================
+   DEMO TERMINAL SECTION
+   ============================================ */
+.demo-experience-section {
+    background: #12151a !important;
+}
+
+.demo-ambient {
+    opacity: 0.1 !important;
+}
+
+.demo-title {
+    color: #e8eaed !important;
+    text-shadow: none !important;
+}
+
+.holographic-terminal {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+}
+
+.terminal-frame {
+    background: #0d0f12 !important;
+    border-color: #2a2e36 !important;
+}
+
+.terminal-top-bar {
+    background: #181b21 !important;
+    border-color: #2a2e36 !important;
+}
+
+.terminal-glow {
+    display: none !important;
+}
+
+.trace-line.system {
+    color: #4a9eff !important;
+}
+
+.trace-line.node-active {
+    color: #6b7a99 !important;
+}
+
+.trace-line.thinking {
+    color: #9775fa !important;
+}
+
+.trace-line.success {
+    color: #34d399 !important;
+}
+
+.trace-line.prompt {
+    color: #f59e0b !important;
+}
+
+.status-dot {
+    background: #34d399 !important;
+    box-shadow: none !important;
+    animation: none !important;
+}
+
+.demo-enter-btn {
+    background: #4a9eff !important;
+    box-shadow: none !important;
+}
+
+.demo-enter-btn:hover {
+    background: #5eaaff !important;
+}
+
+/* ============================================
+   TRANSFORMATION SECTION
+   ============================================ */
+.transformation-section {
+    background: #0d0f12 !important;
+}
+
+.trans-title {
+    color: #e8eaed !important;
+}
+
+.trans-subtitle {
+    color: #9aa0aa !important;
+}
+
+.old-paradigm {
+    border-color: rgba(248, 113, 113, 0.2) !important;
+    background: rgba(248, 113, 113, 0.03) !important;
+}
+
+.old-paradigm h3 {
+    color: #f87171 !important;
+}
+
+.new-paradigm {
+    border-color: rgba(74, 158, 255, 0.3) !important;
+    background: rgba(74, 158, 255, 0.05) !important;
+}
+
+.new-paradigm h3 {
+    color: #4a9eff !important;
+}
+
+.stage-glow {
+    display: none !important;
+}
+
+.trans-arrow .arrow-pulse {
+    animation: none !important;
+}
+
+.arrow-label {
+    color: #6b7a99 !important;
+}
+
+/* ============================================
+   PERFECT TWIN SECTION
+   ============================================ */
+.perfect-twin-section {
+    background: #12151a !important;
+}
+
+.twin-title {
+    color: #e8eaed !important;
+}
+
+.twin-text {
+    color: #9aa0aa !important;
+}
+
+.human-orb .orb-core {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.2) !important;
+}
+
+.machine-orb .orb-core {
+    background: linear-gradient(135deg, #4a9eff, #3d8ce6) !important;
+    box-shadow: 0 0 30px rgba(74, 158, 255, 0.2) !important;
+}
+
+.connection-label {
+    color: #6b7a99 !important;
+}
+
+.data-bit {
+    color: #4a9eff !important;
+}
+
+/* ============================================
+   UNICORN SECTION
+   ============================================ */
+.unicorn-section {
+    background: #0d0f12 !important;
+}
+
+.unicorn-title {
+    color: #e8eaed !important;
+    text-shadow: none !important;
+}
+
+.unicorn-vision {
+    color: #9aa0aa !important;
+}
+
+.unicorn-quote {
+    color: #6b7a99 !important;
+    border-left-color: #4a9eff !important;
+}
+
+.eq-element {
+    background: #12151a !important;
+    border-color: #2a2e36 !important;
+}
+
+.eq-element.result {
+    background: rgba(74, 158, 255, 0.08) !important;
+    border-color: #4a9eff !important;
+}
+
+.eq-operator {
+    color: #6b7a99 !important;
+}
+
+/* ============================================
+   STACK SECTION
+   ============================================ */
+.stack-section {
+    background: #12151a !important;
+}
+
+.stack-title {
+    color: #e8eaed !important;
+}
+
+.stack-desc {
+    color: #9aa0aa !important;
+}
+
+.stack-core {
+    background: linear-gradient(135deg, #181b21, #12151a) !important;
+    border-color: #4a9eff !important;
+    box-shadow: 0 0 40px rgba(74, 158, 255, 0.1) !important;
+}
+
+.core-label {
+    color: #4a9eff !important;
+}
+
+.orbit-item {
+    background: #181b21 !important;
+    border-color: #2a2e36 !important;
+}
+
+.orbit-name {
+    color: #9aa0aa !important;
+}
+
+.stack-feature {
+    background: #181b21 !important;
+    border-color: #2a2e36 !important;
+}
+
+.stack-feature:hover {
+    border-color: #4a9eff !important;
+}
+
+.sf-icon {
+    color: #4a9eff !important;
+}
+
+/* ============================================
+   FINAL CTA SECTION
+   ============================================ */
+.final-cta-section {
+    background: linear-gradient(180deg, #0d0f12 0%, #12151a 100%) !important;
+}
+
+.cta-grid-lines {
+    opacity: 0.03 !important;
+}
+
+.cta-badge {
+    background: rgba(52, 211, 153, 0.1) !important;
+    border-color: rgba(52, 211, 153, 0.3) !important;
+}
+
+.cta-badge .badge-text {
+    color: #34d399 !important;
+}
+
+.badge-pulse {
+    animation: none !important;
+    background: #34d399 !important;
+}
+
+.cta-headline .cta-line {
+    color: #e8eaed !important;
+    text-shadow: none !important;
+}
+
+.cta-headline .cta-line.accent {
+    color: #4a9eff !important;
+}
+
+.cta-philosophy {
+    color: #6b7a99 !important;
+}
+
+.cta-primary-btn {
+    background: #4a9eff !important;
+    box-shadow: 0 4px 20px rgba(74, 158, 255, 0.2) !important;
+}
+
+.cta-primary-btn:hover {
+    background: #5eaaff !important;
+}
+
+.cta-protocol {
+    background: #0d0f12 !important;
+    border-color: #2a2e36 !important;
+}
+
+.cta-protocol code {
+    color: #9aa0aa !important;
+}
+
+.meta-item {
+    color: #6b7a99 !important;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.landing-footer {
+    background: #0d0f12 !important;
+    border-top-color: #2a2e36 !important;
+}
+
+.footer-brand h3 {
+    color: #e8eaed !important;
+}
+
+.footer-brand .accent {
+    color: #4a9eff !important;
+}
+
+.footer-brand p {
+    color: #6b7a99 !important;
+}
+
+.meta-label {
+    color: #4a9eff !important;
+}
+
+.meta-col a,
+.meta-col p {
+    color: #6b7a99 !important;
+}
+
+.meta-col a:hover {
+    color: #e8eaed !important;
+}
+
+.footer-bottom {
+    border-top-color: #2a2e36 !important;
+}
+
+.footer-bottom p {
+    color: #5a616d !important;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0d0f12;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2a2e36;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3d4554;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem !important;
+    }
+    
+    .sub-hero {
+        font-size: 2rem !important;
+    }
+}

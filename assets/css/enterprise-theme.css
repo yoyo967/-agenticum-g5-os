@@ -1,0 +1,550 @@
+/**
+ * AGENTICUM G5 | ENTERPRISE THEME
+ * Hyper-Professional Design for C-Level Executives
+ * Built for 12+ hour work sessions
+ */
+
+/* ============================================
+   ENTERPRISE COLOR SYSTEM
+   Muted, professional, eye-friendly
+   ============================================ */
+:root {
+    /* Core Backgrounds - Deep, muted, easy on eyes */
+    --bg-core: #0d0f12;
+    --bg-panel: #12151a;
+    --bg-surface: #181b21;
+    --bg-elevated: #1e2229;
+    --bg-hover: #252931;
+    
+    /* Professional Borders */
+    --border-color: #2a2e36;
+    --border-subtle: #23262e;
+    --border-focus: #3d4554;
+    
+    /* Enterprise Accent Colors - Muted & Professional */
+    --accent-primary: #4a9eff;      /* Professional Blue */
+    --accent-secondary: #6b7a99;    /* Slate */
+    --accent-success: #34d399;      /* Muted Green */
+    --accent-warning: #fbbf24;      /* Amber */
+    --accent-danger: #f87171;       /* Soft Red */
+    
+    /* Text Hierarchy */
+    --text-primary: #e8eaed;
+    --text-secondary: #9aa0aa;
+    --text-muted: #5a616d;
+    --text-accent: #4a9eff;
+    
+    /* Replace old neon colors */
+    --accent-teal: var(--accent-primary);
+    --accent-magenta: #9775fa;      /* Muted Purple instead of hot pink */
+    --accent-green: var(--accent-success);
+    --accent-orange: var(--accent-warning);
+}
+
+/* ============================================
+   GLOBAL OVERRIDES - Kill all neon effects
+   ============================================ */
+
+/* Remove all glows and shadows */
+* {
+    text-shadow: none !important;
+}
+
+body.console-body {
+    background: var(--bg-core) !important;
+    color: var(--text-primary);
+}
+
+/* ============================================
+   HEADER - Clean and Professional
+   ============================================ */
+.console-header {
+    background: var(--bg-panel) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    backdrop-filter: none !important;
+}
+
+.logo-version {
+    color: var(--accent-primary) !important;
+    text-shadow: none !important;
+}
+
+.system-badge {
+    background: rgba(74, 158, 255, 0.08) !important;
+    border-color: rgba(74, 158, 255, 0.2) !important;
+}
+
+.badge-text {
+    color: var(--accent-primary) !important;
+}
+
+.badge-dot {
+    background: var(--accent-success) !important;
+    box-shadow: none !important;
+}
+
+.badge-dot.pulsing {
+    animation: none !important;
+}
+
+/* Clock - No glow */
+.clock-value {
+    color: var(--text-primary) !important;
+    text-shadow: none !important;
+    font-weight: 500 !important;
+}
+
+/* Operator badge - Muted */
+.operator-badge {
+    background: rgba(151, 117, 250, 0.08) !important;
+    border-color: rgba(151, 117, 250, 0.2) !important;
+}
+
+.operator-level {
+    color: var(--accent-secondary) !important;
+}
+
+/* ============================================
+   PANELS - Professional surfaces
+   ============================================ */
+.panel {
+    background: var(--bg-panel) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: none !important;
+}
+
+.panel-header {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+}
+
+.panel-header h3 {
+    color: var(--text-secondary) !important;
+    font-weight: 500 !important;
+}
+
+.ai-badge {
+    background: rgba(74, 158, 255, 0.1) !important;
+    border-color: rgba(74, 158, 255, 0.2) !important;
+    color: var(--accent-primary) !important;
+}
+
+/* ============================================
+   STATUS INDICATORS - Subtle
+   ============================================ */
+.status-indicator.live {
+    background: rgba(52, 211, 153, 0.15) !important;
+    color: var(--accent-success) !important;
+    animation: none !important;
+}
+
+.status-value.live {
+    color: var(--accent-success) !important;
+}
+
+.status-value.online {
+    color: var(--accent-primary) !important;
+}
+
+/* Metric bars - Professional gradients */
+.cpu-bar {
+    background: linear-gradient(90deg, #4a9eff, #34d399) !important;
+}
+
+.token-bar {
+    background: linear-gradient(90deg, #4a9eff, #9775fa) !important;
+}
+
+.memory-bar {
+    background: linear-gradient(90deg, #6b7a99, #4a9eff) !important;
+}
+
+/* ============================================
+   COMMAND INTERFACE CENTER - Clean
+   ============================================ */
+.commander-interface {
+    background: none !important;
+}
+
+/* Remove the pulsing core animation */
+.core-center.pulsing {
+    background: var(--bg-elevated) !important;
+    box-shadow: 0 0 0 1px var(--border-focus) !important;
+    animation: none !important;
+}
+
+.core-logo {
+    color: var(--accent-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* Kill orbit animations in professional mode */
+.orbit-ring {
+    animation: none !important;
+    border-color: var(--border-subtle) !important;
+    box-shadow: none !important;
+    opacity: 0.3 !important;
+}
+
+/* Commander Input - Clean */
+.input-wrapper {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: none !important;
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1) !important;
+}
+
+.input-label {
+    color: var(--text-muted) !important;
+}
+
+.prompt-symbol {
+    color: var(--accent-primary) !important;
+}
+
+.execute-btn {
+    background: var(--accent-primary) !important;
+    box-shadow: none !important;
+}
+
+.execute-btn:hover {
+    background: #5eaaff !important;
+    box-shadow: none !important;
+}
+
+/* Suggestions - Subtle */
+.suggestion {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.suggestion:hover {
+    background: var(--bg-hover) !important;
+    border-color: var(--accent-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* ============================================
+   TERMINAL - Professional CLI
+   ============================================ */
+.terminal-container {
+    background: var(--bg-core) !important;
+}
+
+.terminal-output {
+    background: var(--bg-core) !important;
+}
+
+.term-line.system {
+    color: var(--accent-primary) !important;
+}
+
+.term-line.success {
+    color: var(--accent-success) !important;
+}
+
+.term-line.error {
+    color: var(--accent-danger) !important;
+}
+
+.terminal-input-area {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+}
+
+.prompt-char {
+    color: var(--accent-primary) !important;
+}
+
+.send-btn {
+    background: var(--accent-primary) !important;
+}
+
+.send-btn:hover {
+    background: #5eaaff !important;
+    transform: none !important;
+}
+
+/* ============================================
+   QUICK ACTIONS - Professional buttons
+   ============================================ */
+.action-btn {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-color) !important;
+    transition: all 0.15s ease !important;
+}
+
+.action-btn:hover {
+    background: var(--bg-hover) !important;
+    border-color: var(--accent-primary) !important;
+}
+
+.action-btn .btn-text {
+    color: var(--text-secondary) !important;
+    font-weight: 500 !important;
+}
+
+.action-btn:hover .btn-text {
+    color: var(--text-primary) !important;
+}
+
+/* Specific button variants */
+.action-btn.warning-btn:hover {
+    border-color: var(--accent-warning) !important;
+}
+
+.action-btn.success-btn:hover {
+    border-color: var(--accent-success) !important;
+}
+
+.action-btn.help-btn:hover {
+    border-color: var(--accent-secondary) !important;
+}
+
+/* Jury Mode Button - Prominent but not flashy */
+.jury-mode-btn {
+    background: linear-gradient(135deg, rgba(74, 158, 255, 0.1), rgba(151, 117, 250, 0.1)) !important;
+    border: 1px solid rgba(74, 158, 255, 0.3) !important;
+}
+
+.jury-mode-btn:hover {
+    background: linear-gradient(135deg, rgba(74, 158, 255, 0.15), rgba(151, 117, 250, 0.15)) !important;
+    border-color: var(--accent-primary) !important;
+}
+
+.jury-badge {
+    background: var(--accent-primary) !important;
+    color: white !important;
+}
+
+/* ============================================
+   ASSET VAULT - Clean cards
+   ============================================ */
+.vault-header h4 {
+    color: var(--text-secondary) !important;
+}
+
+.asset-card {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+}
+
+.asset-card:hover {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transform: translateY(-1px) !important;
+}
+
+.asset-type-badge {
+    background: var(--bg-elevated) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* ============================================
+   MODALS - Professional windows
+   ============================================ */
+.overlay-modal {
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+.modal-panel {
+    background: var(--bg-panel) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+}
+
+.modal-header {
+    background: var(--bg-surface) !important;
+}
+
+.modal-header h3 {
+    color: var(--text-primary) !important;
+}
+
+.modal-footer {
+    background: var(--bg-surface) !important;
+}
+
+.btn-primary {
+    background: var(--accent-primary) !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background: #5eaaff !important;
+}
+
+/* ============================================
+   LOG STREAM - Subtle
+   ============================================ */
+.log-stream-container {
+    background: var(--bg-core) !important;
+}
+
+.log-header {
+    background: var(--bg-surface) !important;
+}
+
+.log-title {
+    color: var(--text-muted) !important;
+}
+
+.log-entry .sys {
+    color: var(--accent-primary) !important;
+}
+
+.log-entry .time {
+    color: var(--text-muted) !important;
+}
+
+/* ============================================
+   SCROLLBAR - Professional
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-core);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-focus);
+}
+
+/* ============================================
+   DISABLE ALL UNNECESSARY ANIMATIONS
+   ============================================ */
+.pulsing,
+.pulse,
+[class*="pulse"] {
+    animation: none !important;
+}
+
+/* Minimal status animations only */
+@keyframes gentle-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* ============================================
+   CRT/SCAN OVERLAYS - REMOVE COMPLETELY
+   ============================================ */
+.crt-overlay,
+.scan-line,
+.vignette {
+    display: none !important;
+}
+
+/* Particles - reduce opacity significantly */
+#dashboard-particles {
+    opacity: 0.1 !important;
+}
+
+/* ============================================
+   HIGHLIGHT COLORS
+   ============================================ */
+.highlight {
+    color: var(--accent-primary) !important;
+}
+
+/* Node dots - Muted */
+.node-dot {
+    background: var(--accent-secondary) !important;
+    border-color: var(--border-color) !important;
+    opacity: 0.7 !important;
+    box-shadow: none !important;
+}
+
+.node-dot:hover {
+    background: var(--accent-primary) !important;
+    opacity: 1 !important;
+}
+
+/* ============================================
+   SECTION HEADERS
+   ============================================ */
+.section-label {
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+}
+
+/* ============================================
+   TOOL BUTTONS
+   ============================================ */
+.tool-btn {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.tool-btn:hover {
+    background: var(--bg-hover) !important;
+    border-color: var(--accent-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.tool-btn.action {
+    background: rgba(74, 158, 255, 0.1) !important;
+    border-color: rgba(74, 158, 255, 0.3) !important;
+    color: var(--accent-primary) !important;
+}
+
+.tool-btn.action:hover {
+    background: var(--accent-primary) !important;
+    color: white !important;
+}
+
+/* ============================================
+   HEADER BUTTONS
+   ============================================ */
+.header-btn {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.header-btn:hover {
+    border-color: var(--accent-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.header-btn.active {
+    border-color: var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+}
+
+/* ============================================
+   RED TEAM MODE - Professional Alert
+   ============================================ */
+body.red-team-mode {
+    --accent-primary: #f87171 !important;
+    --accent-teal: #f87171 !important;
+}
+
+body.red-team-mode .console-header {
+    border-bottom-color: rgba(248, 113, 113, 0.3) !important;
+}
+
+/* ============================================
+   FOCUS STATES - Accessibility
+   ============================================ */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
