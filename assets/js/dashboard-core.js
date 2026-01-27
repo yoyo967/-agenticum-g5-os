@@ -474,6 +474,9 @@ class G5Dashboard {
                 this.logSystem('✓ UPLOAD SUCCESS. ASSET MOUNTED.');
                 this.renderVault();
                 this.playSound('success');
+                
+                // FIX: Reset input to allow multiple uploads
+                input.value = '';
             };
             
             // Actually read the file
@@ -500,7 +503,8 @@ class G5Dashboard {
         filtered.forEach(asset => {
             const card = document.createElement('div');
             card.className = 'asset-card';
-            card.onclick = () => this.openAssetPreview(asset.id); // Click to open
+            // FIX: Use explicit attribute binding for robustness
+            card.setAttribute('onclick', `G5Dashboard.openAssetPreview('${asset.id}')`);
             
             // Visual Preview (Thumbnail)
             let thumbnail = '';
@@ -526,7 +530,10 @@ class G5Dashboard {
 
     openAssetPreview(assetId) {
         const asset = this.assets.find(a => a.id === assetId);
-        if(!asset) return;
+        if(!asset) {
+            console.error('Asset not found:', assetId);
+            return;
+        }
 
         const modal = document.getElementById('asset-preview-modal');
         const title = document.getElementById('preview-filename');
@@ -610,6 +617,7 @@ class G5Dashboard {
     // NEW STATIC METHODS FOR ASSET PREVIEW
     static saveAssetChanges() { window.dashboardInstance?.saveAssetChanges(); }
     static downloadCurrentAsset() { window.dashboardInstance?.downloadCurrentAsset(); }
+    static openAssetPreview(id) { window.dashboardInstance?.openAssetPreview(id); } // MISSING ONE ADDED
 }
 
 // Global Instance
