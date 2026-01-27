@@ -487,12 +487,18 @@ class G5Dashboard {
     // Static Access helper
     static toggleRedTeam() { window.dashboardInstance?.toggleRedTeam(); }
     static runDiagnostics() { window.dashboardInstance?.runDiagnostics(); }
-    static toggleView() { console.log('View Toggle'); } // Placeholder
+    static toggleView() { window.dashboardInstance?.toggleView(); }
     static fillInput(txt) { window.dashboardInstance?.fillInput(txt); }
     static executeCommand() { 
         const input = document.getElementById('commander-input');
         if(input) window.dashboardInstance?.executeCommand(input.value); 
     }
+    
+    // MISSING STATIC HANDLERS FIXED
+    static openNodeConfig(id) { window.dashboardInstance?.openNodeConfig(id); }
+    static closeModal() { window.dashboardInstance?.closeModal(); }
+    static saveNodeConfig() { window.dashboardInstance?.saveNodeConfig(); }
+    static handleUpload(el) { window.dashboardInstance?.handleUpload(el); }
 }
 
 // Global Instance
