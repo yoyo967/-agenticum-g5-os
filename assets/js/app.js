@@ -65,6 +65,11 @@ function log(msg, type = 'info') {
     entry.innerHTML = `<span class="time">${time}</span> <span class="${type}">${prefix}</span> ${msg}`;
     stream.appendChild(entry);
     stream.scrollTop = stream.scrollHeight;
+    
+    // EXCELLENCE: Pulse the visualizer on node activity
+    if (type === 'node' && visualizer) {
+        visualizer.triggerPulse();
+    }
 }
 
 // TERMINAL

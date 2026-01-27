@@ -1,9 +1,10 @@
 /**
- * AGENTICUM G5 | LANDING PAGE LOGIC
+ * AGENTICUM G5 | LANDING PAGE LOGIC V2.0
  */
 
 document.addEventListener('DOMContentLoaded', () => {
     initLandingTerminal();
+    initManifestoTyping();
     
     // Smooth scroll for nav links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -40,11 +41,35 @@ function initLandingTerminal() {
         div.className = `line ${lines[i].type || ''}`;
         div.innerHTML = `<span class="prompt">></span> ${lines[i].text}`;
         
-        // Insert before the cursor
         term.insertBefore(div, term.querySelector('.cursor'));
         i++;
-        
-        // Auto-scroll terminal
         term.scrollTop = term.scrollHeight;
     }, 1200);
+}
+
+function initManifestoTyping() {
+    const lead = document.querySelector('.manifesto-lead');
+    if (!lead) return;
+
+    const text = lead.innerText;
+    lead.innerText = '';
+    let i = 0;
+
+    const type = () => {
+        if (i < text.length) {
+            lead.innerText += text.charAt(i);
+            i++;
+            setTimeout(type, 50);
+        }
+    };
+
+    // Trigger when in view
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            type();
+            observer.disconnect();
+        }
+    });
+
+    observer.observe(lead);
 }

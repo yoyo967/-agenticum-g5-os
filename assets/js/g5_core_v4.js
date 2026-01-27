@@ -58,11 +58,44 @@ function forceUpdateVault() {
         item.style.cssText = 'padding: 8px; border-bottom: 1px solid #222; font-size: 0.7rem; color: #fff; cursor: pointer; background: rgba(255,0,255,0.05); margin-bottom: 2px;';
         item.innerHTML = `<span style="color:#00f3ff; font-weight:bold;">[${asset.type.toUpperCase()}]</span> ${asset.name}`;
         item.onclick = () => {
-            alert(`AGENTICUM G5 ARTIFACT [${asset.id}]:\n\n${asset.content}`);
+            openAssetPreview(asset);
+            writeToTerminal(`>> ACCESSING ARTIFACT: ${asset.name}`, 'info');
         };
         vault.appendChild(item);
     });
     console.log("G5 >> VAULT UPDATED MANUALLY");
+}
+
+function openAssetPreview(asset) {
+    const existing = document.querySelector('.hologram-overlay');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'hologram-overlay';
+    overlay.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+        display: flex; justify-content: center; align-items: center;
+        z-index: 20000; animation: fadeIn 0.3s ease;
+    `;
+    
+    overlay.innerHTML = `
+        <div class="hologram-card" style="
+            width: 600px; background: #0a0a0a; border: 1px solid var(--accent-teal);
+            padding: 2rem; position: relative; box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+        ">
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-teal); margin-bottom: 1rem;">
+                // ARTIFACT_PREVIEW :: ${asset.id}
+            </div>
+            <h2 style="font-family: var(--font-heading); color: #fff; margin-bottom: 1.5rem;">${asset.name}</h2>
+            <div style="background: rgba(255,255,255,0.02); padding: 1.5rem; color: #ccc; font-family: var(--font-mono); line-height: 1.6; border: 1px solid #222;">
+                ${asset.content}
+            </div>
+            <button class="primary-btn" onclick="this.parentElement.parentElement.remove()" style="margin-top: 2rem; width: 100%;">ACKNOWLEDGE & CLOSE</button>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
 }
 
 function showCampaignResults() {

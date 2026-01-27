@@ -7,12 +7,35 @@
     --accent-teal: #00f3ff;
     --accent-orange: #ff4800;
     --accent-green: #00ff41;
+    --accent-magenta: #ff00ff;
     --glass-bg: rgba(255, 255, 255, 0.03);
     --glass-border: rgba(255, 255, 255, 0.05);
     
     --font-heading: 'Rajdhani', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     --font-body: 'Inter', sans-serif;
+    
+    --neon-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* CRT SCANLINE EFFECT */
+.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+    z-index: 30000;
+    opacity: 0.3;
 }
 
 * {

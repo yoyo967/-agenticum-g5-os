@@ -60,9 +60,23 @@ npx serve .
 ### Cloud Deployment
 
 ```bash
-firebase init
 firebase deploy
 ```
+
+## 🌌 SYSTEM CORE V4.1: "THE PERFECT TWIN"
+
+**STATUS:** [OPERATIONAL // MAXIMUM_EXCELLENCE]
+**PROVIDER:** Google Cloud / Vertex AI (Frankfurt Sovereign Enclave)
+**REASONING:** 2M Token Context Cluster (Gemini 3 Pro)
+
+### 🏗️ THE 52-NODE FABRIC
+
+AGENTICUM G5 orchestrates a complex mesh of specialized nodes:
+
+- **[STRATEGY]**: SN-00 Oracle, SP-33 Hegemony, PS-00 Psy-Ops.
+- **[CREATION]**: CC-06 Veo Native, CC-08 Flash Voice, CC-13 Brand.
+- **[INTEL]**: RA-01 Authority, RA-09 Red Team, RA-06 Grounding.
+- **[OPS]**: DT-04 EU AI Compliance, MT-05 Health Monitor.
 
 ## 🎮 COMMANDS (HEGEMONY CONSOLE)
 
