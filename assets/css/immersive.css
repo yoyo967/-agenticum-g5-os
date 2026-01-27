@@ -424,3 +424,82 @@ body.loaded {
     font-size: 1rem;
     margin-left: 0.25rem;
 }
+
+/* ============================================
+   NEURAL NETWORK VISUALIZATION
+   ============================================ */
+
+.neural-network-canvas {
+    width: 100%;
+    height: 500px;
+    position: relative;
+}
+
+.neural-network-canvas canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.arch-legend {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 1px;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.legend-dot.strategy {
+    background: #00f3ff;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+}
+
+.legend-dot.creation {
+    background: #ff00ff;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+}
+
+.legend-dot.intel {
+    background: #ff4800;
+    box-shadow: 0 0 10px rgba(255, 72, 0, 0.5);
+}
+
+.legend-dot.data {
+    background: #00ff41;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.legend-dot.meta {
+    background: #7b2dff;
+    box-shadow: 0 0 10px rgba(123, 45, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+    .neural-network-canvas {
+        height: 350px;
+    }
+    
+    .arch-legend {
+        gap: 1rem;
+    }
+    
+    .legend-item {
+        font-size: 0.6rem;
+    }
+}
+
