@@ -8,12 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=OMEGA_1">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=OMEGA_1">
-    <link rel="stylesheet" href="assets/css/future-2030.css?v=OMEGA_1">
-    <link rel="stylesheet" href="assets/css/dashboard-2030.css?v=OMEGA_PRO_FIX_1">
-    <link rel="stylesheet" href="assets/css/immersive.css?v=OMEGA_1">
-    <link rel="stylesheet" href="assets/css/interactive.css?v=OMEGA_1">
+    <link rel="stylesheet" href="assets/css/style.css?v=OMEGA_OS_LEVEL">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=OMEGA_OS_LEVEL">
+    <link rel="stylesheet" href="assets/css/future-2030.css?v=OMEGA_OS_LEVEL">
+    <link rel="stylesheet" href="assets/css/dashboard-2030.css?v=OMEGA_OS_LEVEL">
+    <link rel="stylesheet" href="assets/css/immersive.css?v=OMEGA_OS_LEVEL">
+    <link rel="stylesheet" href="assets/css/interactive.css?v=OMEGA_OS_LEVEL">
 </head>
 <body class="console-body">
     <!-- Visual Overlays -->
@@ -23,9 +23,9 @@
     <canvas id="dashboard-particles"></canvas>
 
     <!-- 2030 EXPERIENCE SCRIPTS -->
-    <script src="assets/js/immersive.js?v=OMEGA_1" defer></script>
-    <script src="assets/js/interactive.js?v=OMEGA_1" defer></script>
-    <script src="assets/js/neural-network.js?v=OMEGA_1" defer></script>
+    <script src="assets/js/immersive.js?v=OMEGA_OS_LEVEL" defer></script>
+    <script src="assets/js/interactive.js?v=OMEGA_OS_LEVEL" defer></script>
+    <script src="assets/js/neural-network.js?v=OMEGA_OS_LEVEL" defer></script>
 
     <!-- TOP BAR: System Status -->
     <header class="console-header">
@@ -405,7 +405,32 @@
         </div>
     </div>
     
+    <!-- ASSET PREVIEW / EDITOR MODAL -->
+    <div class="overlay-modal hidden" id="asset-preview-modal">
+        <div class="modal-panel large-window">
+            <div class="modal-header">
+                <div class="window-controls">
+                    <span class="win-btn close" onclick="G5Dashboard.closeModal()"></span>
+                    <span class="win-btn min"></span>
+                    <span class="win-btn max"></span>
+                </div>
+                <h3 id="preview-filename">DOCUMENT_VIEWER.EXE</h3>
+                <div class="modal-actions">
+                    <button class="tool-btn" onclick="G5Dashboard.saveAssetChanges()">💾 SAVE</button>
+                    <button class="tool-btn" onclick="G5Dashboard.downloadCurrentAsset()">⬇ DOWNLOAD</button>
+                </div>
+            </div>
+            <div class="modal-body preview-body" id="preview-content-area">
+                <!-- DYNAMIC CONTENT GOES HERE -->
+                <div class="empty-preview">Select an asset to view</div>
+            </div>
+            <div class="modal-footer editor-footer">
+                <span class="meta-info" id="preview-meta">READ ONLY MODE</span>
+            </div>
+        </div>
+    </div>
+    
     <!-- CORE DASHBOARD LOGIC -->
-    <script src="assets/js/dashboard-core.js?v=OMEGA_PRO_FIX_1"></script>
+    <script src="assets/js/dashboard-core.js?v=OMEGA_OS_LEVEL"></script>
 </body>
 </html>

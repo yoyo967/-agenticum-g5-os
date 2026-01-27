@@ -442,26 +442,135 @@ class G5Dashboard {
     }
     
     /* ============================================
-       FILE UPLOAD LOGIC
+       FILE UPLOAD & ASSET OS LOGIC
        ============================================ */
     handleUpload(input) {
         if (input.files && input.files[0]) {
             const file = input.files[0];
-            this.logSystem(`INITIATING UPLOAD: ${file.name} (${(file.size/1024).toFixed(1)} KB)...`);
+            this.logSystem(`READING FILE STREAM: ${file.name}...`);
             
-            setTimeout(() => {
-                this.logSystem('✓ UPLOAD COMPLETE. ASSET INDEXED.');
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                const content = e.target.result; // Data URL for images, text for text files
                 
-                // Add to Vault
+                // Determine Type
+                let type = 'text';
+                if (file.type.match('image.*')) type = 'image';
+                if (file.type.match('video.*')) type = 'video';
+                
+                const assetId = `FILE_${Math.floor(Math.random()*1000)}`;
+                
+                // Add to Vault with REAL CONTENT
                 this.assets.unshift({
-                    id: `FILE_${Math.floor(Math.random()*1000)}`,
-                    type: file.type.includes('image') ? 'image' : 'text',
+                    id: assetId,
+                    type: type,
                     title: file.name,
-                    date: new Date().toLocaleTimeString()
+                    date: new Date().toLocaleTimeString(),
+                    data: content, // The actual base64 or text data
+                    size: (file.size/1024).toFixed(1) + ' KB'
                 });
+                
+                this.logSystem('✓ UPLOAD SUCCESS. ASSET MOUNTED.');
                 this.renderVault();
                 this.playSound('success');
-            }, 1000);
+            };
+            
+            // Actually read the file
+            if (file.type.match('image.*')) {
+                reader.readAsDataURL(file);
+            } else {
+                reader.readAsText(file); // Assume text for code/docs
+            }
+        }
+    }
+
+    renderVault(filter = 'all') {
+        const grid = document.getElementById('asset-vault-grid');
+        if (!grid) return;
+        
+        grid.innerHTML = '';
+        const filtered = filter === 'all' ? this.assets : this.assets.filter(a => a.type === filter);
+        
+        if (filtered.length === 0) {
+             grid.innerHTML = `<div class="empty-state"><span class="empty-icon">📂</span><span>No assets indexed.</span></div>`;
+             return;
+        }
+
+        filtered.forEach(asset => {
+            const card = document.createElement('div');
+            card.className = 'asset-card';
+            card.onclick = () => this.openAssetPreview(asset.id); // Click to open
+            
+            // Visual Preview (Thumbnail)
+            let thumbnail = '';
+            if (asset.type === 'image') {
+                thumbnail = `<img src="${asset.data}" style="width:100%; height:100%; object-fit:cover; opacity:0.8;">`;
+            } else {
+                 thumbnail = `<div style="width: 40px; height: 40px; background: linear-gradient(45deg, var(--accent-teal), var(--accent-magenta)); border-radius: 50%; opacity: 0.5"></div>`;
+            }
+
+            card.innerHTML = `
+                <div class="asset-preview">
+                    <span class="asset-type-badge">${asset.type.toUpperCase()}</span>
+                    ${thumbnail}
+                </div>
+                <div class="asset-info">
+                    <span class="asset-title">${asset.title}</span>
+                    <span class="asset-meta">${asset.id} | ${asset.date}</span>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    openAssetPreview(assetId) {
+        const asset = this.assets.find(a => a.id === assetId);
+        if(!asset) return;
+
+        const modal = document.getElementById('asset-preview-modal');
+        const title = document.getElementById('preview-filename');
+        const contentArea = document.getElementById('preview-content-area');
+        const meta = document.getElementById('preview-meta');
+
+        if(modal && title && contentArea) {
+            title.textContent = asset.title.toUpperCase();
+            
+            // Render Content based on Type
+            if (asset.type === 'image') {
+                contentArea.innerHTML = `<img src="${asset.data}" class="preview-image">`;
+                meta.textContent = `IMAGE PREVIEW | ${asset.size}`;
+            } else {
+                // Text Editor Mode
+                contentArea.innerHTML = `<textarea class="preview-editor" spellcheck="false">${asset.data || 'No content available.'}</textarea>`;
+                meta.textContent = `TEXT EDITOR MODE | ${asset.size} | UTF-8`;
+            }
+            
+            modal.classList.remove('hidden');
+            this.playSound('open');
+            this.currentOpenAsset = asset;
+        }
+    }
+    
+    saveAssetChanges() {
+        // Mock Save using Editor Content
+        if (this.currentOpenAsset && this.currentOpenAsset.type !== 'image') {
+            const editor = document.querySelector('.preview-editor');
+            if (editor) {
+                this.currentOpenAsset.data = editor.value; // Save to memory
+                this.logSystem(`✓ SAVED CHANGES TO ${this.currentOpenAsset.id}`);
+                this.playSound('success');
+            }
+        } else {
+             this.logSystem('INFO: Image assets are read-only in this version.');
+        }
+    }
+    
+    downloadCurrentAsset() {
+        if(this.currentOpenAsset) {
+            this.logSystem(`DOWNLOADING ${this.currentOpenAsset.title}...`);
+            // Here we would trigger a real download, purely simulated for now to avoid popup blockers
+            this.playSound('success');
         }
     }
 
@@ -474,7 +583,6 @@ class G5Dashboard {
 
     startLiveMetrics() {
         setInterval(() => {
-            // Fluctuate Latency
             const lat = document.getElementById('latency-display');
             if(lat) {
                 const val = 10 + Math.floor(Math.random() * 20);
@@ -484,7 +592,7 @@ class G5Dashboard {
         }, 2000);
     }
 
-    // Static Access helper
+    // Static Access helpers
     static toggleRedTeam() { window.dashboardInstance?.toggleRedTeam(); }
     static runDiagnostics() { window.dashboardInstance?.runDiagnostics(); }
     static toggleView() { window.dashboardInstance?.toggleView(); }
@@ -494,11 +602,14 @@ class G5Dashboard {
         if(input) window.dashboardInstance?.executeCommand(input.value); 
     }
     
-    // MISSING STATIC HANDLERS FIXED
     static openNodeConfig(id) { window.dashboardInstance?.openNodeConfig(id); }
     static closeModal() { window.dashboardInstance?.closeModal(); }
     static saveNodeConfig() { window.dashboardInstance?.saveNodeConfig(); }
     static handleUpload(el) { window.dashboardInstance?.handleUpload(el); }
+    
+    // NEW STATIC METHODS FOR ASSET PREVIEW
+    static saveAssetChanges() { window.dashboardInstance?.saveAssetChanges(); }
+    static downloadCurrentAsset() { window.dashboardInstance?.downloadCurrentAsset(); }
 }
 
 // Global Instance
