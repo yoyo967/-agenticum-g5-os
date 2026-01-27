@@ -108,10 +108,37 @@ async function deployCampaign(btn) {
     
     await wait(1500);
     log("Campaign Assets propogated to Web App Layer.", "success");
-    writeToTerminal(">> DEPLOY_SUCCESS: Campaign Live on https://tutorai-e39uu.web.app", "success");
+    writeToTerminal('>> DEPLOY_SUCCESS: Campaign Live on https://tutorai-e39uu.web.app', "success");
     
+    // FILL THE VAULT
+    updateAssetVault([
+        { id: 'GEN_MANIFESTO', name: 'MANIFESTO_V5.md', type: 'text' },
+        { id: 'GEN_VEO_PROMPT', name: 'VEO_CINEMATIC.prompt', type: 'video' },
+        { id: 'GEN_SOCIAL_PACK', name: 'VIRAL_HOOKS.json', type: 'data' }
+    ]);
+
     btn.innerText = "DEPLOY_SUCCESS";
     setTimeout(() => {
         btn.parentElement.parentElement.parentElement.remove();
     }, 2000);
+}
+
+function updateAssetVault(assets) {
+    const vault = document.getElementById('vault-list');
+    vault.innerHTML = '';
+    
+    assets.forEach(asset => {
+        const item = document.createElement('div');
+        item.className = 'vault-item';
+        item.style.cssText = 'padding: 0.4rem; border-bottom: 1px solid #222; font-size: 0.7rem; font-family: var(--font-mono); color: #888; cursor: pointer; display: flex; align-items: center;';
+        item.innerHTML = `
+            <span style="color:var(--accent-teal); margin-right: 10px;">[${asset.type.toUpperCase()}]</span>
+            <span>${asset.name}</span>
+        `;
+        item.onclick = () => {
+            writeToTerminal(`>> OPENING ${asset.name}...`, 'info');
+            // Logic to show asset content could go here
+        };
+        vault.appendChild(item);
+    });
 }
