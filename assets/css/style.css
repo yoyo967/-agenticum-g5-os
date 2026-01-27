@@ -38,6 +38,48 @@
     opacity: 0.3;
 }
 
+/* PARTICLE SYSTEM CANVAS */
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.7;
+}
+
+/* NOISE OVERLAY */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 29999;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+}
+
+/* GRID OVERLAY */
+.grid-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -982,4 +1024,321 @@ body {
     transition: all 0.2s;
 }
 
+/* ============================================
+   PREMIUM DEMO TERMINAL SECTION
+   ============================================ */
+.demo-section {
+    padding: 6rem 10%;
+    background: linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
+    position: relative;
+    overflow: hidden;
+}
 
+.demo-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 100px;
+    background: linear-gradient(180deg, transparent, var(--accent-teal), transparent);
+    animation: pulse-line 3s ease-in-out infinite;
+}
+
+@keyframes pulse-line {
+    0%, 100% { opacity: 0.3; height: 80px; }
+    50% { opacity: 1; height: 120px; }
+}
+
+.terminal-window {
+    background: rgba(5, 5, 5, 0.9);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(0, 243, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terminal-header .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.terminal-header .dot.red { background: #ff5f57; box-shadow: 0 0 8px rgba(255, 95, 87, 0.5); }
+.terminal-header .dot.yellow { background: #febc2e; box-shadow: 0 0 8px rgba(254, 188, 46, 0.5); }
+.terminal-header .dot.green { background: #28c840; box-shadow: 0 0 8px rgba(40, 200, 64, 0.5); }
+
+.terminal-header .title {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #666;
+    letter-spacing: 1px;
+}
+
+.terminal-body {
+    padding: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    min-height: 200px;
+    background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 243, 255, 0.01) 1px,
+        rgba(0, 243, 255, 0.01) 2px
+    );
+}
+
+.terminal-body .line {
+    margin-bottom: 0.5rem;
+    opacity: 1;
+}
+
+.terminal-body .line.success { color: var(--accent-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
+.terminal-body .line.info { color: var(--accent-teal); }
+.terminal-body .line.warn { color: var(--accent-orange); text-shadow: 0 0 10px rgba(255, 72, 0, 0.3); }
+
+.typing-cursor {
+    color: var(--accent-teal);
+    font-weight: bold;
+    animation: cursorBlink 0.5s steps(1) infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+@keyframes typeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.terminal-body .prompt {
+    color: var(--accent-magenta);
+    margin-right: 0.5rem;
+}
+
+.terminal-body .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background: var(--accent-teal);
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+    .hero-section {
+        flex-direction: column;
+        padding: 120px 5% 60px;
+        text-align: center;
+    }
+    
+    .hero-content {
+        order: 2;
+    }
+    
+    .hero-visual {
+        order: 1;
+        margin-bottom: 2rem;
+    }
+    
+    .hero-image-container {
+        width: 350px;
+        height: 350px;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+    }
+    
+    .hero-actions {
+        justify-content: center;
+    }
+    
+    .manifesto-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .architecture-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .console-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+    }
+    
+    .left-panel {
+        display: none;
+    }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+    .landing-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .landing-header nav {
+        gap: 0.5rem;
+    }
+    
+    .nav-link {
+        display: none;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    .hero-section {
+        padding-top: 100px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .hero-image-container {
+        width: 280px;
+        height: 280px;
+    }
+    
+    .floating-artifact {
+        max-width: 250px;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .primary-btn, .secondary-btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .section-id {
+        font-size: 2rem;
+    }
+    
+    .manifesto-section, .architecture-section {
+        padding: 4rem 5%;
+    }
+    
+    .manifesto-lead {
+        font-size: 1.5rem;
+    }
+    
+    .architecture-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .terminal-window {
+        margin: 0 1rem;
+    }
+    
+    .m-val {
+        font-size: 2rem;
+    }
+    
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-btn {
+        justify-content: center;
+    }
+}
+
+/* ============================================
+   ENHANCED LOADING STATES
+   ============================================ */
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.loading-shimmer {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.02) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.02) 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+/* ============================================
+   PREMIUM HOVER STATES
+   ============================================ */
+.arch-node-group:hover {
+    background: rgba(0, 243, 255, 0.03);
+    border-color: rgba(0, 243, 255, 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.m-card:hover .m-val {
+    color: var(--accent-teal);
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    #particle-canvas {
+        display: none;
+    }
+}
+
+/* Focus states for keyboard navigation */
+a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent-teal);
+    outline-offset: 4px;
+}
