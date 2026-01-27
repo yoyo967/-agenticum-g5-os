@@ -1,0 +1,467 @@
+/**
+ * AGENTICUM G5 | DASHBOARD OBSIDIAN & CHROME THEME
+ * Industrial Autonomous Design System
+ * 
+ * Obsidian: Deep blacks, dark grays
+ * Chrome: Metallic silvers, subtle blue accents
+ */
+
+/* ============================================
+   OBSIDIAN & CHROME COLOR PALETTE
+   ============================================ */
+:root {
+    /* Obsidian - Deep Dark Palette */
+    --obsidian-deep: #08090a;
+    --obsidian-dark: #0d0f12;
+    --obsidian-mid: #12151a;
+    --obsidian-light: #181b21;
+    
+    /* Chrome - Metallic Accents */
+    --chrome-bright: #e8eaed;
+    --chrome-mid: #a8adb5;
+    --chrome-dim: #6b7280;
+    --chrome-subtle: #4b5563;
+    
+    /* Accent Colors - Industrial */
+    --accent-blue: #60a5fa;
+    --accent-cyan: #22d3ee;
+    --accent-green: #34d399;
+    --accent-amber: #fbbf24;
+    --accent-red: #f87171;
+    
+    /* Override existing variables */
+    --accent-teal: var(--accent-blue) !important;
+    --bg-dark: var(--obsidian-deep) !important;
+    --bg-panel: var(--obsidian-dark) !important;
+    --text-primary: var(--chrome-bright) !important;
+    --text-secondary: var(--chrome-mid) !important;
+    --text-muted: var(--chrome-dim) !important;
+    --border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ============================================
+   DASHBOARD BODY
+   ============================================ */
+.dashboard-body {
+    background: var(--obsidian-deep) !important;
+    color: var(--chrome-bright) !important;
+}
+
+/* ============================================
+   CONSOLE HEADER - CHROME FINISH
+   ============================================ */
+.console-header {
+    background: linear-gradient(180deg, 
+        var(--obsidian-dark) 0%, 
+        rgba(13, 15, 18, 0.98) 100%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.logo-text {
+    color: var(--chrome-bright) !important;
+    letter-spacing: 3px;
+}
+
+.logo-version {
+    color: var(--accent-blue) !important;
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+}
+
+.system-badge {
+    background: rgba(96, 165, 250, 0.08) !important;
+    border: 1px solid rgba(96, 165, 250, 0.2) !important;
+}
+
+.badge-dot {
+    background: var(--accent-green) !important;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+}
+
+.badge-text {
+    color: var(--accent-blue) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ============================================
+   SIDEBAR - OBSIDIAN DEPTH
+   ============================================ */
+.command-sidebar {
+    background: linear-gradient(180deg, 
+        var(--obsidian-mid) 0%, 
+        var(--obsidian-dark) 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
+}
+
+.sidebar-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.sidebar-header h3 {
+    color: var(--chrome-mid) !important;
+    letter-spacing: 2px;
+}
+
+.sidebar-hint {
+    color: var(--chrome-dim) !important;
+}
+
+.command-group h4 {
+    color: var(--chrome-dim) !important;
+    letter-spacing: 1.5px;
+}
+
+.cmd {
+    background: var(--obsidian-dark) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    color: var(--chrome-bright) !important;
+    transition: all 0.3s ease;
+}
+
+.cmd:hover {
+    background: rgba(96, 165, 250, 0.1) !important;
+    border-color: rgba(96, 165, 250, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(96, 165, 250, 0.1);
+}
+
+/* ============================================
+   MAIN CONSOLE - OBSIDIAN CORE
+   ============================================ */
+.main-console {
+    background: var(--obsidian-deep) !important;
+}
+
+.console-container {
+    background: var(--obsidian-dark) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Terminal Header */
+.terminal-header {
+    background: linear-gradient(180deg, 
+        var(--obsidian-mid) 0%, 
+        var(--obsidian-dark) 100%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.terminal-dot:nth-child(1) {
+    background: #ff5f57 !important;
+}
+
+.terminal-dot:nth-child(2) {
+    background: #febc2e !important;
+}
+
+.terminal-dot:nth-child(3) {
+    background: #28c840 !important;
+}
+
+.terminal-title {
+    color: var(--chrome-dim) !important;
+    letter-spacing: 1px;
+}
+
+/* Terminal Body */
+.terminal-body {
+    background: var(--obsidian-deep) !important;
+}
+
+.output-line {
+    color: var(--chrome-mid) !important;
+}
+
+.output-line.system {
+    color: var(--accent-blue) !important;
+}
+
+.output-line.success {
+    color: var(--accent-green) !important;
+}
+
+.output-line.error {
+    color: var(--accent-red) !important;
+}
+
+.output-line.warning {
+    color: var(--accent-amber) !important;
+}
+
+/* Input Line */
+.input-line {
+    background: var(--obsidian-dark) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.prompt {
+    color: var(--accent-blue) !important;
+}
+
+#command-input {
+    background: transparent !important;
+    color: var(--chrome-bright) !important;
+    caret-color: var(--accent-blue);
+}
+
+#command-input::placeholder {
+    color: var(--chrome-dim) !important;
+}
+
+/* ============================================
+   3D NAVIGATOR - CHROME ACCENTS
+   ============================================ */
+.node-navigator {
+    background: var(--obsidian-dark) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 12px;
+}
+
+.navigator-header {
+    background: var(--obsidian-mid) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.navigator-header h3 {
+    color: var(--chrome-mid) !important;
+    letter-spacing: 1.5px;
+}
+
+.cluster-legend {
+    background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.legend-item span:last-child {
+    color: var(--chrome-dim) !important;
+}
+
+/* ============================================
+   CHAIN OF THOUGHT - OBSIDIAN PANEL
+   ============================================ */
+.cot-viewer {
+    background: var(--obsidian-dark) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 12px;
+}
+
+.cot-header {
+    background: var(--obsidian-mid) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.cot-header h3 {
+    color: var(--chrome-mid) !important;
+}
+
+.cot-body {
+    background: var(--obsidian-deep) !important;
+}
+
+.thought-card {
+    background: var(--obsidian-mid) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-left: 3px solid var(--accent-blue) !important;
+}
+
+.thought-card.active {
+    border-left-color: var(--accent-green) !important;
+    background: rgba(52, 211, 153, 0.05) !important;
+}
+
+/* ============================================
+   ASSET VAULT - CHROME CARDS
+   ============================================ */
+.vault-panel {
+    background: var(--obsidian-dark) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 12px;
+}
+
+.vault-header {
+    background: var(--obsidian-mid) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.vault-header h3 {
+    color: var(--chrome-mid) !important;
+}
+
+.asset-card {
+    background: var(--obsidian-mid) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.asset-card:hover {
+    border-color: rgba(96, 165, 250, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.asset-name {
+    color: var(--chrome-bright) !important;
+}
+
+.asset-type {
+    color: var(--accent-blue) !important;
+}
+
+/* ============================================
+   OMNI PREVIEW - OBSIDIAN FRAME
+   ============================================ */
+.omni-preview {
+    background: var(--obsidian-dark) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 12px;
+}
+
+.preview-header {
+    background: var(--obsidian-mid) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.preview-header h3 {
+    color: var(--chrome-mid) !important;
+}
+
+/* ============================================
+   BUTTONS - CHROME FINISH
+   ============================================ */
+.jury-btn,
+.vault-upload-btn,
+.primary-action-btn {
+    background: linear-gradient(135deg, 
+        var(--accent-blue) 0%, 
+        #3b82f6 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(96, 165, 250, 0.2);
+    transition: all 0.3s ease;
+}
+
+.jury-btn:hover,
+.vault-upload-btn:hover,
+.primary-action-btn:hover {
+    background: linear-gradient(135deg, 
+        #93c5fd 0%, 
+        var(--accent-blue) 100%) !important;
+    box-shadow: 0 6px 20px rgba(96, 165, 250, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Secondary Buttons */
+.secondary-btn,
+.close-btn {
+    background: var(--obsidian-mid) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: var(--chrome-mid) !important;
+}
+
+.secondary-btn:hover,
+.close-btn:hover {
+    background: var(--obsidian-light) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--chrome-bright) !important;
+}
+
+/* ============================================
+   SCROLLBARS - CHROME STYLE
+   ============================================ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--obsidian-deep);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--obsidian-light);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--chrome-subtle);
+}
+
+/* ============================================
+   LOADING STATES - CHROME PULSE
+   ============================================ */
+@keyframes chromePulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.loading-indicator {
+    color: var(--accent-blue) !important;
+    animation: chromePulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   NODE STATUS INDICATORS
+   ============================================ */
+.node-status.online {
+    background: var(--accent-green) !important;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+}
+
+.node-status.processing {
+    background: var(--accent-blue) !important;
+    box-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+}
+
+.node-status.offline {
+    background: var(--chrome-dim) !important;
+}
+
+.node-status.error {
+    background: var(--accent-red) !important;
+    box-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+}
+
+/* ============================================
+   MODAL OVERLAYS - OBSIDIAN GLASS
+   ============================================ */
+.modal-overlay {
+    background: rgba(8, 9, 10, 0.9) !important;
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    background: var(--obsidian-dark) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================
+   TOOLTIPS - CHROME SURFACE
+   ============================================ */
+.tooltip {
+    background: var(--obsidian-light) !important;
+    color: var(--chrome-bright) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   RESPONSIVE OBSIDIAN
+   ============================================ */
+@media (max-width: 768px) {
+    .console-header {
+        padding: 0 1rem !important;
+    }
+    
+    .command-sidebar {
+        background: var(--obsidian-dark) !important;
+    }
+}
