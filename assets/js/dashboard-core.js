@@ -620,7 +620,15 @@ class G5Dashboard {
     static openAssetPreview(id) { window.dashboardInstance?.openAssetPreview(id); } // MISSING ONE ADDED
 }
 
-// Global Instance
+// Global Instance & Class Exposure
+window.G5Dashboard = G5Dashboard; // Guarantee availability for static calls
+
 window.addEventListener('DOMContentLoaded', () => {
-    window.dashboardInstance = new G5Dashboard();
+    try {
+        window.dashboardInstance = new G5Dashboard();
+        console.log("✅ G5 DASHBOARD INSTANCE ONLINE");
+    } catch (err) {
+        console.error("❌ FATAL: INSTANCE CREATION FAILED", err);
+        alert("CRITICAL ERROR: Dashboard could not start. Please refresh.");
+    }
 });
