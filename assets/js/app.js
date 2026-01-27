@@ -117,6 +117,15 @@ async function executeCommand(cmd) {
         runScenario('CRISIS_MGMT');
     } else if (cleanCmd === 'VIRAL_LOOP') {
         runScenario('VIRAL_LOOP');
+    } else if (cleanCmd === 'JURY_MODE' || cleanCmd === 'JURY_MODE_SEQUENCE') {
+        initHackathonDemo();
+    } else if (cleanCmd === 'DEBUG_VAULT') {
+        if (typeof forceUpdateVault === 'function') {
+            forceUpdateVault();
+            writeToTerminal('Vault updated manually.', 'success');
+        } else {
+            writeToTerminal('ERR: forceUpdateVault not loaded.', 'error');
+        }
     } else if (cleanCmd === 'HELP') {
         writeToTerminal('// AGENTICUM G5 COMMAND LIST:', 'info');
         writeToTerminal('- START_SYSTEM      : Initialize Core Protocols');
