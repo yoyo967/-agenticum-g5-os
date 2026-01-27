@@ -18,12 +18,24 @@ class G5Dashboard {
     }
     
     init() {
-        console.log('🚀 SYSTEM: G5 HEGEMONY CONSOLE INITIALIZED');
-        this.startSystemClock();
-        this.startLiveMetrics();
-        this.setupEventListeners();
-        this.setupVoiceControl();
-        this.renderNodes();
+        try {
+            console.log('🚀 SYSTEM: G5 HEGEMONY CONSOLE INITIALIZED');
+            this.startSystemClock();
+            this.startLiveMetrics();
+            this.setupEventListeners();
+            this.setupVoiceControl();
+            this.renderNodes();
+            
+            // Visual Confirmation
+            const core = document.querySelector('.core-logo');
+            if(core) {
+                core.style.color = '#00ff41';
+                setTimeout(() => core.style.color = 'white', 1000);
+            }
+        } catch (e) {
+            console.error('CRITICAL INIT ERROR:', e);
+            alert('SYSTEM ERROR: Dashboard Core failed to load. Check console.');
+        }
     }
 
     /* ============================================
