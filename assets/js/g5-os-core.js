@@ -263,6 +263,34 @@ const G5OS = {
             this.filterAgentsByStatus(e.target.value);
         });
 
+        // Quick actions
+        document.getElementById('quickNewChat')?.addEventListener('click', () => this.newChat());
+        document.getElementById('quickUpload')?.addEventListener('click', () => document.getElementById('fileInput').click());
+        document.getElementById('quickWorkflow')?.addEventListener('click', () => this.openWorkflowModal('5min-agency'));
+        document.getElementById('quickPalette')?.addEventListener('click', () => this.togglePalette());
+        document.getElementById('quickSettings')?.addEventListener('click', () => this.openSettings());
+
+        // Workflow card execute buttons
+        document.querySelectorAll('.wf-run-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = btn.closest('.workflow-card');
+                if (card) {
+                    this.openWorkflowModal(card.dataset.workflow);
+                }
+            });
+        });
+
+        // Workflow card click
+        document.querySelectorAll('.workflow-card').forEach(card => {
+            card.addEventListener('click', () => {
+                this.selectWorkflowCard(card);
+            });
+        });
+
+        // Context menu setup
+        this.setupContextMenu();
+
         // Keyboard shortcuts
         this.setupKeyboardShortcuts();
     },
@@ -332,6 +360,8 @@ const G5OS = {
             this.switchWorkspaceTab('agents');
         } else if (view === 'assets') {
             this.switchWorkspaceTab('preview');
+        } else if (view === 'workflows') {
+            this.switchWorkspaceTab('workflows');
         } else if (view === 'workspace') {
             this.switchWorkspaceTab('chat');
         }
@@ -353,7 +383,8 @@ const G5OS = {
             'chat': 'chatView',
             'editor': 'editorView',
             'preview': 'previewView',
-            'agents': 'agentsView'
+            'agents': 'agentsView',
+            'workflows': 'workflowsView'
         };
         
         const viewId = viewMap[tab] || `${tab}View`;
@@ -1274,6 +1305,170 @@ const G5OS = {
         URL.revokeObjectURL(url);
         
         this.showToast('success', 'Chat exported');
+    },
+
+    // ============================================
+    // CONTEXT MENU
+    // ============================================
+    setupContextMenu() {
+        const menu = document.getElementById('contextMenu');
+        
+        // Show context menu on right-click in chat area
+        document.getElementById('chatView')?.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            this.showContextMenu(e.clientX, e.clientY);
+        });
+        
+        // Hide on click elsewhere
+        document.addEventListener('click', () => this.hideContextMenu());
+        
+        // Handle menu item clicks
+        document.querySelectorAll('.context-menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                this.executeContextAction(item.dataset.action);
+                this.hideContextMenu();
+            });
+        });
+    },
+
+    showContextMenu(x, y) {
+        const menu = document.getElementById('contextMenu');
+        menu.style.left = `${x}px`;
+        menu.style.top = `${y}px`;
+        menu.classList.remove('hidden');
+    },
+
+    hideContextMenu() {
+        document.getElementById('contextMenu')?.classList.add('hidden');
+    },
+
+    executeContextAction(action) {
+        switch(action) {
+            case 'copy':
+                document.execCommand('copy');
+                this.showToast('success', 'Copied to clipboard');
+                break;
+            case 'paste':
+                navigator.clipboard.readText().then(text => {
+                    document.getElementById('chatInput').value += text;
+                });
+                break;
+            case 'select-all':
+                document.getElementById('chatMessages')?.focus();
+                document.execCommand('selectAll');
+                break;
+            case 'export':
+                this.exportChat();
+                break;
+            case 'new-chat':
+                this.newChat();
+                break;
+            case 'clear':
+                this.clearChatHistory();
+                break;
+        }
+    },
+
+    clearChatHistory() {
+        this.newChat();
+        this.showToast('success', 'Chat history cleared');
+        this.logToTerminal('[SYSTEM] Chat history cleared');
+    },
+
+    // ============================================
+    // ACTIVITY INDICATOR
+    // ============================================
+    showActivity(text = 'Processing...') {
+        document.getElementById('activityText').textContent = text;
+        document.getElementById('activityIndicator')?.classList.remove('hidden');
+    },
+
+    hideActivity() {
+        document.getElementById('activityIndicator')?.classList.add('hidden');
+    },
+
+    // ============================================
+    // WORKFLOW SELECTION
+    // ============================================
+    selectWorkflowCard(card) {
+        document.querySelectorAll('.workflow-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        
+        const workflowId = card.dataset.workflow;
+        this.state.selectedWorkflow = workflowId;
+        this.logToTerminal(`[WORKFLOW] Selected: ${workflowId}`);
+    },
+
+    // ============================================
+    // ENHANCED VIEW SWITCHING
+    // ============================================
+    switchToWorkflowsView() {
+        this.switchWorkspaceTab('workflows');
+        document.querySelectorAll('.os-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.view === 'workflows');
+        });
+    },
+
+    // ============================================
+    // ENHANCED TERMINAL COMMANDS
+    // ============================================
+    terminalCommands: {
+        help: 'Show available commands',
+        clear: 'Clear terminal',
+        status: 'Show system status',
+        nodes: 'List all nodes',
+        workflows: 'List workflows',
+        chat: 'Switch to chat view',
+        agents: 'Switch to agents view',
+        assets: 'Switch to assets view',
+        export: 'Export chat history',
+        version: 'Show OS version'
+    },
+
+    processTerminalInput(input) {
+        const [cmd, ...args] = input.toLowerCase().split(' ');
+        
+        switch(cmd) {
+            case 'help':
+                let helpText = 'AVAILABLE COMMANDS:\n';
+                for (const [command, desc] of Object.entries(this.terminalCommands)) {
+                    helpText += `  ${command.padEnd(12)} - ${desc}\n`;
+                }
+                this.logToTerminal(helpText);
+                break;
+            case 'clear':
+                this.clearTerminal();
+                break;
+            case 'status':
+                this.logToTerminal(`[STATUS] 52 nodes online | ${this.state.chatHistory.length} messages | ${this.state.assets.length} assets`);
+                break;
+            case 'nodes':
+                this.logToTerminal('[NODES] SN-00 (Apex), SP-01..SP-99 (Strategy), RA-01..RA-52 (Research), CC-01..CC-32 (Content), MI-01..MI-05 (Governance), DT-01..DT-06 (Intel)');
+                break;
+            case 'workflows':
+                this.logToTerminal('[WORKFLOWS] 5min-agency, senate, morphosis, jit-reality, autopoiesis');
+                break;
+            case 'chat':
+                this.switchWorkspaceTab('chat');
+                this.logToTerminal('[UI] Switched to Chat view');
+                break;
+            case 'agents':
+                this.switchWorkspaceTab('agents');
+                this.logToTerminal('[UI] Switched to Agents view');
+                break;
+            case 'assets':
+                this.switchWorkspaceTab('preview');
+                this.logToTerminal('[UI] Switched to Assets view');
+                break;
+            case 'export':
+                this.exportChat();
+                break;
+            case 'version':
+                this.logToTerminal('[VERSION] AGENTICUM G5 OS v5.0.4 | Build 2026.01.28');
+                break;
+            default:
+                this.logToTerminal(`[ERROR] Unknown command: ${cmd}. Type 'help' for available commands.`);
+        }
     },
 
     // ============================================

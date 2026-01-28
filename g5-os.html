@@ -737,6 +737,225 @@
                     </div>
                 </div>
             </div>
+
+            <!-- WORKFLOWS VIEW (Hidden) -->
+            <div class="workspace-content hidden" id="workflowsView">
+                <div class="workflows-container">
+                    <div class="workflows-header">
+                        <h2>⚡ Enterprise Workflows</h2>
+                        <div class="workflow-stats">
+                            <span class="wf-stat"><strong>5</strong> Workflows</span>
+                            <span class="wf-stat"><strong>127</strong> Executions</span>
+                            <span class="wf-stat success"><strong>98.4%</strong> Success</span>
+                        </div>
+                    </div>
+                    
+                    <!-- WORKFLOW CARDS -->
+                    <div class="workflow-cards">
+                        <!-- 5-MINUTE AGENCY -->
+                        <div class="workflow-card" data-workflow="5min-agency">
+                            <div class="wf-card-header">
+                                <span class="wf-card-icon">⚡</span>
+                                <div class="wf-card-info">
+                                    <span class="wf-card-name">5-Minute Agency</span>
+                                    <span class="wf-card-desc">Complete campaign from brief to launch</span>
+                                </div>
+                                <span class="wf-card-status ready">READY</span>
+                            </div>
+                            <div class="wf-card-body">
+                                <div class="wf-flow">
+                                    <span class="wf-node">BRIEF</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">SP-01</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">CC-01</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">CC-07</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">DEPLOY</span>
+                                </div>
+                                <div class="wf-card-meta">
+                                    <span>🕐 ~5 min</span>
+                                    <span>🔗 12 nodes</span>
+                                    <span>📊 42 runs</span>
+                                </div>
+                            </div>
+                            <div class="wf-card-actions">
+                                <button class="btn btn-primary btn-small wf-run-btn">▶ Execute</button>
+                                <button class="btn btn-secondary btn-small">Configure</button>
+                            </div>
+                        </div>
+                        
+                        <!-- ALGORITHMIC SENATE -->
+                        <div class="workflow-card" data-workflow="senate">
+                            <div class="wf-card-header">
+                                <span class="wf-card-icon">⚖️</span>
+                                <div class="wf-card-info">
+                                    <span class="wf-card-name">Algorithmic Senate</span>
+                                    <span class="wf-card-desc">Multi-perspective consensus building</span>
+                                </div>
+                                <span class="wf-card-status ready">READY</span>
+                            </div>
+                            <div class="wf-card-body">
+                                <div class="wf-flow">
+                                    <span class="wf-node">INPUT</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">5 AGENTS</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">DEBATE</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">VOTE</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">CONSENSUS</span>
+                                </div>
+                                <div class="wf-card-meta">
+                                    <span>🕐 ~8 min</span>
+                                    <span>🔗 7 nodes</span>
+                                    <span>📊 28 runs</span>
+                                </div>
+                            </div>
+                            <div class="wf-card-actions">
+                                <button class="btn btn-primary btn-small wf-run-btn">▶ Execute</button>
+                                <button class="btn btn-secondary btn-small">Configure</button>
+                            </div>
+                        </div>
+                        
+                        <!-- NARRATIVE MORPHOSIS -->
+                        <div class="workflow-card" data-workflow="morphosis">
+                            <div class="wf-card-header">
+                                <span class="wf-card-icon">🔄</span>
+                                <div class="wf-card-info">
+                                    <span class="wf-card-name">Narrative Morphosis</span>
+                                    <span class="wf-card-desc">Transform content across formats</span>
+                                </div>
+                                <span class="wf-card-status ready">READY</span>
+                            </div>
+                            <div class="wf-card-body">
+                                <div class="wf-flow">
+                                    <span class="wf-node">SOURCE</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">ANALYZE</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">TRANSFORM</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">8 FORMATS</span>
+                                </div>
+                                <div class="wf-card-meta">
+                                    <span>🕐 ~3 min</span>
+                                    <span>🔗 15 nodes</span>
+                                    <span>📊 31 runs</span>
+                                </div>
+                            </div>
+                            <div class="wf-card-actions">
+                                <button class="btn btn-primary btn-small wf-run-btn">▶ Execute</button>
+                                <button class="btn btn-secondary btn-small">Configure</button>
+                            </div>
+                        </div>
+                        
+                        <!-- JIT REALITY -->
+                        <div class="workflow-card" data-workflow="jit-reality">
+                            <div class="wf-card-header">
+                                <span class="wf-card-icon">🔮</span>
+                                <div class="wf-card-info">
+                                    <span class="wf-card-name">Just-in-Time Reality</span>
+                                    <span class="wf-card-desc">Predictive content generation</span>
+                                </div>
+                                <span class="wf-card-status ready">READY</span>
+                            </div>
+                            <div class="wf-card-body">
+                                <div class="wf-flow">
+                                    <span class="wf-node">TRENDS</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">PREDICT</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">GENERATE</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">SCHEDULE</span>
+                                </div>
+                                <div class="wf-card-meta">
+                                    <span>🕐 ~6 min</span>
+                                    <span>🔗 9 nodes</span>
+                                    <span>📊 18 runs</span>
+                                </div>
+                            </div>
+                            <div class="wf-card-actions">
+                                <button class="btn btn-primary btn-small wf-run-btn">▶ Execute</button>
+                                <button class="btn btn-secondary btn-small">Configure</button>
+                            </div>
+                        </div>
+                        
+                        <!-- AUTOPOIESIS -->
+                        <div class="workflow-card active" data-workflow="autopoiesis">
+                            <div class="wf-card-header">
+                                <span class="wf-card-icon">🔧</span>
+                                <div class="wf-card-info">
+                                    <span class="wf-card-name">Autopoiesis</span>
+                                    <span class="wf-card-desc">Self-optimizing content pipeline</span>
+                                </div>
+                                <span class="wf-card-status running">ACTIVE</span>
+                            </div>
+                            <div class="wf-card-body">
+                                <div class="wf-flow">
+                                    <span class="wf-node">MONITOR</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">ANALYZE</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">OPTIMIZE</span>
+                                    <span class="wf-arrow">→</span>
+                                    <span class="wf-node">DEPLOY</span>
+                                    <span class="wf-arrow">↺</span>
+                                </div>
+                                <div class="wf-card-meta">
+                                    <span>🕐 Continuous</span>
+                                    <span>🔗 18 nodes</span>
+                                    <span>📊 8 cycles</span>
+                                </div>
+                            </div>
+                            <div class="wf-card-actions">
+                                <button class="btn btn-secondary btn-small">⏸ Pause</button>
+                                <button class="btn btn-secondary btn-small">Configure</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- EXECUTION HISTORY -->
+                    <div class="execution-history">
+                        <h3>📋 Recent Executions</h3>
+                        <div class="history-list">
+                            <div class="history-item success">
+                                <span class="history-icon">✅</span>
+                                <span class="history-workflow">5-Minute Agency</span>
+                                <span class="history-time">2 minutes ago</span>
+                                <span class="history-duration">4m 32s</span>
+                            </div>
+                            <div class="history-item success">
+                                <span class="history-icon">✅</span>
+                                <span class="history-workflow">Narrative Morphosis</span>
+                                <span class="history-time">15 minutes ago</span>
+                                <span class="history-duration">2m 18s</span>
+                            </div>
+                            <div class="history-item running">
+                                <span class="history-icon">🔄</span>
+                                <span class="history-workflow">Autopoiesis</span>
+                                <span class="history-time">Running</span>
+                                <span class="history-duration">--</span>
+                            </div>
+                            <div class="history-item success">
+                                <span class="history-icon">✅</span>
+                                <span class="history-workflow">Algorithmic Senate</span>
+                                <span class="history-time">1 hour ago</span>
+                                <span class="history-duration">7m 45s</span>
+                            </div>
+                            <div class="history-item error">
+                                <span class="history-icon">❌</span>
+                                <span class="history-workflow">JIT Reality</span>
+                                <span class="history-time">3 hours ago</span>
+                                <span class="history-duration">Failed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- RIGHT PANEL: AGENT CONFIGURATION -->
@@ -1292,8 +1511,63 @@
         </div>
     </div>
 
+    <!-- ============================================
+         QUICK ACTIONS BAR
+         ============================================ -->
+    <div class="quick-actions" id="quickActions">
+        <button class="quick-action" id="quickNewChat" title="New Chat (Ctrl+N)">💬</button>
+        <button class="quick-action" id="quickUpload" title="Upload Asset">📤</button>
+        <button class="quick-action active" id="quickWorkflow" title="5-Min Agency">⚡</button>
+        <button class="quick-action" id="quickPalette" title="Command Palette (Ctrl+K)">🔍</button>
+        <button class="quick-action" id="quickSettings" title="Settings (Ctrl+,)">⚙️</button>
+    </div>
+
+    <!-- ============================================
+         ACTIVITY INDICATOR
+         ============================================ -->
+    <div class="activity-indicator hidden" id="activityIndicator">
+        <div class="activity-spinner"></div>
+        <span class="activity-text" id="activityText">Processing...</span>
+    </div>
+
+    <!-- ============================================
+         CONTEXT MENU (Hidden by default)
+         ============================================ -->
+    <div class="context-menu hidden" id="contextMenu">
+        <div class="context-menu-item" data-action="copy">
+            <span class="menu-icon">📋</span>
+            <span>Copy</span>
+            <span class="menu-shortcut">Ctrl+C</span>
+        </div>
+        <div class="context-menu-item" data-action="paste">
+            <span class="menu-icon">📥</span>
+            <span>Paste</span>
+            <span class="menu-shortcut">Ctrl+V</span>
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" data-action="select-all">
+            <span class="menu-icon">✓</span>
+            <span>Select All</span>
+            <span class="menu-shortcut">Ctrl+A</span>
+        </div>
+        <div class="context-menu-item" data-action="export">
+            <span class="menu-icon">💾</span>
+            <span>Export Chat</span>
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" data-action="new-chat">
+            <span class="menu-icon">💬</span>
+            <span>New Chat</span>
+            <span class="menu-shortcut">Ctrl+N</span>
+        </div>
+        <div class="context-menu-item danger" data-action="clear">
+            <span class="menu-icon">🗑️</span>
+            <span>Clear History</span>
+        </div>
+    </div>
+
     <!-- SCRIPTS -->
     <script src="assets/js/g5_api.js?v=2"></script>
-    <script src="assets/js/g5-os-core.js?v=OS_V3"></script>
+    <script src="assets/js/g5-os-core.js?v=OS_V4"></script>
 </body>
 </html>
