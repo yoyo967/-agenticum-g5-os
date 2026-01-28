@@ -457,22 +457,22 @@ const G5OS = {
         });
 
         // ===================================
-        // ORCHESTRATOR CONFIG LISTENERS
+        // ORCHESTRATOR CONFIG LISTENERS (DELEGATED)
         // ===================================
-        const computeSlider = document.getElementById('nodeComputeSlider');
-        if (computeSlider) {
-            computeSlider.addEventListener('input', (e) => {
+        // Use delegation to ensure it works even if modal is re-rendered
+        document.body.addEventListener('input', (e) => {
+            if (e.target.id === 'nodeComputeSlider') {
                 const val = e.target.value;
                 const display = document.getElementById('computeValueDisplay');
                 if (display) display.textContent = `${val}% TERAFLOPS`;
-            });
-        }
+            }
+        });
 
-        const applyConfigBtn = document.getElementById('applyConfigBtn');
-        if (applyConfigBtn) {
-            applyConfigBtn.addEventListener('click', () => {
+        document.body.addEventListener('click', (e) => {
+             const btn = e.target.closest('#applyConfigBtn');
+             if (btn) {
                 const mode = document.getElementById('nodeModeSelect')?.value || 'autonomous';
-                const compute = computeSlider?.value || 85;
+                const compute = document.getElementById('nodeComputeSlider')?.value || 85;
                 
                 // 1. Show Toast
                 this.showToast('success', `CONFIGURATION SAVED | MODE: ${mode.toUpperCase()}`);
@@ -487,8 +487,8 @@ const G5OS = {
                     const time = new Date().toLocaleTimeString('en-US', {hour12:false});
                     nodeLogs.innerHTML = `<div class="log-entry">[${time}] Configuration updated by SYSADMIN</div>` + nodeLogs.innerHTML;
                 }
-            });
-        }
+             }
+        });
     },
 
     // ============================================
