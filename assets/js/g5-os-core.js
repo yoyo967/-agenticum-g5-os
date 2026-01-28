@@ -757,11 +757,42 @@ const G5OS = {
 
     logToTerminal(message, type = '') {
         const output = document.getElementById('terminalOutput');
+        if (!output) return;
+        
         const line = document.createElement('div');
         line.className = `term-line ${type}`;
-        line.textContent = message;
+        
+        // TYPEWRITER EFFECT CONTAINER
+        // We use a specific structure to ensure style consistency
+        const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+        line.innerHTML = `<span style="opacity:0.5">[${time}]</span> <span class="typewriter-text"></span><span class="typing-cursor">█</span>`;
+        
         output.appendChild(line);
         output.scrollTop = output.scrollHeight;
+        
+        const textSpan = line.querySelector('.typewriter-text');
+        const cursor = line.querySelector('.typing-cursor');
+        
+        let i = 0;
+        // Faster speed for demo fluidness (8ms)
+        const speed = 8; 
+        
+        const typeChar = () => {
+            if (i < message.length) {
+                textSpan.textContent += message.charAt(i);
+                i++;
+                output.scrollTop = output.scrollHeight;
+                setTimeout(typeChar, speed);
+            } else {
+                cursor.remove();
+            }
+        };
+        typeChar();
+        
+        // Limit history
+        if (output.children.length > 50) {
+            output.removeChild(output.firstChild);
+        }
     },
 
     clearTerminal() {
@@ -1367,6 +1398,13 @@ const G5OS = {
         
         // GRID ANIMATION STOP
         document.querySelector('.node-grid')?.classList.remove('pulse-active');
+
+        // WORKFLOW MEMORY: Store result for Chat Context
+        this.state.lastWorkflowResult = {
+            id: workflowId,
+            input: input,
+            timestamp: Date.now()
+        };
     },
 
     createSimulatedAsset(name, type) {
@@ -2044,23 +2082,31 @@ const G5OS = {
         if (this.newChat) {
              this.newChat(); 
         } else {
-             // Fallback if newChat not found
              const chatHistory = document.getElementById('chatHistory');
              if (chatHistory) chatHistory.innerHTML = '';
              this.state.chatHistory = [];
         }
         
         // Seed chat
-        const greeting = `[SECURE CHANNEL ESTABLISHED]\nIdentity Verified: ${nodeId}\nStatus: ONLINE\n\nAwaiting directive...`;
+        let greeting = `[SECURE CHANNEL ESTABLISHED]\nIdentity Verified: ${nodeId}\nStatus: ONLINE`;
+        
+        // CHECK WORKFLOW MEMORY
+        if (this.state.lastWorkflowResult && (Date.now() - this.state.lastWorkflowResult.timestamp < 300000)) {
+            // If workflow ran in last 5 mins
+            const wf = this.state.lastWorkflowResult;
+            greeting += `\n\n[CONTEXT] I have analyzed the output from the '${wf.id}' workflow.\nInput: "${wf.input}"\n\nReady to refine assets or adjust strategy.`;
+        } else {
+            greeting += `\n\nAwaiting directive...`;
+        }
         
         // Add greeting message
         setTimeout(() => {
             this.addChatMessage('system', greeting);
             this.showToast('info', `Channel open to ${nodeId}`);
-        }, 500);
+        }, 800);
         
         // Focus input
-        setTimeout(() => document.getElementById('chatInput')?.focus(), 600);
+        setTimeout(() => document.getElementById('chatInput')?.focus(), 900);
     }
 };
 
