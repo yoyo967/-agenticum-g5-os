@@ -366,6 +366,19 @@ const G5OS = {
             this.startAgentChat(nodeId);
         });
 
+        // NODE CONFIGURATION LISTENERS
+        document.getElementById('nodeComputeSlider')?.addEventListener('input', (e) => {
+            document.getElementById('computeValueDisplay').textContent = `${e.target.value}% TERAFLOPS`;
+        });
+
+        document.getElementById('applyConfigBtn')?.addEventListener('click', () => {
+            const mode = document.getElementById('nodeModeSelect').value;
+            const compute = document.getElementById('nodeComputeSlider').value;
+            this.showToast('success', `[SN-00] CONFIG UPDATED: ${mode.toUpperCase()} | ${compute}% COMPUTE`);
+            this.logToTerminal(`[SN-00] Configuration applied: Mode=${mode}, Compute=${compute}%`);
+            document.getElementById('nodeModal')?.classList.add('hidden');
+        });
+
         document.getElementById('nodeLogsBtn')?.addEventListener('click', () => {
             this.showToast('info', 'System logs exported to clipboard');
         });
@@ -377,8 +390,25 @@ const G5OS = {
             nodeModal.querySelector('.modal-backdrop')?.addEventListener('click', () => nodeModal.classList.add('hidden'));
         }
 
-        // Keyboard shortcuts
+        // KEYBOARD SHORTCUTS
         this.setupKeyboardShortcuts();
+        
+        // DEAD CLICK AUDIT - FEEDBACK LOOPS
+        document.querySelector('.os-user')?.addEventListener('click', () => {
+             this.showToast('info', 'OPERATOR: YILDIRIM | ROLE: SYSADMIN');
+        });
+        
+        document.querySelectorAll('.section-action').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.showToast('warning', 'Module System Locked by Policy MI-07');
+            });
+        });
+
+        // Ensure all feature-restricted buttons give feedback
+        document.querySelectorAll('.feature-locked').forEach(btn => {
+            btn.addEventListener('click', () => this.showToast('info', 'Feature available in Enterprise Edition'));
+        });
     },
 
     // ============================================
@@ -797,6 +827,15 @@ const G5OS = {
         }
         
         // Show Modal
+        const configSection = document.getElementById('nodeConfigSection');
+        if (configSection) {
+            if (nodeId === 'SN-00') {
+                configSection.classList.remove('hidden');
+            } else {
+                configSection.classList.add('hidden');
+            }
+        }
+        
         document.getElementById('nodeModal')?.classList.remove('hidden');
         
         this.logToTerminal(`[NODE] Inspecting ${nodeId}`);
