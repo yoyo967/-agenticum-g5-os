@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGENTICUM G5 | OPERATING SYSTEM</title>
+    <meta name="description" content="Industrial Autonomous Marketing Operating System - 52 Specialized AI Nodes">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/g5-os.css?v=OS_V1">
+</head>
+<body class="g5-os-body">
+
+    <!-- ============================================
+         TOP BAR - SYSTEM HEADER
+         ============================================ -->
+    <header class="os-header">
+        <div class="os-header-left">
+            <div class="os-logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">AGENTICUM</span>
+                <span class="logo-version">G5</span>
+            </div>
+            <nav class="os-tabs">
+                <button class="os-tab active" data-view="workspace">
+                    <span class="tab-icon">⬡</span>
+                    <span>Workspace</span>
+                </button>
+                <button class="os-tab" data-view="agents">
+                    <span class="tab-icon">🧠</span>
+                    <span>Agents</span>
+                </button>
+                <button class="os-tab" data-view="workflows">
+                    <span class="tab-icon">⚡</span>
+                    <span>Workflows</span>
+                </button>
+                <button class="os-tab" data-view="assets">
+                    <span class="tab-icon">📦</span>
+                    <span>Assets</span>
+                </button>
+            </nav>
+        </div>
+        <div class="os-header-center">
+            <div class="os-status">
+                <span class="status-dot online"></span>
+                <span class="status-text">52 NODES OPERATIONAL</span>
+            </div>
+        </div>
+        <div class="os-header-right">
+            <div class="os-metrics">
+                <div class="metric">
+                    <span class="metric-value" id="tokenCount">1.7M</span>
+                    <span class="metric-label">TOKENS</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value" id="latencyDisplay">~87ms</span>
+                    <span class="metric-label">LATENCY</span>
+                </div>
+            </div>
+            <button class="os-btn-icon" id="settingsBtn" title="Settings">⚙️</button>
+            <div class="os-user">
+                <span class="user-avatar">YY</span>
+                <span class="user-name">OPERATOR_YILDIRIM</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================
+         MAIN OS LAYOUT
+         ============================================ -->
+    <div class="os-container">
+        
+        <!-- LEFT PANEL: EXPLORER -->
+        <aside class="os-panel os-panel-left" id="leftPanel">
+            <div class="panel-resize-handle" data-panel="left"></div>
+            
+            <!-- MODULE SELECTOR -->
+            <div class="panel-section">
+                <div class="section-header">
+                    <span class="section-icon">📁</span>
+                    <span>MODULES</span>
+                    <button class="section-action" title="Add Module">+</button>
+                </div>
+                <div class="module-tree" id="moduleTree">
+                    <div class="tree-item folder open">
+                        <span class="tree-toggle">▼</span>
+                        <span class="tree-icon">📂</span>
+                        <span class="tree-label">STRATEGY_CLUSTER</span>
+                    </div>
+                    <div class="tree-children">
+                        <div class="tree-item file" data-node="SP-01">
+                            <span class="tree-icon node-icon sp">◆</span>
+                            <span class="tree-label">SP-01 Campaign Strategist</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="SP-99">
+                            <span class="tree-icon node-icon sp">◆</span>
+                            <span class="tree-label">SP-99 Hegemony Matrix</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="SP-77">
+                            <span class="tree-icon node-icon sp">◆</span>
+                            <span class="tree-label">SP-77 Logic Patcher</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="tree-item folder">
+                        <span class="tree-toggle">▶</span>
+                        <span class="tree-icon">📂</span>
+                        <span class="tree-label">RESEARCH_CLUSTER</span>
+                    </div>
+                    
+                    <div class="tree-item folder">
+                        <span class="tree-toggle">▶</span>
+                        <span class="tree-icon">📂</span>
+                        <span class="tree-label">CONTENT_CLUSTER</span>
+                    </div>
+                    
+                    <div class="tree-item folder">
+                        <span class="tree-toggle">▶</span>
+                        <span class="tree-icon">📂</span>
+                        <span class="tree-label">GOVERNANCE_CLUSTER</span>
+                    </div>
+                    
+                    <div class="tree-item folder">
+                        <span class="tree-toggle">▶</span>
+                        <span class="tree-icon">📂</span>
+                        <span class="tree-label">INTELLIGENCE_CLUSTER</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WORKFLOWS -->
+            <div class="panel-section">
+                <div class="section-header">
+                    <span class="section-icon">⚡</span>
+                    <span>WORKFLOWS</span>
+                </div>
+                <div class="workflow-list">
+                    <div class="workflow-item" data-workflow="5min-agency">
+                        <span class="wf-icon">⚡</span>
+                        <span class="wf-name">5-Minute Agency</span>
+                    </div>
+                    <div class="workflow-item" data-workflow="senate">
+                        <span class="wf-icon">⚖️</span>
+                        <span class="wf-name">Algorithmic Senate</span>
+                    </div>
+                    <div class="workflow-item" data-workflow="morphosis">
+                        <span class="wf-icon">🔄</span>
+                        <span class="wf-name">Narrative Morphosis</span>
+                    </div>
+                    <div class="workflow-item" data-workflow="jit-reality">
+                        <span class="wf-icon">🔮</span>
+                        <span class="wf-name">Just-in-Time Reality</span>
+                    </div>
+                    <div class="workflow-item active" data-workflow="autopoiesis">
+                        <span class="wf-icon">🔧</span>
+                        <span class="wf-name">Autopoiesis</span>
+                        <span class="wf-status active">ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECENT ASSETS -->
+            <div class="panel-section">
+                <div class="section-header">
+                    <span class="section-icon">📦</span>
+                    <span>RECENT ASSETS</span>
+                </div>
+                <div class="asset-list" id="recentAssets">
+                    <div class="asset-mini" data-type="text">
+                        <span class="asset-icon">📄</span>
+                        <span class="asset-name">MANIFESTO_V5.md</span>
+                    </div>
+                    <div class="asset-mini" data-type="video">
+                        <span class="asset-icon">🎬</span>
+                        <span class="asset-name">VEO_CINEMATIC.mp4</span>
+                    </div>
+                    <div class="asset-mini" data-type="image">
+                        <span class="asset-icon">🖼️</span>
+                        <span class="asset-name">CAMPAIGN_HERO.png</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CENTER: MAIN WORKSPACE -->
+        <main class="os-main" id="mainWorkspace">
+            
+            <!-- WORKSPACE TABS -->
+            <div class="workspace-tabs">
+                <div class="workspace-tab active" data-tab="chat">
+                    <span class="tab-icon">💬</span>
+                    <span>Chat</span>
+                    <button class="tab-close">×</button>
+                </div>
+                <div class="workspace-tab" data-tab="editor">
+                    <span class="tab-icon">📝</span>
+                    <span>Editor</span>
+                    <button class="tab-close">×</button>
+                </div>
+                <div class="workspace-tab" data-tab="preview">
+                    <span class="tab-icon">👁️</span>
+                    <span>Preview</span>
+                    <button class="tab-close">×</button>
+                </div>
+                <button class="tab-add" title="New Tab">+</button>
+            </div>
+
+            <!-- CHAT VIEW (Active by default) -->
+            <div class="workspace-content" id="chatView">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- SYSTEM WELCOME -->
+                        <div class="chat-message system">
+                            <div class="msg-header">
+                                <span class="msg-icon">◆</span>
+                                <span class="msg-sender">AGENTICUM G5</span>
+                                <span class="msg-time">SYSTEM</span>
+                            </div>
+                            <div class="msg-content">
+                                <p>Welcome to <strong>AGENTICUM G5</strong> - The Industrial Autonomous Marketing OS.</p>
+                                <p>52 specialized AI nodes are online and ready to execute your commands.</p>
+                                <div class="msg-capabilities">
+                                    <span class="cap-tag">Strategy</span>
+                                    <span class="cap-tag">Content</span>
+                                    <span class="cap-tag">Research</span>
+                                    <span class="cap-tag">Governance</span>
+                                    <span class="cap-tag">Intelligence</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CHAT INPUT -->
+                    <div class="chat-input-container">
+                        <div class="chat-input-wrapper">
+                            <button class="input-action" id="attachBtn" title="Attach File">📎</button>
+                            <textarea class="chat-input" id="chatInput" placeholder="Enter your command, briefing, or question..." rows="1"></textarea>
+                            <button class="input-action" id="voiceBtn" title="Voice Input">🎙️</button>
+                            <button class="chat-send" id="sendBtn" title="Send (Enter)">
+                                <span>→</span>
+                            </button>
+                        </div>
+                        <div class="chat-suggestions">
+                            <button class="suggestion" data-cmd="Design a viral campaign for SaaS launch">🚀 Campaign Design</button>
+                            <button class="suggestion" data-cmd="Analyze competitor vulnerabilities">🔍 Competitor Scan</button>
+                            <button class="suggestion" data-cmd="Generate 50 ad copy variations">✍️ Batch Copy</button>
+                            <button class="suggestion" data-cmd="Run compliance check on strategy">⚖️ Compliance</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDITOR VIEW (Hidden) -->
+            <div class="workspace-content hidden" id="editorView">
+                <div class="editor-container">
+                    <div class="editor-header">
+                        <span class="editor-filename">MANIFESTO_V5.md</span>
+                        <div class="editor-actions">
+                            <button class="editor-btn">💾 Save</button>
+                            <button class="editor-btn">📋 Copy</button>
+                        </div>
+                    </div>
+                    <textarea class="editor-content" id="editorContent" placeholder="Start writing..."></textarea>
+                </div>
+            </div>
+
+            <!-- PREVIEW VIEW (Hidden) -->
+            <div class="workspace-content hidden" id="previewView">
+                <div class="preview-container">
+                    <div class="preview-placeholder">
+                        <span class="preview-icon">👁️</span>
+                        <p>Select an asset to preview</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT PANEL: AGENT CONFIGURATION -->
+        <aside class="os-panel os-panel-right" id="rightPanel">
+            <div class="panel-resize-handle" data-panel="right"></div>
+            
+            <!-- ACTIVE AGENT -->
+            <div class="panel-section agent-config">
+                <div class="section-header">
+                    <span class="section-icon">🤖</span>
+                    <span>ACTIVE AGENT</span>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-avatar">
+                        <span class="avatar-icon">◆</span>
+                    </div>
+                    <div class="agent-info">
+                        <span class="agent-name">SN-00 Orchestrator</span>
+                        <span class="agent-role">APEX NODE</span>
+                    </div>
+                    <span class="agent-status online">ONLINE</span>
+                </div>
+                
+                <!-- AGENT BRIEFING -->
+                <div class="agent-briefing">
+                    <label class="briefing-label">AGENT BRIEFING</label>
+                    <textarea class="briefing-input" id="agentBriefing" placeholder="Define agent behavior, constraints, and objectives...">You are the central orchestrator of a 52-node cognitive mesh. Coordinate strategy, content, research, and governance clusters for optimal marketing outcomes. Prioritize ethical compliance and strategic dominance.</textarea>
+                </div>
+                
+                <!-- AGENT TRAITS -->
+                <div class="agent-traits">
+                    <label class="traits-label">PERSONALITY TRAITS</label>
+                    <div class="trait-toggles">
+                        <label class="trait-toggle">
+                            <input type="checkbox" checked>
+                            <span class="trait-name">Strategic</span>
+                        </label>
+                        <label class="trait-toggle">
+                            <input type="checkbox" checked>
+                            <span class="trait-name">Decisive</span>
+                        </label>
+                        <label class="trait-toggle">
+                            <input type="checkbox">
+                            <span class="trait-name">Creative</span>
+                        </label>
+                        <label class="trait-toggle">
+                            <input type="checkbox" checked>
+                            <span class="trait-name">Analytical</span>
+                        </label>
+                        <label class="trait-toggle">
+                            <input type="checkbox">
+                            <span class="trait-name">Experimental</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTEXT WINDOW -->
+            <div class="panel-section">
+                <div class="section-header">
+                    <span class="section-icon">📋</span>
+                    <span>CONTEXT</span>
+                    <button class="section-action" title="Clear Context">🗑️</button>
+                </div>
+                <div class="context-files" id="contextFiles">
+                    <div class="context-file">
+                        <span class="file-icon">📄</span>
+                        <span class="file-name">BRAND_GUIDELINES.pdf</span>
+                        <button class="file-remove">×</button>
+                    </div>
+                    <div class="context-file">
+                        <span class="file-icon">📊</span>
+                        <span class="file-name">MARKET_DATA_Q4.xlsx</span>
+                        <button class="file-remove">×</button>
+                    </div>
+                </div>
+                <button class="add-context-btn" id="addContextBtn">
+                    + Add Context File
+                </button>
+            </div>
+
+            <!-- NODE MESH STATUS -->
+            <div class="panel-section">
+                <div class="section-header">
+                    <span class="section-icon">🔮</span>
+                    <span>NODE MESH</span>
+                </div>
+                <div class="mesh-visualization" id="meshViz">
+                    <div class="mesh-cluster">
+                        <span class="cluster-name">STRATEGY</span>
+                        <div class="cluster-nodes">
+                            <span class="node-dot online" title="SP-01"></span>
+                            <span class="node-dot online" title="SP-99"></span>
+                            <span class="node-dot online" title="SP-77"></span>
+                        </div>
+                    </div>
+                    <div class="mesh-cluster">
+                        <span class="cluster-name">RESEARCH</span>
+                        <div class="cluster-nodes">
+                            <span class="node-dot online" title="RA-01"></span>
+                            <span class="node-dot online" title="RA-06"></span>
+                            <span class="node-dot online" title="RA-52"></span>
+                        </div>
+                    </div>
+                    <div class="mesh-cluster">
+                        <span class="cluster-name">CONTENT</span>
+                        <div class="cluster-nodes">
+                            <span class="node-dot processing" title="CC-01"></span>
+                            <span class="node-dot online" title="CC-06"></span>
+                            <span class="node-dot online" title="CC-08"></span>
+                            <span class="node-dot online" title="CC-13"></span>
+                        </div>
+                    </div>
+                    <div class="mesh-cluster">
+                        <span class="cluster-name">GOVERNANCE</span>
+                        <div class="cluster-nodes">
+                            <span class="node-dot online" title="MI-01"></span>
+                            <span class="node-dot online" title="MI-07"></span>
+                        </div>
+                    </div>
+                    <div class="mesh-cluster">
+                        <span class="cluster-name">INTEL</span>
+                        <div class="cluster-nodes">
+                            <span class="node-dot online" title="DT-02"></span>
+                            <span class="node-dot online" title="DT-04"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ============================================
+         BOTTOM PANEL: TERMINAL / LOGS
+         ============================================ -->
+    <footer class="os-footer" id="bottomPanel">
+        <div class="panel-resize-handle" data-panel="bottom"></div>
+        
+        <div class="footer-tabs">
+            <button class="footer-tab active" data-panel="terminal">
+                <span class="tab-icon">⌨️</span>
+                <span>Terminal</span>
+            </button>
+            <button class="footer-tab" data-panel="logs">
+                <span class="tab-icon">📋</span>
+                <span>Reasoning Log</span>
+            </button>
+            <button class="footer-tab" data-panel="output">
+                <span class="tab-icon">📤</span>
+                <span>Output</span>
+            </button>
+            <button class="footer-tab" data-panel="problems">
+                <span class="tab-icon">⚠️</span>
+                <span>Problems</span>
+                <span class="tab-badge">0</span>
+            </button>
+        </div>
+
+        <!-- TERMINAL -->
+        <div class="footer-content" id="terminalPanel">
+            <div class="terminal-output" id="terminalOutput">
+                <div class="term-line system">[SYSTEM] AGENTICUM G5 OPERATING SYSTEM V5.0.1</div>
+                <div class="term-line">[SN-00] Orchestrator initialized. 52 nodes online.</div>
+                <div class="term-line success">[READY] Awaiting operator commands...</div>
+            </div>
+            <div class="terminal-input-line">
+                <span class="terminal-prompt">g5 ></span>
+                <input type="text" class="terminal-input" id="terminalInput" placeholder="Enter system command...">
+            </div>
+        </div>
+
+        <!-- REASONING LOG (Hidden) -->
+        <div class="footer-content hidden" id="logsPanel">
+            <div class="log-entries" id="logEntries">
+                <div class="log-entry">
+                    <span class="log-time">01:12:34</span>
+                    <span class="log-node">[SN-00]</span>
+                    <span class="log-msg">System boot sequence complete</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- OUTPUT (Hidden) -->
+        <div class="footer-content hidden" id="outputPanel">
+            <div class="output-content">
+                <p class="output-placeholder">Generated output will appear here...</p>
+            </div>
+        </div>
+
+        <!-- PROBLEMS (Hidden) -->
+        <div class="footer-content hidden" id="problemsPanel">
+            <div class="problems-list">
+                <p class="no-problems">✓ No problems detected</p>
+            </div>
+        </div>
+
+        <div class="footer-controls">
+            <button class="footer-btn" id="togglePanelBtn" title="Toggle Panel">▼</button>
+            <button class="footer-btn" id="clearTerminalBtn" title="Clear">🗑️</button>
+        </div>
+    </footer>
+
+    <!-- HIDDEN FILE INPUT -->
+    <input type="file" id="fileInput" class="hidden" accept="*/*">
+
+    <!-- SCRIPTS -->
+    <script src="assets/js/g5-os-core.js?v=OS_V1"></script>
+</body>
+</html>
