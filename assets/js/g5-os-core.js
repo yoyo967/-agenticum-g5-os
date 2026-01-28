@@ -315,6 +315,25 @@ const G5OS = {
         document.getElementById('downloadAsset')?.addEventListener('click', () => this.downloadPreviewAsset());
         document.getElementById('copyAsset')?.addEventListener('click', () => this.copyPreviewContent());
         document.getElementById('closeAssetPreview')?.addEventListener('click', () => this.closeAssetPreview());
+        
+        // Node Modal Actions
+        document.getElementById('nodeActivateBtn')?.addEventListener('click', () => {
+            const nodeId = this.state.activeAgent?.id || 'NODE';
+            this.showToast('success', `${nodeId} ACTIVATED | Integration complete`);
+            // Add visual flair - maybe glow on the grid?
+            document.getElementById('nodeModal')?.classList.add('hidden');
+        });
+
+        document.getElementById('nodeLogsBtn')?.addEventListener('click', () => {
+            this.showToast('info', 'System logs exported to clipboard');
+        });
+        
+        // Generic Modal Close for Node Modal (using class since ID might vary)
+        const nodeModal = document.getElementById('nodeModal');
+        if (nodeModal) {
+            nodeModal.querySelector('.modal-close')?.addEventListener('click', () => nodeModal.classList.add('hidden'));
+            nodeModal.querySelector('.modal-backdrop')?.addEventListener('click', () => nodeModal.classList.add('hidden'));
+        }
 
         // Keyboard shortcuts
         this.setupKeyboardShortcuts();
@@ -714,12 +733,31 @@ const G5OS = {
             traits: this.getNodeTraits(nodeId)
         };
         
-        // Update UI
-        document.querySelector('.agent-name').textContent = `${nodeId} ${node.name}`;
-        document.querySelector('.agent-role').textContent = node.cluster;
-        document.getElementById('agentBriefing').value = this.state.activeAgent.briefing;
+        // POPULATE MODAL
+        document.getElementById('nodeModalTitle').textContent = `${nodeId} | ${node.name}`;
         
-        this.logToTerminal(`[NODE] Selected ${nodeId} ${node.name}`);
+        const logsContainer = document.getElementById('nodeLogs');
+        if (logsContainer) {
+            logsContainer.innerHTML = '';
+            // Simulate startup logs
+            const logs = [
+                `[SYSTEM] Initializing ${nodeId} protocol...`,
+                `[${node.cluster}] Cluster handshake verified.`,
+                `[MEMORY] Loading context frame (24MB)...`,
+                `[STATUS] Node is ONLINE and IDLE.`
+            ];
+            
+            logs.forEach((log, i) => {
+                setTimeout(() => {
+                    logsContainer.innerHTML += `<div class="log-line">${log}</div>`;
+                }, i * 200);
+            });
+        }
+        
+        // Show Modal
+        document.getElementById('nodeModal')?.classList.remove('hidden');
+        
+        this.logToTerminal(`[NODE] Inspecting ${nodeId}`);
     },
 
     getNodeBriefing(nodeId) {
