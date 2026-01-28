@@ -399,35 +399,50 @@ const G5OS = {
         });
 
         // AGENT TILE LISTENER (Global Delegate for Gear/Log buttons)
-        document.getElementById('agentsGrid')?.addEventListener('click', (e) => {
-            const btn = e.target.closest('.tile-btn');
-            const tile = e.target.closest('.agent-tile');
-            
-            if (btn && tile) {
-                const nodeId = tile.dataset.node;
-                // Check if it's the gear icon
-                if (btn.querySelector('span')?.textContent === '⚙️' || btn.textContent.includes('⚙️') || btn.title === 'Configure') {
-                    this.selectNode(nodeId);
-                    // Force config section open if it's SN-00 (handled in selectNode, but being explicit)
-                    if(nodeId === 'SN-00') {
-                        setTimeout(() => {
-                           const config = document.getElementById('nodeConfigSection');
-                           if(config) config.classList.remove('hidden'); 
-                           // Scroll to config
-                           config?.scrollIntoView({behavior: 'smooth'});
-                        }, 100);
+        const agentsGrid = document.getElementById('agentsGrid');
+        if (agentsGrid) {
+            agentsGrid.addEventListener('click', (e) => {
+                const btn = e.target.closest('.tile-btn');
+                const tile = e.target.closest('.agent-tile');
+                
+                if (tile) {
+                    const nodeId = tile.dataset.node;
+                    
+                    // Case 1: Clicked a Button
+                    if (btn) {
+                        e.stopPropagation(); // Prevent tile click
+                        const title = btn.getAttribute('title');
+                        const text = btn.textContent;
+                        
+                        if (title === 'Configure' || text.includes('⚙️')) {
+                            this.logToTerminal(`[UI] Configure requested for ${nodeId}`);
+                            this.selectNode(nodeId);
+                            
+                            // Force Config Panel Open
+                            setTimeout(() => {
+                                const config = document.getElementById('nodeConfigSection');
+                                if (config) {
+                                    config.classList.remove('hidden');
+                                    config.style.display = 'block'; // Force display
+                                    config.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            }, 50);
+                        } 
+                        else if (title === 'Logs' || text.includes('📋')) {
+                             this.selectNode(nodeId);
+                             setTimeout(() => {
+                                 const logs = document.getElementById('nodeLogs');
+                                 if (logs) logs.scrollIntoView({ behavior: 'smooth' });
+                             }, 50);
+                        }
+                        return;
                     }
-                } 
-                else if (btn.querySelector('span')?.textContent === '📋' || btn.textContent.includes('📋') || btn.title === 'Logs') {
+                    
+                    // Case 2: Clicked the Tile Body
                     this.selectNode(nodeId);
-                    setTimeout(() => document.getElementById('nodeLogs')?.scrollIntoView({behavior: 'smooth'}), 100);
                 }
-            } else if (tile) {
-                // Clicking the tile itself should also open details
-                const nodeId = tile.dataset.node;
-                this.selectNode(nodeId);
-            }
-        });
+            });
+        }
         
         document.querySelectorAll('.section-action').forEach(btn => {
             btn.addEventListener('click', (e) => {
