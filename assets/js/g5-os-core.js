@@ -200,9 +200,67 @@ const G5OS = {
         // Test connection button
         document.getElementById('testConnection')?.addEventListener('click', () => this.testApiConnection());
 
-        // Asset items
+        // Asset items in sidebar
         document.querySelectorAll('.asset-mini').forEach(asset => {
             asset.addEventListener('click', () => this.previewAsset(asset.dataset.type, asset.querySelector('.asset-name')?.textContent));
+        });
+
+        // Assets grid cards
+        document.querySelectorAll('.asset-card:not(.upload-zone)').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.closest('.asset-action')) {
+                    this.previewAsset(card.dataset.type, card.querySelector('.asset-title')?.textContent);
+                }
+            });
+        });
+
+        // Preview tabs
+        document.querySelectorAll('.preview-tab').forEach(tab => {
+            tab.addEventListener('click', () => this.filterAssets(tab.dataset.type));
+        });
+
+        // Upload zone
+        const uploadZone = document.getElementById('uploadZone');
+        uploadZone?.addEventListener('click', () => document.getElementById('fileInput').click());
+        uploadZone?.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('drop-active');
+        });
+        uploadZone?.addEventListener('dragleave', () => uploadZone.classList.remove('drop-active'));
+        uploadZone?.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drop-active');
+            this.handleFileUpload(e.dataTransfer.files);
+        });
+
+        // Upload button in preview
+        document.getElementById('uploadAssetBtn')?.addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        // Generate asset button
+        document.getElementById('generateAssetBtn')?.addEventListener('click', () => {
+            this.showToast('info', 'Asset generation requires Gemini API');
+        });
+
+        // Agent tiles
+        document.querySelectorAll('.agent-tile').forEach(tile => {
+            tile.addEventListener('click', (e) => {
+                if (!e.target.closest('.tile-btn')) {
+                    this.selectNode(tile.dataset.node);
+                    this.showToast('success', `Selected ${tile.dataset.node}`);
+                }
+            });
+        });
+
+        // Cluster filter
+        document.getElementById('clusterFilter')?.addEventListener('change', (e) => {
+            this.filterAgentsByCluster(e.target.value);
+        });
+
+        // Status filter
+        document.getElementById('statusFilter')?.addEventListener('change', (e) => {
+            this.filterAgentsByStatus(e.target.value);
         });
 
         // Keyboard shortcuts
@@ -268,6 +326,16 @@ const G5OS = {
             tab.classList.toggle('active', tab.dataset.view === view);
         });
         this.state.activeView = view;
+        
+        // Show corresponding workspace content
+        if (view === 'agents') {
+            this.switchWorkspaceTab('agents');
+        } else if (view === 'assets') {
+            this.switchWorkspaceTab('preview');
+        } else if (view === 'workspace') {
+            this.switchWorkspaceTab('chat');
+        }
+        
         this.logToTerminal(`[UI] Switched to ${view.toUpperCase()} view`);
     },
 
@@ -280,7 +348,16 @@ const G5OS = {
             content.classList.add('hidden');
         });
         
-        document.getElementById(`${tab}View`)?.classList.remove('hidden');
+        // Map tab to view
+        const viewMap = {
+            'chat': 'chatView',
+            'editor': 'editorView',
+            'preview': 'previewView',
+            'agents': 'agentsView'
+        };
+        
+        const viewId = viewMap[tab] || `${tab}View`;
+        document.getElementById(viewId)?.classList.remove('hidden');
         this.state.activeWorkspaceTab = tab;
     },
 
@@ -1072,6 +1149,131 @@ const G5OS = {
 
     hideLoading() {
         document.getElementById('loadingOverlay')?.classList.add('hidden');
+    },
+
+    // ============================================
+    // ASSET FILTERING
+    // ============================================
+    filterAssets(type) {
+        // Update active tab
+        document.querySelectorAll('.preview-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.type === type);
+        });
+        
+        // Filter cards
+        document.querySelectorAll('.asset-card:not(.upload-zone)').forEach(card => {
+            if (type === 'all') {
+                card.style.display = '';
+            } else {
+                card.style.display = card.dataset.type === type ? '' : 'none';
+            }
+        });
+        
+        this.logToTerminal(`[ASSETS] Filtered by: ${type.toUpperCase()}`);
+    },
+
+    // ============================================
+    // AGENT FILTERING
+    // ============================================
+    filterAgentsByCluster(cluster) {
+        document.querySelectorAll('.agent-tile').forEach(tile => {
+            if (cluster === 'all') {
+                tile.style.display = '';
+            } else {
+                const tileCluster = tile.querySelector('.tile-cluster')?.textContent;
+                tile.style.display = tileCluster === cluster ? '' : 'none';
+            }
+        });
+        this.logToTerminal(`[AGENTS] Filtered by cluster: ${cluster}`);
+    },
+
+    filterAgentsByStatus(status) {
+        document.querySelectorAll('.agent-tile').forEach(tile => {
+            if (status === 'all') {
+                tile.style.display = '';
+            } else {
+                const tileStatus = tile.querySelector('.tile-status');
+                const hasStatus = tileStatus?.classList.contains(status);
+                tile.style.display = hasStatus ? '' : 'none';
+            }
+        });
+        this.logToTerminal(`[AGENTS] Filtered by status: ${status}`);
+    },
+
+    // ============================================
+    // ENHANCED FILE UPLOAD (adds to assets grid)
+    // ============================================
+    addAssetToGrid(file) {
+        const grid = document.getElementById('assetsGrid');
+        const uploadZone = document.getElementById('uploadZone');
+        
+        const typeMap = {
+            'image': ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+            'video': ['video/mp4', 'video/webm'],
+            'audio': ['audio/mp3', 'audio/wav', 'audio/mpeg'],
+            'text': ['text/plain', 'text/markdown', 'application/pdf', 'application/json']
+        };
+        
+        let assetType = 'text';
+        for (const [type, mimes] of Object.entries(typeMap)) {
+            if (mimes.some(m => file.type.includes(m.split('/')[1]))) {
+                assetType = type;
+                break;
+            }
+        }
+        
+        const card = document.createElement('div');
+        card.className = 'asset-card';
+        card.dataset.type = assetType;
+        card.dataset.id = `asset-${Date.now()}`;
+        card.innerHTML = `
+            <div class="asset-thumbnail ${assetType}">${this.getFileIcon(file.type)}</div>
+            <div class="asset-info">
+                <span class="asset-title">${file.name}</span>
+                <span class="asset-meta">${this.formatFileSize(file.size)} • Just now</span>
+            </div>
+            <div class="asset-actions">
+                <button class="asset-action" title="Preview">👁️</button>
+                <button class="asset-action" title="Download">⬇️</button>
+                <button class="asset-action" title="Delete">🗑️</button>
+            </div>
+        `;
+        
+        // Insert before upload zone
+        grid.insertBefore(card, uploadZone);
+        
+        // Add click listener
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('.asset-action')) {
+                this.previewAsset(assetType, file.name);
+            }
+        });
+    },
+
+    formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    },
+
+    // ============================================
+    // EXPORT CHAT
+    // ============================================
+    exportChat() {
+        const messages = this.state.chatHistory.map(m => {
+            const time = new Date(m.time).toLocaleTimeString();
+            return `[${time}] ${m.type.toUpperCase()}: ${m.content}`;
+        }).join('\n\n');
+        
+        const blob = new Blob([messages], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `g5-chat-${Date.now()}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        this.showToast('success', 'Chat exported');
     },
 
     // ============================================

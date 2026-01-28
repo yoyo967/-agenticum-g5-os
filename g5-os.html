@@ -433,9 +433,307 @@
             <!-- PREVIEW VIEW (Hidden) -->
             <div class="workspace-content hidden" id="previewView">
                 <div class="preview-container">
-                    <div class="preview-placeholder">
-                        <span class="preview-icon">👁️</span>
-                        <p>Select an asset to preview</p>
+                    <div class="preview-header">
+                        <div class="preview-tabs">
+                            <button class="preview-tab active" data-type="all">All</button>
+                            <button class="preview-tab" data-type="text">📄 Text</button>
+                            <button class="preview-tab" data-type="image">🖼️ Images</button>
+                            <button class="preview-tab" data-type="video">🎬 Video</button>
+                            <button class="preview-tab" data-type="audio">🎵 Audio</button>
+                        </div>
+                        <div class="preview-actions">
+                            <button class="btn btn-small" id="uploadAssetBtn">📤 Upload</button>
+                            <button class="btn btn-small" id="generateAssetBtn">✨ Generate</button>
+                        </div>
+                    </div>
+                    
+                    <!-- ASSETS GRID -->
+                    <div class="assets-grid" id="assetsGrid">
+                        <div class="asset-card" data-type="text" data-id="asset-1">
+                            <div class="asset-thumbnail text">📄</div>
+                            <div class="asset-info">
+                                <span class="asset-title">MANIFESTO_V5.md</span>
+                                <span class="asset-meta">2.4 KB • Today</span>
+                            </div>
+                            <div class="asset-actions">
+                                <button class="asset-action" title="Preview">👁️</button>
+                                <button class="asset-action" title="Download">⬇️</button>
+                                <button class="asset-action" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="asset-card" data-type="video" data-id="asset-2">
+                            <div class="asset-thumbnail video">
+                                <span class="play-icon">▶</span>
+                            </div>
+                            <div class="asset-info">
+                                <span class="asset-title">VEO_CINEMATIC.mp4</span>
+                                <span class="asset-meta">45 MB • Yesterday</span>
+                            </div>
+                            <div class="asset-actions">
+                                <button class="asset-action" title="Preview">👁️</button>
+                                <button class="asset-action" title="Download">⬇️</button>
+                                <button class="asset-action" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="asset-card" data-type="image" data-id="asset-3">
+                            <div class="asset-thumbnail image">🖼️</div>
+                            <div class="asset-info">
+                                <span class="asset-title">CAMPAIGN_HERO.png</span>
+                                <span class="asset-meta">1.2 MB • Yesterday</span>
+                            </div>
+                            <div class="asset-actions">
+                                <button class="asset-action" title="Preview">👁️</button>
+                                <button class="asset-action" title="Download">⬇️</button>
+                                <button class="asset-action" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="asset-card" data-type="audio" data-id="asset-4">
+                            <div class="asset-thumbnail audio">🎵</div>
+                            <div class="asset-info">
+                                <span class="asset-title">SONIC_LOGO.wav</span>
+                                <span class="asset-meta">890 KB • 2 days ago</span>
+                            </div>
+                            <div class="asset-actions">
+                                <button class="asset-action" title="Preview">👁️</button>
+                                <button class="asset-action" title="Download">⬇️</button>
+                                <button class="asset-action" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="asset-card" data-type="text" data-id="asset-5">
+                            <div class="asset-thumbnail text">📊</div>
+                            <div class="asset-info">
+                                <span class="asset-title">ANALYTICS_REPORT.csv</span>
+                                <span class="asset-meta">156 KB • 3 days ago</span>
+                            </div>
+                            <div class="asset-actions">
+                                <button class="asset-action" title="Preview">👁️</button>
+                                <button class="asset-action" title="Download">⬇️</button>
+                                <button class="asset-action" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="asset-card" data-type="image" data-id="asset-6">
+                            <div class="asset-thumbnail image">🖼️</div>
+                            <div class="asset-info">
+                                <span class="asset-title">SOCIAL_BANNER.jpg</span>
+                                <span class="asset-meta">2.1 MB • 3 days ago</span>
+                            </div>
+                            <div class="asset-actions">
+                                <button class="asset-action" title="Preview">👁️</button>
+                                <button class="asset-action" title="Download">⬇️</button>
+                                <button class="asset-action" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                        
+                        <!-- UPLOAD ZONE -->
+                        <div class="asset-card upload-zone" id="uploadZone">
+                            <div class="upload-content">
+                                <span class="upload-icon">📤</span>
+                                <p>Drop files here<br>or click to upload</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AGENTS VIEW (Hidden) -->
+            <div class="workspace-content hidden" id="agentsView">
+                <div class="agents-container">
+                    <div class="agents-header">
+                        <h2>🤖 Node Configuration</h2>
+                        <div class="agents-filters">
+                            <select class="filter-select" id="clusterFilter">
+                                <option value="all">All Clusters</option>
+                                <option value="APEX">APEX</option>
+                                <option value="STRATEGY">STRATEGY</option>
+                                <option value="RESEARCH">RESEARCH</option>
+                                <option value="CONTENT">CONTENT</option>
+                                <option value="GOVERNANCE">GOVERNANCE</option>
+                                <option value="INTEL">INTELLIGENCE</option>
+                            </select>
+                            <select class="filter-select" id="statusFilter">
+                                <option value="all">All Status</option>
+                                <option value="online">Online</option>
+                                <option value="processing">Processing</option>
+                                <option value="offline">Offline</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="agents-grid" id="agentsGrid">
+                        <!-- APEX -->
+                        <div class="agent-tile apex" data-node="SN-00">
+                            <div class="tile-header">
+                                <span class="tile-icon">👑</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">SN-00</span>
+                                <span class="tile-name">Orchestrator</span>
+                                <span class="tile-cluster">APEX</span>
+                            </div>
+                            <div class="tile-actions">
+                                <button class="tile-btn" title="Configure">⚙️</button>
+                                <button class="tile-btn" title="Logs">📋</button>
+                            </div>
+                        </div>
+                        
+                        <!-- STRATEGY -->
+                        <div class="agent-tile sp" data-node="SP-01">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">SP-01</span>
+                                <span class="tile-name">Campaign Strategist</span>
+                                <span class="tile-cluster">STRATEGY</span>
+                            </div>
+                            <div class="tile-actions">
+                                <button class="tile-btn">⚙️</button>
+                                <button class="tile-btn">📋</button>
+                            </div>
+                        </div>
+                        
+                        <div class="agent-tile sp" data-node="SP-99">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">SP-99</span>
+                                <span class="tile-name">Hegemony Matrix</span>
+                                <span class="tile-cluster">STRATEGY</span>
+                            </div>
+                            <div class="tile-actions">
+                                <button class="tile-btn">⚙️</button>
+                                <button class="tile-btn">📋</button>
+                            </div>
+                        </div>
+                        
+                        <!-- RESEARCH -->
+                        <div class="agent-tile ra" data-node="RA-01">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">RA-01</span>
+                                <span class="tile-name">Authority Auditor</span>
+                                <span class="tile-cluster">RESEARCH</span>
+                            </div>
+                            <div class="tile-actions">
+                                <button class="tile-btn">⚙️</button>
+                                <button class="tile-btn">📋</button>
+                            </div>
+                        </div>
+                        
+                        <div class="agent-tile ra" data-node="RA-52">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status processing"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">RA-52</span>
+                                <span class="tile-name">Red Team</span>
+                                <span class="tile-cluster">RESEARCH</span>
+                            </div>
+                            <div class="tile-actions">
+                                <button class="tile-btn">⚙️</button>
+                                <button class="tile-btn">📋</button>
+                            </div>
+                        </div>
+                        
+                        <!-- CONTENT -->
+                        <div class="agent-tile cc" data-node="CC-01">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status processing"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">CC-01</span>
+                                <span class="tile-name">Copy Chief</span>
+                                <span class="tile-cluster">CONTENT</span>
+                            </div>
+                            <div class="tile-actions">
+                                <button class="tile-btn">⚙️</button>
+                                <button class="tile-btn">📋</button>
+                            </div>
+                        </div>
+                        
+                        <div class="agent-tile cc" data-node="CC-07">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">CC-07</span>
+                                <span class="tile-name">Imagen 3 Gen</span>
+                                <span class="tile-cluster">CONTENT</span>
+                            </div>
+                            <div class="tile-actions">
+                                <button class="tile-btn">⚙️</button>
+                                <button class="tile-btn">📋</button>
+                            </div>
+                        </div>
+                        
+                        <!-- GOVERNANCE -->
+                        <div class="agent-tile mi" data-node="MI-01">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">MI-01</span>
+                                <span class="tile-name">Compliance Officer</span>
+                                <span class="tile-cluster">GOVERNANCE</span>
+                            </div>
+                            <div class="tile-actions">
+                                <button class="tile-btn">⚙️</button>
+                                <button class="tile-btn">📋</button>
+                            </div>
+                        </div>
+                        
+                        <!-- INTEL -->
+                        <div class="agent-tile dt" data-node="DT-02">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">DT-02</span>
+                                <span class="tile-name">Pricing Algorithm</span>
+                                <span class="tile-cluster">INTEL</span>
+                            </div>
+                            <div class="tile-actions">
+                                <button class="tile-btn">⚙️</button>
+                                <button class="tile-btn">📋</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- NODE STATS -->
+                    <div class="node-stats">
+                        <div class="stat-card">
+                            <span class="stat-value" id="nodesOnline">52</span>
+                            <span class="stat-label">Online</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="nodesProcessing">2</span>
+                            <span class="stat-label">Processing</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="nodesOffline">0</span>
+                            <span class="stat-label">Offline</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="totalClusters">6</span>
+                            <span class="stat-label">Clusters</span>
+                        </div>
                     </div>
                 </div>
             </div>
