@@ -1079,6 +1079,13 @@ const G5OS = {
         const progressFill = document.getElementById('workflowProgressFill');
         const stepsContainer = document.getElementById('workflowSteps');
         
+        // SIMULATE INTELLIGENT CONTEXT ATTACHMENT
+        const countSpan = document.getElementById('attachedCount');
+        if (countSpan) {
+            countSpan.textContent = '⚡ Auto-Context: 4 Sources';
+            countSpan.style.color = 'var(--accent-primary)';
+        }
+
         // SIMULATION STEPS based on workflow type
         let steps = ['Initializing cluster...', 'Parsing intent...', 'Finalizing...'];
         if (this.currentWorkflow === '5min-agency') {

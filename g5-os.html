@@ -1444,9 +1444,10 @@
     <!-- ============================================
          ASSET PREVIEW MODAL
          ============================================ -->
-    <div class="modal hidden" id="assetPreviewModal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-container modal-lg">
+    <!-- Added style="z-index: 9999" to force it on top of everything -->
+    <div class="modal hidden" id="assetPreviewModal" style="z-index: 9999 !important;">
+        <div class="modal-backdrop" style="z-index: 9998 !important; background: rgba(0,0,0,0.85);"></div>
+        <div class="modal-container modal-lg" style="z-index: 10000 !important; border: 1px solid var(--accent-primary);">
             <div class="modal-header">
                 <h2 class="modal-title" id="assetPreviewTitle">📄 Asset Preview</h2>
                 <button class="modal-close" id="closeAssetPreview">×</button>
