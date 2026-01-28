@@ -1584,12 +1584,15 @@
     <!-- ============================================
          NODE DETAILS MODAL
          ============================================ -->
-    <div class="modal hidden" id="nodeDetailsModal">
+    <!-- ============================================
+         NODE DETAILS MODAL
+         ============================================ -->
+    <div class="modal hidden" id="nodeModal">
         <div class="modal-backdrop"></div>
         <div class="modal-container modal-large">
             <div class="modal-header">
-                <h3 id="nodeDetailsTitle">◆ SN-00 Orchestrator</h3>
-                <button class="modal-close" id="closeNodeDetails">×</button>
+                <h3 id="nodeModalTitle">◆ SN-00 Orchestrator</h3>
+                <button class="modal-close" id="closeNodeModal">×</button>
             </div>
             <div class="modal-body node-details-body">
                 <div class="node-detail-grid">
@@ -1654,7 +1657,8 @@
                     <!-- Node Logs -->
                     <div class="node-detail-section full-width">
                         <h4>Recent Activity</h4>
-                        <div class="node-logs">
+                        <div class="node-logs" id="nodeLogs">
+                            <!-- Logs injected by JS -->
                             <div class="log-entry">[01:42:15] Routed campaign brief to SP-01</div>
                             <div class="log-entry">[01:42:08] Coordinated content pipeline</div>
                             <div class="log-entry">[01:41:55] Optimized context window</div>
