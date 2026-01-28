@@ -42,6 +42,7 @@ const G5OS = {
         this.startSystemClock();
         this.loadNodes();
         this.initNeuralMesh();
+        this.initAudio();
         
         // Start Boot Sequence
         this.runBootSequence();
@@ -90,29 +91,47 @@ const G5OS = {
     // EVENT LISTENERS
     // ============================================
     setupEventListeners() {
+        // GLOBAL HOVER SOUND
+        document.body.addEventListener('mouseover', (e) => {
+             if (e.target.closest('button, .agent-tile, .os-tab, .workspace-tab, .nav-item, .workflow-card, .tree-item, .asset-card')) {
+                 this.playSound('hover');
+             }
+        });
+
         // Header tabs
         document.querySelectorAll('.os-tab').forEach(tab => {
-            tab.addEventListener('click', () => this.switchView(tab.dataset.view));
+            tab.addEventListener('click', () => {
+                this.switchView(tab.dataset.view);
+                this.playSound('click');
+            });
         });
 
         // Workspace tabs
         document.querySelectorAll('.workspace-tab').forEach(tab => {
-            tab.addEventListener('click', () => this.switchWorkspaceTab(tab.dataset.tab));
+            tab.addEventListener('click', () => {
+                this.switchWorkspaceTab(tab.dataset.tab);
+                this.playSound('click');
+            });
         });
 
         // Footer tabs
         document.querySelectorAll('.footer-tab').forEach(tab => {
-            tab.addEventListener('click', () => this.switchFooterTab(tab.dataset.panel));
+            tab.addEventListener('click', () => {
+                this.switchFooterTab(tab.dataset.panel);
+                this.playSound('click');
+            });
         });
 
         // Toggle footer
         document.getElementById('togglePanelBtn')?.addEventListener('click', () => {
             this.toggleFooter();
+            this.playSound('click');
         });
 
         // Clear terminal
         document.getElementById('clearTerminalBtn')?.addEventListener('click', () => {
             this.clearTerminal();
+            this.playSound('click');
         });
 
         // Chat input
@@ -1321,6 +1340,96 @@ const G5OS = {
     },
 
     // ============================================
+    // AUDIO FEEDBACK SYSTEM (ATOMIC IMMERSION)
+    // ============================================
+    initAudio() {
+        // Initialize AudioContext on first user interaction to comply with browser policies
+        this.audioCtx = null;
+        this.soundEnabled = true;
+        
+        const initAudioCtx = () => {
+            if (!this.audioCtx) {
+                this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                console.log('🔊 G5 AUDIO SUBSYSTEM ONLINE');
+            }
+            document.removeEventListener('click', initAudioCtx);
+        };
+        document.addEventListener('click', initAudioCtx);
+    },
+
+    playSound(type) {
+        if (!this.soundEnabled || !this.audioCtx) return;
+        
+        const ctx = this.audioCtx;
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        
+        const now = ctx.currentTime;
+        
+        switch (type) {
+            case 'hover':
+                // High-pitched blip
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.05);
+                gainNode.gain.setValueAtTime(0.02, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+                break;
+                
+            case 'click':
+                // Mechanical click
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+                gainNode.gain.setValueAtTime(0.05, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+                break;
+                
+            case 'success':
+                // Positive chime
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, now); // A4
+                osc.frequency.setValueAtTime(554.37, now + 0.1); // C#5
+                osc.frequency.setValueAtTime(659.25, now + 0.2); // E5
+                gainNode.gain.setValueAtTime(0.05, now);
+                gainNode.gain.linearRampToValueAtTime(0.05, now + 0.2);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+                osc.start(now);
+                osc.stop(now + 0.6);
+                break;
+                
+            case 'alert':
+                // Error buzz
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+                break;
+                
+            case 'process':
+                // Computing flutter
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.linearRampToValueAtTime(400, now + 0.1);
+                gainNode.gain.setValueAtTime(0.03, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+                break;
+        }
+    },
+
+    // ============================================
     // NEURAL CANVAS MESH (ATOMIC VISUALS)
     // ============================================
     initNeuralMesh() {
@@ -1632,6 +1741,7 @@ const G5OS = {
         } catch (err) {
             console.error('Workflow Execution Error:', err);
             this.logToTerminal(`[ERROR] Workflow interrupted: ${err.message}`, 'error');
+            this.playSound('alert');
         }
         
         // CLEANUP PULSE
@@ -1649,6 +1759,7 @@ const G5OS = {
         document.getElementById('workflowOutput')?.classList.remove('hidden');
         this.showToast('success', `${wfId.toUpperCase()} completed`);
         this.logToTerminal(`[WORKFLOW] ${wfId} execution successful`);
+        this.playSound('success');
     },
 
     generateSimulationResult(workflowId, input) {
