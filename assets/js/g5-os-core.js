@@ -1492,7 +1492,22 @@ const G5OS = {
             
             // Force position update in case of layout shift
             this.updateNodePositions();
+            
+            // ATOMIC GLITCH TRIGGER
+            this.triggerGlitchEffect('osHeader');
         }
+    },
+
+    triggerGlitchEffect(elementId) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+
+        el.setAttribute('data-text', el.innerText);
+        el.classList.add('atomic-glitch');
+        
+        setTimeout(() => {
+            el.classList.remove('atomic-glitch');
+        }, 400); // Short burst
     },
 
     closeWorkflowModal() {
