@@ -3127,3 +3127,13 @@
     border-top: 1px dashed rgba(52, 211, 153, 0.3);
     padding-top: 12px;
 }
+
+/* FIX: Ensure Asset Preview is ALWAYS on top of Workflow Modal */
+#assetPreviewModal {
+    z-index: 2000 !important;
+}
+
+#assetPreviewModal .modal-backdrop {
+    z-index: 1999 !important;
+    background: rgba(0,0,0,0.8); /* Darker backdrop for focus */
+}

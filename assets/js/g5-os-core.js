@@ -281,6 +281,25 @@ const G5OS = {
             });
         });
 
+        // WORKFLOW MODAL ACTIONS
+        // Allow Enter to submit (without Shift)
+        document.getElementById('workflowInput')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.executeWorkflow();
+            }
+        });
+
+        // Simulate attaching files
+        document.getElementById('workflowAttach')?.addEventListener('click', () => {
+             const countSpan = document.getElementById('attachedCount');
+             if (countSpan) {
+                 countSpan.textContent = '3 files'; // Simulating context
+                 countSpan.style.color = '#4ade80'; // Success green
+                 this.showToast('success', 'Context attached: Brand Guidelines, Persona Data');
+             }
+        });
+
         // Workflow card click
         document.querySelectorAll('.workflow-card').forEach(card => {
             card.addEventListener('click', () => {
