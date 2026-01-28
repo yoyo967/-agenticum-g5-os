@@ -42,7 +42,47 @@ const G5OS = {
         this.startSystemClock();
         this.loadNodes();
         
+        // Start Boot Sequence
+        this.runBootSequence();
+
         console.log('✅ G5 OS READY | 52 NODES ONLINE');
+    },
+
+    runBootSequence() {
+        const terminal = document.getElementById('bootTerminal');
+        const overlay = document.getElementById('bootOverlay');
+        if (!terminal || !overlay) {
+            if (overlay) overlay.remove(); 
+            return;
+        }
+        
+        const lines = [
+            'LOADING KERNEL MODULES...',
+            'MOUNTING G5 HYPERVISOR...',
+            'CONNECTING TO 52-NODE CLUSTER...',
+            'VERIFYING SECURITY TOKENS...',
+            'SYSTEM READY.'
+        ];
+        
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i >= lines.length) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    overlay.classList.add('fade-out');
+                    setTimeout(() => overlay.remove(), 1000);
+                }, 500);
+                return;
+            }
+            
+            const line = document.createElement('div');
+            line.className = 'boot-line';
+            line.style.opacity = '0';
+            line.style.animation = 'typeLine 0.1s forwards';
+            line.textContent = `> ${lines[i]}`;
+            terminal.appendChild(line);
+            i++;
+        }, 500); 
     },
 
     // ============================================
@@ -320,8 +360,10 @@ const G5OS = {
         document.getElementById('nodeActivateBtn')?.addEventListener('click', () => {
             const nodeId = this.state.activeAgent?.id || 'NODE';
             this.showToast('success', `${nodeId} ACTIVATED | Integration complete`);
-            // Add visual flair - maybe glow on the grid?
             document.getElementById('nodeModal')?.classList.add('hidden');
+            
+            // CONTEXTUAL CHAT
+            this.startAgentChat(nodeId);
         });
 
         document.getElementById('nodeLogsBtn')?.addEventListener('click', () => {
@@ -1099,6 +1141,26 @@ const G5OS = {
         document.getElementById('workflowModal')?.classList.remove('hidden');
     },
 
+    generateStepLogs(stepName) {
+        // Extract Node ID if present (e.g., "SP-01: ...")
+        const match = stepName.match(/([A-Z]{2}-\d{2})/);
+        const nodeId = match ? match[1] : 'SYSTEM';
+        
+        const actions = [
+            'Allocating vCPU cores...', 'Context window optimized.', 'Querying vector database...',
+            'Retrieving specialized knowledge...', 'Handshaking with sub-nodes...', 'Verifying output integrity...'
+        ];
+        
+        // Immediate log
+        this.logToTerminal(`[${nodeId}] ${stepName}`);
+        
+        // Random follow-up log after 200ms
+        setTimeout(() => {
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            this.logToTerminal(`[${nodeId}] ${action}`);
+        }, 200);
+    },
+
     closeWorkflowModal() {
         document.getElementById('workflowModal')?.classList.add('hidden');
         this.currentWorkflow = null;
@@ -1114,6 +1176,9 @@ const G5OS = {
         // UI Reset
         document.getElementById('workflowProgress')?.classList.remove('hidden');
         document.getElementById('workflowOutput')?.classList.add('hidden');
+        
+        // GRID ANIMATION START
+        document.querySelector('.node-grid')?.classList.add('pulse-active');
         const progressFill = document.getElementById('workflowProgressFill');
         const stepsContainer = document.getElementById('workflowSteps');
         
@@ -1145,6 +1210,9 @@ const G5OS = {
             stepsContainer.textContent = steps[i];
             const progress = ((i + 1) / steps.length) * 100;
             progressFill.style.width = `${progress}%`;
+            
+            // TERMINAL SYNC: Generate realistic logs for this step
+            this.generateStepLogs(steps[i]);
             
             // Randomish delay for realism
             await this.delay(800 + Math.random() * 600);
@@ -1202,6 +1270,9 @@ const G5OS = {
         }
         
         outputContainer.innerHTML = html;
+        
+        // GRID ANIMATION STOP
+        document.querySelector('.node-grid')?.classList.remove('pulse-active');
     },
 
     createSimulatedAsset(name, type) {
@@ -1866,6 +1937,36 @@ const G5OS = {
     // ============================================
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
+    // ============================================
+    // CONTEXTUAL CHAT
+    // ============================================
+    startAgentChat(nodeId) {
+        // Switch to chat view
+        this.switchWorkspaceTab('chat');
+        
+        // Reset chat
+        if (this.newChat) {
+             this.newChat(); 
+        } else {
+             // Fallback if newChat not found
+             const chatHistory = document.getElementById('chatHistory');
+             if (chatHistory) chatHistory.innerHTML = '';
+             this.state.chatHistory = [];
+        }
+        
+        // Seed chat
+        const greeting = `[SECURE CHANNEL ESTABLISHED]\nIdentity Verified: ${nodeId}\nStatus: ONLINE\n\nAwaiting directive...`;
+        
+        // Add greeting message
+        setTimeout(() => {
+            this.addChatMessage('system', greeting);
+            this.showToast('info', `Channel open to ${nodeId}`);
+        }, 500);
+        
+        // Focus input
+        setTimeout(() => document.getElementById('chatInput')?.focus(), 600);
     }
 };
 
