@@ -1193,11 +1193,19 @@ const G5OS = {
         // Immediate log
         this.logToTerminal(`[${nodeId}] ${stepName}`);
         
+        // CONTEXT AWARENESS: Inject file specific logs
+        if (this.state.contextFiles && this.state.contextFiles.length > 0 && Math.random() > 0.6) {
+             const file = this.state.contextFiles[Math.floor(Math.random() * this.state.contextFiles.length)];
+             setTimeout(() => {
+                 this.logToTerminal(`[${nodeId}] Reading context: '${file.name}' (${(file.size/1024).toFixed(1)}KB)`);
+             }, 100);
+        }
+        
         // Random follow-up log after 200ms
         setTimeout(() => {
             const action = actions[Math.floor(Math.random() * actions.length)];
             this.logToTerminal(`[${nodeId}] ${action}`);
-        }, 200);
+        }, 200 + Math.random() * 200);
     },
 
     closeWorkflowModal() {
@@ -1216,46 +1224,93 @@ const G5OS = {
         document.getElementById('workflowProgress')?.classList.remove('hidden');
         document.getElementById('workflowOutput')?.classList.add('hidden');
         
-        // GRID ANIMATION START
-        document.querySelector('.node-grid')?.classList.add('pulse-active');
+        // GRID ANIMATION START (Default Base Pulse)
+        const grid = document.querySelector('.node-grid');
+        grid?.classList.add('pulse-active');
+        
         const progressFill = document.getElementById('workflowProgressFill');
         const stepsContainer = document.getElementById('workflowSteps');
         
         // SIMULATE INTELLIGENT CONTEXT ATTACHMENT
         const countSpan = document.getElementById('attachedCount');
         if (countSpan) {
-            countSpan.textContent = '⚡ Auto-Context: 4 Sources';
+            const fileCount = this.state.contextFiles.length;
+            countSpan.textContent = fileCount > 0 ? `⚡ Auto-Context: ${fileCount} Sources` : '⚡ Auto-Context: Zero-Shot';
             countSpan.style.color = 'var(--accent-primary)';
         }
 
-        // SIMULATION STEPS based on workflow type
-        let steps = ['Initializing cluster...', 'Parsing intent...', 'Finalizing...'];
+        // DEFINING GRANULAR SIMULATION STEPS
+        let simulationSteps = [];
+        
         if (this.currentWorkflow === '5min-agency') {
-            steps = [
-                'Initializing Executive Cluster (SN-00)...',
-                'Analysing Briefing & Context...',
-                'SP-01: Generating Strategic Angles...',
-                'CC-01: Drafting Headlines & Copy...',
-                'CC-06: Rendering Visual Concepts...',
-                'MI-01: Verifying Compliance...',
-                'Packing Assets...'
+            simulationSteps = [
+                { label: 'Initializing Executive Cluster (SN-00)...', cluster: 'strategy' },
+                { label: 'Analysing Briefing & Context...', cluster: 'strategy' },
+                { label: 'SP-01: Generating Strategic Angles...', cluster: 'strategy' },
+                { label: 'CC-01: Drafting Headlines & Copy...', cluster: 'content' },
+                { label: 'CC-06: Rendering Visual Concepts...', cluster: 'content' },
+                { label: 'MI-01: Verifying Compliance & Safety...', cluster: 'governance' },
+                { label: 'Packing Assets for Delivery...', cluster: 'apex' }
+            ];
+        } else if (this.currentWorkflow === 'senate') {
+            simulationSteps = [
+                { label: 'Convening Algorithmic Senate...', cluster: 'governance' },
+                { label: 'Polling Node Consensus...', cluster: 'governance' },
+                { label: 'Debating Policy Constraints...', cluster: 'strategy' },
+                { label: 'Applying Ethical Filters (MI-07)...', cluster: 'governance' },
+                { label: 'Finalizing Legislative Output...', cluster: 'apex' }
             ];
         } else if (this.currentWorkflow === 'jit-reality') {
-            steps = ['Scanning Market Trends...', 'Identifying White Spots...', 'Simulating Product Launch...', 'Calculating ROI...', 'Generating Report...'];
+            simulationSteps = [
+                { label: 'Scanning Global Market Trends...', cluster: 'intel' },
+                { label: 'Identifying White Space p(>0.8)...', cluster: 'research' },
+                { label: 'Simulating Product Launch Routes...', cluster: 'strategy' },
+                { label: 'Calculating ROI Projection...', cluster: 'intel' },
+                { label: 'Generating Reality Report...', cluster: 'apex' }
+            ];
+        } else if (this.currentWorkflow === 'morphosis') {
+            simulationSteps = [
+                { label: 'Scanning Narrative Field...', cluster: 'research' },
+                { label: 'Detecting Cultural Mutations...', cluster: 'research' },
+                { label: 'Evolving Content Genotypes...', cluster: 'content' },
+                { label: 'Simulating A/B Variants...', cluster: 'intel' },
+                { label: 'Morphing Final Output...', cluster: 'content' }
+            ];
+        } else {
+             // Fallback
+             simulationSteps = [
+                { label: 'Initializing Cluster...', cluster: 'apex' },
+                { label: 'Processing...', cluster: 'intel' },
+                { label: 'Finalizing...', cluster: 'apex' }
+             ];
         }
 
-        // Animate Progress
-        for (let i = 0; i < steps.length; i++) {
-            stepsContainer.textContent = steps[i];
-            const progress = ((i + 1) / steps.length) * 100;
+        // ANIMATE PROGRESS WITH GRANULAR PULSE
+        for (let i = 0; i < simulationSteps.length; i++) {
+            const step = simulationSteps[i];
+            
+            // UI Text
+            stepsContainer.textContent = step.label;
+            const progress = ((i + 1) / simulationSteps.length) * 100;
             progressFill.style.width = `${progress}%`;
             
-            // TERMINAL SYNC: Generate realistic logs for this step
-            this.generateStepLogs(steps[i]);
+            // CLUSTER PULSE LOGIC
+            // Remove all specific pulses first
+            grid.classList.remove('pulse-strategy', 'pulse-content', 'pulse-research', 'pulse-governance', 'pulse-intel');
+            // Add specific pulse if defined
+            if (step.cluster && step.cluster !== 'apex') {
+                grid.classList.add(`pulse-${step.cluster}`);
+            }
             
-            // Randomish delay for realism
+            // TERMINAL SYNC
+            this.generateStepLogs(step.label);
+            
+            // Randomish delay for realism (varied by specific step type could be cool, but random is fine)
             await this.delay(800 + Math.random() * 600);
         }
+        
+        // CLEANUP PULSE
+        grid.classList.remove('pulse-active', 'pulse-strategy', 'pulse-content', 'pulse-research', 'pulse-governance', 'pulse-intel');
         
         // GENERATE FAKE ASSETS & OUTPUT
         this.generateSimulationResult(this.currentWorkflow, input);
