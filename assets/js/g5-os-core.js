@@ -1352,8 +1352,12 @@ const G5OS = {
         document.getElementById('workflowOutput')?.classList.add('hidden');
         
         // GRID ANIMATION START (Default Base Pulse)
-        const grid = document.querySelector('.node-grid');
-        grid?.classList.add('pulse-active');
+        if (this.pulseCluster) {
+             this.pulseCluster('active');
+        } else {
+             const grid = document.querySelector('.node-grid');
+             grid?.classList.add('pulse-active');
+        }
         
         const progressFill = document.getElementById('workflowProgressFill');
         const stepsContainer = document.getElementById('workflowSteps');
@@ -1361,7 +1365,7 @@ const G5OS = {
         // SIMULATE INTELLIGENT CONTEXT ATTACHMENT
         const countSpan = document.getElementById('attachedCount');
         if (countSpan) {
-            const fileCount = this.state.contextFiles.length;
+            const fileCount = (this.state.contextFiles || []).length;
             countSpan.textContent = fileCount > 0 ? `⚡ Auto-Context: ${fileCount} Sources` : '⚡ Auto-Context: Zero-Shot';
             countSpan.style.color = 'var(--accent-primary)';
         }
@@ -1369,7 +1373,10 @@ const G5OS = {
         // DEFINING GRANULAR SIMULATION STEPS
         let simulationSteps = [];
         
-        if (this.currentWorkflow === '5min-agency') {
+        // Ensure current workflow is set
+        const wfId = this.currentWorkflow || this.state.selectedWorkflow || '5min-agency';
+
+        if (wfId === '5min-agency') {
             simulationSteps = [
                 { label: 'Initializing Executive Cluster (SN-00)...', cluster: 'strategy' },
                 { label: 'Analysing Briefing & Context...', cluster: 'strategy' },
@@ -1379,7 +1386,7 @@ const G5OS = {
                 { label: 'MI-01: Verifying Compliance & Safety...', cluster: 'governance' },
                 { label: 'Packing Assets for Delivery...', cluster: 'apex' }
             ];
-        } else if (this.currentWorkflow === 'senate') {
+        } else if (wfId === 'senate') {
             simulationSteps = [
                 { label: 'Convening Algorithmic Senate...', cluster: 'governance' },
                 { label: 'Polling Node Consensus...', cluster: 'governance' },
@@ -1387,7 +1394,7 @@ const G5OS = {
                 { label: 'Applying Ethical Filters (MI-07)...', cluster: 'governance' },
                 { label: 'Finalizing Legislative Output...', cluster: 'apex' }
             ];
-        } else if (this.currentWorkflow === 'jit-reality') {
+        } else if (wfId === 'jit-reality') {
             simulationSteps = [
                 { label: 'Scanning Global Market Trends...', cluster: 'intel' },
                 { label: 'Identifying White Space p(>0.8)...', cluster: 'research' },
@@ -1395,7 +1402,7 @@ const G5OS = {
                 { label: 'Calculating ROI Projection...', cluster: 'intel' },
                 { label: 'Generating Reality Report...', cluster: 'apex' }
             ];
-        } else if (this.currentWorkflow === 'morphosis') {
+        } else if (wfId === 'morphosis') {
             simulationSteps = [
                 { label: 'Scanning Narrative Field...', cluster: 'research' },
                 { label: 'Detecting Cultural Mutations...', cluster: 'research' },
@@ -1412,40 +1419,61 @@ const G5OS = {
              ];
         }
 
+        this.logToTerminal(`[COMMAND] EXECUTE AGENTS: ${wfId}`);
+
         // ANIMATE PROGRESS WITH GRANULAR PULSE
-        for (let i = 0; i < simulationSteps.length; i++) {
-            const step = simulationSteps[i];
-            
-            // UI Text
-            stepsContainer.textContent = step.label;
-            const progress = ((i + 1) / simulationSteps.length) * 100;
-            progressFill.style.width = `${progress}%`;
-            
-            // CLUSTER PULSE LOGIC
-            // Remove all specific pulses first
-            grid.classList.remove('pulse-strategy', 'pulse-content', 'pulse-research', 'pulse-governance', 'pulse-intel');
-            // Add specific pulse if defined
-            if (step.cluster && step.cluster !== 'apex') {
-                grid.classList.add(`pulse-${step.cluster}`);
+        try {
+            for (let i = 0; i < simulationSteps.length; i++) {
+                const step = simulationSteps[i];
+                
+                // UI Text
+                stepsContainer.textContent = step.label;
+                const progress = ((i + 1) / simulationSteps.length) * 100;
+                progressFill.style.width = `${progress}%`;
+                
+                // ATOMIC CLUSTER PULSE
+                if (this.pulseCluster) {
+                    this.pulseCluster(step.cluster);
+                } else if (step.cluster) {
+                    // Fallback to manual class manipulation if pulseCluster missing
+                     const grid = document.querySelector('.node-grid');
+                     if (grid) {
+                        grid.className = 'node-grid'; // Reset
+                        grid.classList.add(`pulse-${step.cluster}`);
+                     }
+                }
+                
+                // TERMINAL SYNC
+                if (this.generateStepLogs) {
+                    this.generateStepLogs(step.label);
+                } else {
+                    this.logToTerminal(`[PROCESSING] ${step.label}`);
+                }
+                
+                // Randomish delay for realism
+                const delayMs = 800 + Math.random() * 600;
+                await new Promise(r => setTimeout(r, delayMs));
             }
-            
-            // TERMINAL SYNC
-            this.generateStepLogs(step.label);
-            
-            // Randomish delay for realism (varied by specific step type could be cool, but random is fine)
-            await this.delay(800 + Math.random() * 600);
+        } catch (err) {
+            console.error('Workflow Execution Error:', err);
+            this.logToTerminal(`[ERROR] Workflow interrupted: ${err.message}`, 'error');
         }
         
         // CLEANUP PULSE
-        grid.classList.remove('pulse-active', 'pulse-strategy', 'pulse-content', 'pulse-research', 'pulse-governance', 'pulse-intel');
+        if (this.pulseCluster) {
+            this.pulseCluster(null);
+        } else {
+             const grid = document.querySelector('.node-grid');
+             grid?.classList.remove('pulse-active', 'pulse-strategy', 'pulse-content', 'pulse-research', 'pulse-governance', 'pulse-intel');
+        }
         
         // GENERATE FAKE ASSETS & OUTPUT
-        this.generateSimulationResult(this.currentWorkflow, input);
+        this.generateSimulationResult(this.currentWorkflow || wfId, input);
         
         // Show Output UI
         document.getElementById('workflowOutput')?.classList.remove('hidden');
-        this.showToast('success', `${this.currentWorkflow} completed`);
-        this.logToTerminal(`[WORKFLOW] ${this.currentWorkflow} execution successful`);
+        this.showToast('success', `${wfId.toUpperCase()} completed`);
+        this.logToTerminal(`[WORKFLOW] ${wfId} execution successful`);
     },
 
     generateSimulationResult(workflowId, input) {
