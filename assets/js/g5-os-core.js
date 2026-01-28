@@ -455,6 +455,40 @@ const G5OS = {
         document.querySelectorAll('.feature-locked').forEach(btn => {
             btn.addEventListener('click', () => this.showToast('info', 'Feature available in Enterprise Edition'));
         });
+
+        // ===================================
+        // ORCHESTRATOR CONFIG LISTENERS
+        // ===================================
+        const computeSlider = document.getElementById('nodeComputeSlider');
+        if (computeSlider) {
+            computeSlider.addEventListener('input', (e) => {
+                const val = e.target.value;
+                const display = document.getElementById('computeValueDisplay');
+                if (display) display.textContent = `${val}% TERAFLOPS`;
+            });
+        }
+
+        const applyConfigBtn = document.getElementById('applyConfigBtn');
+        if (applyConfigBtn) {
+            applyConfigBtn.addEventListener('click', () => {
+                const mode = document.getElementById('nodeModeSelect')?.value || 'autonomous';
+                const compute = computeSlider?.value || 85;
+                
+                // 1. Show Toast
+                this.showToast('success', `CONFIGURATION SAVED | MODE: ${mode.toUpperCase()}`);
+                
+                // 2. Log to Terminal
+                this.logToTerminal(`[CONFIG] SN-00 updated: ${mode.toUpperCase()} mode, ${compute}% allocation.`);
+                this.logToTerminal(`[SYSTEM] Optimizing resource distribution...`);
+                
+                // 3. Log to Node Logs (in modal)
+                const nodeLogs = document.getElementById('nodeLogs');
+                if (nodeLogs) {
+                    const time = new Date().toLocaleTimeString('en-US', {hour12:false});
+                    nodeLogs.innerHTML = `<div class="log-entry">[${time}] Configuration updated by SYSADMIN</div>` + nodeLogs.innerHTML;
+                }
+            });
+        }
     },
 
     // ============================================
