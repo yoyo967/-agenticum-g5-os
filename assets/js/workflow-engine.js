@@ -12,11 +12,11 @@ const WorkflowEngine = {
             description: 'Executive Production Pipeline',
             nodes: ['SN-00', 'RA-01', 'SP-01', 'CC-01', 'CC-06', 'CC-12', 'MI-01'],
             steps: [
-                { id: 'ingestion', name: 'INGESTION', desc: 'Processing briefing input...', duration: 1500 },
-                { id: 'analysis', name: 'PARALLEL ANALYSIS', desc: 'Scanning market & competitors...', duration: 2500 },
-                { id: 'strategy', name: 'STRATEGY ROUTES', desc: 'Generating 3 strategic approaches...', duration: 2000 },
-                { id: 'production', name: 'ASSET PRODUCTION', desc: 'Creating video, text, audio...', duration: 3000 },
-                { id: 'compliance', name: 'COMPLIANCE CHECK', desc: 'Verifying ethical guidelines...', duration: 1500 }
+                { id: 'ingestion', name: 'INGESTION', desc: 'Processing briefing input...', duration: 1500, cluster: 'apex' },
+                { id: 'analysis', name: 'PARALLEL ANALYSIS', desc: 'Scanning market & competitors...', duration: 2500, cluster: 'research' },
+                { id: 'strategy', name: 'STRATEGY ROUTES', desc: 'Generating 3 strategic approaches...', duration: 2000, cluster: 'strategy' },
+                { id: 'production', name: 'ASSET PRODUCTION', desc: 'Creating video, text, audio...', duration: 3000, cluster: 'content' },
+                { id: 'compliance', name: 'COMPLIANCE CHECK', desc: 'Verifying ethical guidelines...', duration: 1500, cluster: 'governance' }
             ]
         },
         'senate': {
@@ -160,7 +160,18 @@ const WorkflowEngine = {
             // Mark as running
             stepEl.dataset.status = 'running';
             stepEl.querySelector('.step-status').textContent = 'RUNNING';
-            this.log(`[${step.name}] ${step.desc}`);
+            
+            // 1. ATOMIC: Trigger Grid Pulse for this Cluster
+            if (window.G5OS && window.G5OS.pulseCluster) {
+                window.G5OS.pulseCluster(step.cluster || 'active'); // Default to generic active if no cluster
+            }
+
+            // 2. ATOMIC: Trigger Typewriter Log
+            const logMsg = `[${step.name}] ${step.desc}`;
+            this.log(logMsg); // Internal log
+            if (window.G5OS && window.G5OS.logToTerminal) {
+                window.G5OS.logToTerminal(logMsg, 'info'); // External Typewriter Log
+            }
 
             // Simulate duration
             await this.delay(step.duration);
@@ -174,6 +185,11 @@ const WorkflowEngine = {
             const percent = Math.round((elapsed / totalDuration) * 100);
             progressFill.style.width = `${percent}%`;
             percentDisplay.textContent = `${percent}%`;
+        }
+        
+        // Reset Pulse at end
+        if (window.G5OS && window.G5OS.pulseCluster) {
+             window.G5OS.pulseCluster(null);
         }
 
         // Show output

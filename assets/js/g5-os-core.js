@@ -1313,10 +1313,23 @@ const G5OS = {
         }
         
         // Random follow-up log after 200ms
-        setTimeout(() => {
-            const action = actions[Math.floor(Math.random() * actions.length)];
-            this.logToTerminal(`[${nodeId}] ${action}`);
         }, 200 + Math.random() * 200);
+    },
+
+    // ============================================
+    // PUBLIC API FOR WORKFLOW ENGINE
+    // ============================================
+    pulseCluster(clusterName) {
+        const grid = document.querySelector('.node-grid');
+        if (!grid) return;
+
+        // Reset all pulses
+        grid.classList.remove('pulse-active', 'pulse-strategy', 'pulse-content', 'pulse-research', 'pulse-governance', 'pulse-intel', 'pulse-apex');
+        
+        // Apply specific pulse
+        if (clusterName) {
+            grid.classList.add(`pulse-${clusterName.toLowerCase()}`);
+        }
     },
 
     closeWorkflowModal() {
