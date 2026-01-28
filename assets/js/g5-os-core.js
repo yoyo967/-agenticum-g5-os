@@ -397,6 +397,37 @@ const G5OS = {
         document.querySelector('.os-user')?.addEventListener('click', () => {
              this.showToast('info', 'OPERATOR: YILDIRIM | ROLE: SYSADMIN');
         });
+
+        // AGENT TILE LISTENER (Global Delegate for Gear/Log buttons)
+        document.getElementById('agentsGrid')?.addEventListener('click', (e) => {
+            const btn = e.target.closest('.tile-btn');
+            const tile = e.target.closest('.agent-tile');
+            
+            if (btn && tile) {
+                const nodeId = tile.dataset.node;
+                // Check if it's the gear icon
+                if (btn.querySelector('span')?.textContent === '⚙️' || btn.textContent.includes('⚙️') || btn.title === 'Configure') {
+                    this.selectNode(nodeId);
+                    // Force config section open if it's SN-00 (handled in selectNode, but being explicit)
+                    if(nodeId === 'SN-00') {
+                        setTimeout(() => {
+                           const config = document.getElementById('nodeConfigSection');
+                           if(config) config.classList.remove('hidden'); 
+                           // Scroll to config
+                           config?.scrollIntoView({behavior: 'smooth'});
+                        }, 100);
+                    }
+                } 
+                else if (btn.querySelector('span')?.textContent === '📋' || btn.textContent.includes('📋') || btn.title === 'Logs') {
+                    this.selectNode(nodeId);
+                    setTimeout(() => document.getElementById('nodeLogs')?.scrollIntoView({behavior: 'smooth'}), 100);
+                }
+            } else if (tile) {
+                // Clicking the tile itself should also open details
+                const nodeId = tile.dataset.node;
+                this.selectNode(nodeId);
+            }
+        });
         
         document.querySelectorAll('.section-action').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -1431,6 +1462,9 @@ const G5OS = {
         // Store state for actions
         this.currentPreviewAsset = { type, name, content: '' };
         
+        // SCANLINE OVERLAY (System Vitality)
+        const scanline = `<div class="scanline-overlay"><div class="scanline-bar"></div></div>`;
+        
         // FAKE CONTENT GENERATION
         let viewHtml = '';
         let isEditable = false;
@@ -1513,7 +1547,7 @@ const G5OS = {
              viewHtml = `<div style="padding:40px;text-align:center;color:#666;">Preview not available for this file type.<br>(${type})</div>`;
         }
         
-        content.innerHTML = viewHtml;
+        content.innerHTML = viewHtml + scanline;
         
         // Show/Hide Save Button
         if (isEditable) {
