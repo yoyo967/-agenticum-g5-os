@@ -106,7 +106,7 @@ const G5OS = {
 
         // Workflow items
         document.querySelectorAll('.workflow-item').forEach(item => {
-            item.addEventListener('click', () => this.activateWorkflow(item.dataset.workflow));
+            item.addEventListener('click', () => this.openWorkflowModal(item.dataset.workflow));
         });
 
         // Module tree folders
@@ -116,7 +116,10 @@ const G5OS = {
 
         // Node items
         document.querySelectorAll('.tree-item.file[data-node]').forEach(node => {
-            node.addEventListener('click', () => this.selectNode(node.dataset.node));
+            node.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.selectNode(node.dataset.node);
+            });
         });
 
         // Agent briefing
@@ -132,15 +135,128 @@ const G5OS = {
 
         document.getElementById('fileInput')?.addEventListener('change', (e) => {
             this.handleFileUpload(e.target.files);
+            e.target.value = ''; // Reset for re-upload
         });
 
         document.getElementById('addContextBtn')?.addEventListener('click', () => {
-            document.getElementById('fileInput').click();
+            document.getElementById('contextFileInput').click();
+        });
+
+        document.getElementById('contextFileInput')?.addEventListener('change', (e) => {
+            this.handleContextFileUpload(e.target.files);
+            e.target.value = '';
         });
 
         // Voice input
         document.getElementById('voiceBtn')?.addEventListener('click', () => {
             this.startVoiceInput();
+        });
+
+        // Settings button
+        document.getElementById('settingsBtn')?.addEventListener('click', () => {
+            this.openSettings();
+        });
+
+        // Settings close
+        document.getElementById('closeSettings')?.addEventListener('click', () => {
+            this.closeSettings();
+        });
+
+        // Settings navigation
+        document.querySelectorAll('.settings-nav').forEach(nav => {
+            nav.addEventListener('click', () => this.switchSettingsSection(nav.dataset.section));
+        });
+
+        // Settings backdrop click to close
+        document.querySelector('#settingsModal .modal-backdrop')?.addEventListener('click', () => {
+            this.closeSettings();
+        });
+
+        // Command palette items
+        document.querySelectorAll('.palette-item').forEach(item => {
+            item.addEventListener('click', () => this.executePaletteAction(item));
+        });
+
+        // Palette backdrop
+        document.querySelector('#commandPalette .palette-backdrop')?.addEventListener('click', () => {
+            this.closePalette();
+        });
+
+        // Palette input
+        document.getElementById('paletteInput')?.addEventListener('input', (e) => {
+            this.filterPaletteResults(e.target.value);
+        });
+
+        // Workflow modal
+        document.getElementById('closeWorkflow')?.addEventListener('click', () => this.closeWorkflowModal());
+        document.getElementById('cancelWorkflow')?.addEventListener('click', () => this.closeWorkflowModal());
+        document.getElementById('executeWorkflow')?.addEventListener('click', () => this.executeWorkflow());
+        document.querySelector('#workflowModal .modal-backdrop')?.addEventListener('click', () => this.closeWorkflowModal());
+
+        // Asset preview modal
+        document.getElementById('closeAssetPreview')?.addEventListener('click', () => this.closeAssetPreview());
+        document.querySelector('#assetPreviewModal .modal-backdrop')?.addEventListener('click', () => this.closeAssetPreview());
+
+        // Test connection button
+        document.getElementById('testConnection')?.addEventListener('click', () => this.testApiConnection());
+
+        // Asset items
+        document.querySelectorAll('.asset-mini').forEach(asset => {
+            asset.addEventListener('click', () => this.previewAsset(asset.dataset.type, asset.querySelector('.asset-name')?.textContent));
+        });
+
+        // Keyboard shortcuts
+        this.setupKeyboardShortcuts();
+    },
+
+    // ============================================
+    // KEYBOARD SHORTCUTS
+    // ============================================
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+K - Command Palette
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                this.togglePalette();
+            }
+            
+            // Ctrl+, - Settings
+            if (e.ctrlKey && e.key === ',') {
+                e.preventDefault();
+                this.openSettings();
+            }
+            
+            // Ctrl+` - Toggle Terminal
+            if (e.ctrlKey && e.key === '`') {
+                e.preventDefault();
+                this.toggleFooter();
+            }
+            
+            // Ctrl+B - Toggle Left Panel
+            if (e.ctrlKey && !e.shiftKey && e.key === 'b') {
+                e.preventDefault();
+                this.toggleLeftPanel();
+            }
+            
+            // Ctrl+Shift+B - Toggle Right Panel
+            if (e.ctrlKey && e.shiftKey && e.key === 'B') {
+                e.preventDefault();
+                this.toggleRightPanel();
+            }
+            
+            // Ctrl+N - New Chat
+            if (e.ctrlKey && e.key === 'n') {
+                e.preventDefault();
+                this.newChat();
+            }
+            
+            // ESC - Close modals
+            if (e.key === 'Escape') {
+                this.closePalette();
+                this.closeSettings();
+                this.closeWorkflowModal();
+                this.closeAssetPreview();
+            }
         });
     },
 
@@ -688,6 +804,274 @@ const G5OS = {
             document.getElementById('tokenCount').textContent = `${tokens}M`;
             document.getElementById('latencyDisplay').textContent = `~${latency}ms`;
         }, 5000);
+    },
+
+    // ============================================
+    // COMMAND PALETTE
+    // ============================================
+    togglePalette() {
+        const palette = document.getElementById('commandPalette');
+        palette.classList.toggle('hidden');
+        
+        if (!palette.classList.contains('hidden')) {
+            document.getElementById('paletteInput').focus();
+        }
+    },
+
+    closePalette() {
+        document.getElementById('commandPalette')?.classList.add('hidden');
+        document.getElementById('paletteInput').value = '';
+    },
+
+    filterPaletteResults(query) {
+        const items = document.querySelectorAll('.palette-item');
+        const q = query.toLowerCase();
+        
+        items.forEach(item => {
+            const label = item.querySelector('.item-label')?.textContent.toLowerCase() || '';
+            item.style.display = label.includes(q) ? 'flex' : 'none';
+        });
+    },
+
+    executePaletteAction(item) {
+        const action = item.dataset.action;
+        
+        switch(action) {
+            case 'new-chat':
+                this.newChat();
+                break;
+            case 'toggle-terminal':
+                this.toggleFooter();
+                break;
+            case 'open-settings':
+                this.openSettings();
+                break;
+            case 'workflow':
+                this.openWorkflowModal(item.dataset.workflow);
+                break;
+            case 'select-node':
+                this.selectNode(item.dataset.node);
+                break;
+        }
+        
+        this.closePalette();
+    },
+
+    // ============================================
+    // SETTINGS MODAL
+    // ============================================
+    openSettings() {
+        document.getElementById('settingsModal')?.classList.remove('hidden');
+    },
+
+    closeSettings() {
+        document.getElementById('settingsModal')?.classList.add('hidden');
+    },
+
+    switchSettingsSection(section) {
+        document.querySelectorAll('.settings-nav').forEach(nav => {
+            nav.classList.toggle('active', nav.dataset.section === section);
+        });
+        
+        document.querySelectorAll('.settings-section').forEach(sec => {
+            sec.classList.toggle('active', sec.id === `settings-${section}`);
+        });
+    },
+
+    async testApiConnection() {
+        const statusEl = document.getElementById('connectionStatus');
+        const indicator = document.querySelector('.status-indicator');
+        
+        statusEl.textContent = 'Testing...';
+        indicator.className = 'status-indicator pending';
+        
+        try {
+            if (window.G5_API) {
+                const result = await G5_API.checkHealth();
+                if (result.status === 'healthy') {
+                    statusEl.textContent = 'Connected';
+                    indicator.className = 'status-indicator connected';
+                    this.showToast('success', 'API connection successful');
+                } else {
+                    throw new Error('Unhealthy');
+                }
+            } else {
+                throw new Error('API not loaded');
+            }
+        } catch (e) {
+            statusEl.textContent = 'Simulation Mode';
+            indicator.className = 'status-indicator error';
+            this.showToast('warning', 'Running in simulation mode');
+        }
+    },
+
+    // ============================================
+    // WORKFLOW MODAL
+    // ============================================
+    currentWorkflow: null,
+
+    openWorkflowModal(workflowId) {
+        this.currentWorkflow = workflowId;
+        
+        const workflowNames = {
+            '5min-agency': '⚡ 5-Minute Agency',
+            'senate': '⚖️ Algorithmic Senate',
+            'morphosis': '🔄 Narrative Morphosis',
+            'jit-reality': '🔮 Just-in-Time Reality',
+            'autopoiesis': '🔧 Autopoiesis'
+        };
+        
+        document.getElementById('workflowModalTitle').textContent = workflowNames[workflowId] || 'Workflow';
+        document.getElementById('workflowInput').value = '';
+        document.getElementById('workflowProgress')?.classList.add('hidden');
+        document.getElementById('workflowOutput')?.classList.add('hidden');
+        document.getElementById('workflowModal')?.classList.remove('hidden');
+    },
+
+    closeWorkflowModal() {
+        document.getElementById('workflowModal')?.classList.add('hidden');
+        this.currentWorkflow = null;
+    },
+
+    async executeWorkflow() {
+        const input = document.getElementById('workflowInput').value;
+        if (!input.trim()) {
+            this.showToast('error', 'Please provide a briefing for the workflow');
+            return;
+        }
+        
+        document.getElementById('workflowProgress')?.classList.remove('hidden');
+        const progressFill = document.getElementById('workflowProgressFill');
+        const stepsContainer = document.getElementById('workflowSteps');
+        
+        const steps = ['Initializing...', 'Activating nodes...', 'Processing...', 'Finalizing...'];
+        
+        for (let i = 0; i < steps.length; i++) {
+            stepsContainer.textContent = steps[i];
+            progressFill.style.width = `${(i + 1) * 25}%`;
+            await this.delay(800);
+        }
+        
+        // Show output
+        document.getElementById('workflowOutput')?.classList.remove('hidden');
+        document.getElementById('workflowOutputContent').innerHTML = `
+            <p><strong>Workflow Complete!</strong></p>
+            <p>Input processed through ${this.currentWorkflow} pipeline.</p>
+            <p>Results have been added to your assets.</p>
+        `;
+        
+        this.showToast('success', `${this.currentWorkflow} workflow completed`);
+        this.logToTerminal(`[WORKFLOW] ${this.currentWorkflow} completed successfully`);
+    },
+
+    // ============================================
+    // ASSET PREVIEW
+    // ============================================
+    previewAsset(type, name) {
+        document.getElementById('assetPreviewTitle').textContent = `📄 ${name}`;
+        
+        const content = document.getElementById('assetPreviewContent');
+        content.innerHTML = `<p>Loading ${name}...</p><p>Asset type: ${type}</p>`;
+        
+        document.getElementById('assetPreviewModal')?.classList.remove('hidden');
+    },
+
+    closeAssetPreview() {
+        document.getElementById('assetPreviewModal')?.classList.add('hidden');
+    },
+
+    // ============================================
+    // PANEL TOGGLES
+    // ============================================
+    toggleLeftPanel() {
+        document.getElementById('leftPanel')?.classList.toggle('collapsed');
+    },
+
+    toggleRightPanel() {
+        document.getElementById('rightPanel')?.classList.toggle('collapsed');
+    },
+
+    // ============================================
+    // NEW CHAT
+    // ============================================
+    newChat() {
+        const container = document.getElementById('chatMessages');
+        container.innerHTML = `
+            <div class="chat-message system">
+                <div class="msg-header">
+                    <span class="msg-icon">◆</span>
+                    <span class="msg-sender">AGENTICUM G5</span>
+                    <span class="msg-time">SYSTEM</span>
+                </div>
+                <div class="msg-content">
+                    <p>New conversation started. <strong>52 nodes</strong> are online and ready.</p>
+                </div>
+            </div>
+        `;
+        this.state.chatHistory = [];
+        document.getElementById('chatInput')?.focus();
+        this.showToast('success', 'New chat started');
+    },
+
+    // ============================================
+    // TOAST NOTIFICATIONS
+    // ============================================
+    showToast(type, message) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            success: '✅',
+            error: '❌',
+            warning: '⚠️',
+            info: 'ℹ️'
+        };
+        
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+            <span class="toast-message">${message}</span>
+            <button class="toast-close">×</button>
+        `;
+        
+        toast.querySelector('.toast-close').addEventListener('click', () => toast.remove());
+        container.appendChild(toast);
+        
+        // Auto remove after 4s
+        setTimeout(() => toast.remove(), 4000);
+    },
+
+    // ============================================
+    // CONTEXT FILE HANDLING
+    // ============================================
+    handleContextFileUpload(files) {
+        if (!files || !files.length) return;
+        
+        Array.from(files).forEach(file => {
+            const fileData = {
+                name: file.name,
+                size: file.size,
+                type: file.type
+            };
+            
+            this.state.contextFiles.push(fileData);
+            this.showToast('success', `Added context: ${file.name}`);
+        });
+        
+        this.renderContextFiles();
+        this.logToTerminal(`[CONTEXT] Added ${files.length} file(s)`);
+    },
+
+    // ============================================
+    // LOADING OVERLAY
+    // ============================================
+    showLoading(text = 'Processing...') {
+        document.getElementById('loadingText').textContent = text;
+        document.getElementById('loadingOverlay')?.classList.remove('hidden');
+    },
+
+    hideLoading() {
+        document.getElementById('loadingOverlay')?.classList.add('hidden');
     },
 
     // ============================================

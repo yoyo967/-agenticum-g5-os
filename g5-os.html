@@ -643,9 +643,359 @@
 
     <!-- HIDDEN FILE INPUT -->
     <input type="file" id="fileInput" class="hidden" accept="*/*">
+    <input type="file" id="contextFileInput" class="hidden" accept="*/*" multiple>
+
+    <!-- ============================================
+         COMMAND PALETTE (Ctrl+K)
+         ============================================ -->
+    <div class="command-palette hidden" id="commandPalette">
+        <div class="palette-backdrop"></div>
+        <div class="palette-container">
+            <div class="palette-input-wrapper">
+                <span class="palette-icon">⌘</span>
+                <input type="text" class="palette-input" id="paletteInput" placeholder="Search commands, nodes, workflows...">
+                <span class="palette-shortcut">ESC</span>
+            </div>
+            <div class="palette-results" id="paletteResults">
+                <div class="palette-section">
+                    <div class="palette-section-title">QUICK ACTIONS</div>
+                    <div class="palette-item" data-action="new-chat">
+                        <span class="item-icon">💬</span>
+                        <span class="item-label">New Chat</span>
+                        <span class="item-shortcut">Ctrl+N</span>
+                    </div>
+                    <div class="palette-item" data-action="toggle-terminal">
+                        <span class="item-icon">⌨️</span>
+                        <span class="item-label">Toggle Terminal</span>
+                        <span class="item-shortcut">Ctrl+`</span>
+                    </div>
+                    <div class="palette-item" data-action="open-settings">
+                        <span class="item-icon">⚙️</span>
+                        <span class="item-label">Open Settings</span>
+                        <span class="item-shortcut">Ctrl+,</span>
+                    </div>
+                </div>
+                <div class="palette-section">
+                    <div class="palette-section-title">WORKFLOWS</div>
+                    <div class="palette-item" data-action="workflow" data-workflow="5min-agency">
+                        <span class="item-icon">⚡</span>
+                        <span class="item-label">5-Minute Agency</span>
+                    </div>
+                    <div class="palette-item" data-action="workflow" data-workflow="senate">
+                        <span class="item-icon">⚖️</span>
+                        <span class="item-label">Algorithmic Senate</span>
+                    </div>
+                    <div class="palette-item" data-action="workflow" data-workflow="morphosis">
+                        <span class="item-icon">🔄</span>
+                        <span class="item-label">Narrative Morphosis</span>
+                    </div>
+                </div>
+                <div class="palette-section">
+                    <div class="palette-section-title">NODES</div>
+                    <div class="palette-item" data-action="select-node" data-node="SN-00">
+                        <span class="item-icon node-apex">◆</span>
+                        <span class="item-label">SN-00 Orchestrator</span>
+                    </div>
+                    <div class="palette-item" data-action="select-node" data-node="SP-01">
+                        <span class="item-icon node-sp">◆</span>
+                        <span class="item-label">SP-01 Campaign Strategist</span>
+                    </div>
+                    <div class="palette-item" data-action="select-node" data-node="CC-01">
+                        <span class="item-icon node-cc">◆</span>
+                        <span class="item-label">CC-01 Copy Chief</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SETTINGS MODAL
+         ============================================ -->
+    <div class="modal hidden" id="settingsModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h2 class="modal-title">⚙️ Settings</h2>
+                <button class="modal-close" id="closeSettings">×</button>
+            </div>
+            <div class="modal-body settings-body">
+                <div class="settings-sidebar">
+                    <button class="settings-nav active" data-section="general">General</button>
+                    <button class="settings-nav" data-section="appearance">Appearance</button>
+                    <button class="settings-nav" data-section="nodes">Nodes</button>
+                    <button class="settings-nav" data-section="api">API & Backend</button>
+                    <button class="settings-nav" data-section="shortcuts">Shortcuts</button>
+                    <button class="settings-nav" data-section="about">About</button>
+                </div>
+                <div class="settings-content">
+                    <!-- General Settings -->
+                    <div class="settings-section active" id="settings-general">
+                        <h3>General Settings</h3>
+                        <div class="setting-group">
+                            <label class="setting-label">Operator Name</label>
+                            <input type="text" class="setting-input" id="operatorName" value="OPERATOR_YILDIRIM">
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label">Default Workflow</label>
+                            <select class="setting-select" id="defaultWorkflow">
+                                <option value="autopoiesis">Autopoiesis</option>
+                                <option value="5min-agency">5-Minute Agency</option>
+                                <option value="senate">Algorithmic Senate</option>
+                                <option value="morphosis">Narrative Morphosis</option>
+                                <option value="jit-reality">Just-in-Time Reality</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-toggle-label">
+                                <input type="checkbox" id="autoSave" checked>
+                                <span class="toggle-slider"></span>
+                                Auto-save assets to vault
+                            </label>
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-toggle-label">
+                                <input type="checkbox" id="soundEffects">
+                                <span class="toggle-slider"></span>
+                                Sound effects
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Appearance Settings -->
+                    <div class="settings-section" id="settings-appearance">
+                        <h3>Appearance</h3>
+                        <div class="setting-group">
+                            <label class="setting-label">Theme</label>
+                            <div class="theme-options">
+                                <button class="theme-btn active" data-theme="obsidian">
+                                    <span class="theme-preview obsidian"></span>
+                                    <span>Obsidian</span>
+                                </button>
+                                <button class="theme-btn" data-theme="midnight">
+                                    <span class="theme-preview midnight"></span>
+                                    <span>Midnight</span>
+                                </button>
+                                <button class="theme-btn" data-theme="terminal">
+                                    <span class="theme-preview terminal"></span>
+                                    <span>Terminal</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label">Font Size</label>
+                            <input type="range" class="setting-range" id="fontSize" min="11" max="16" value="13">
+                            <span class="range-value">13px</span>
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-toggle-label">
+                                <input type="checkbox" id="animations" checked>
+                                <span class="toggle-slider"></span>
+                                Enable animations
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Nodes Settings -->
+                    <div class="settings-section" id="settings-nodes">
+                        <h3>Node Configuration</h3>
+                        <div class="setting-group">
+                            <label class="setting-label">Active Clusters</label>
+                            <div class="cluster-toggles">
+                                <label class="cluster-toggle"><input type="checkbox" checked> Strategy (3)</label>
+                                <label class="cluster-toggle"><input type="checkbox" checked> Research (8)</label>
+                                <label class="cluster-toggle"><input type="checkbox" checked> Content (32)</label>
+                                <label class="cluster-toggle"><input type="checkbox" checked> Governance (4)</label>
+                                <label class="cluster-toggle"><input type="checkbox" checked> Intelligence (4)</label>
+                            </div>
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label">Default Agent</label>
+                            <select class="setting-select" id="defaultAgent">
+                                <option value="SN-00">SN-00 Orchestrator (APEX)</option>
+                                <option value="SP-01">SP-01 Campaign Strategist</option>
+                                <option value="CC-01">CC-01 Copy Chief</option>
+                                <option value="RA-01">RA-01 Authority Auditor</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- API Settings -->
+                    <div class="settings-section" id="settings-api">
+                        <h3>API & Backend</h3>
+                        <div class="setting-group">
+                            <label class="setting-label">API Endpoint</label>
+                            <input type="text" class="setting-input" id="apiEndpoint" value="https://us-central1-tutorai-e39uu.cloudfunctions.net/agenticSwarm" readonly>
+                            <span class="setting-hint">Configured via Firebase Functions</span>
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label">Connection Status</label>
+                            <div class="connection-status">
+                                <span class="status-indicator pending"></span>
+                                <span id="connectionStatus">Checking...</span>
+                                <button class="btn-small" id="testConnection">Test Connection</button>
+                            </div>
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-toggle-label">
+                                <input type="checkbox" id="useLocalApi">
+                                <span class="toggle-slider"></span>
+                                Use local development endpoint
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Shortcuts Settings -->
+                    <div class="settings-section" id="settings-shortcuts">
+                        <h3>Keyboard Shortcuts</h3>
+                        <div class="shortcuts-list">
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>K</kbd></span>
+                                <span class="shortcut-desc">Open Command Palette</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>N</kbd></span>
+                                <span class="shortcut-desc">New Chat</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>`</kbd></span>
+                                <span class="shortcut-desc">Toggle Terminal</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>,</kbd></span>
+                                <span class="shortcut-desc">Open Settings</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>B</kbd></span>
+                                <span class="shortcut-desc">Toggle Left Panel</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd></span>
+                                <span class="shortcut-desc">Toggle Right Panel</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Enter</kbd></span>
+                                <span class="shortcut-desc">Send Message</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Esc</kbd></span>
+                                <span class="shortcut-desc">Close Modal/Palette</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- About -->
+                    <div class="settings-section" id="settings-about">
+                        <h3>About AGENTICUM G5</h3>
+                        <div class="about-content">
+                            <div class="about-logo">◆ AGENTICUM G5</div>
+                            <p class="about-version">Version 5.0.1_RC</p>
+                            <p class="about-tagline">Industrial Autonomous Marketing OS</p>
+                            <div class="about-stats">
+                                <div class="stat">
+                                    <span class="stat-value">52</span>
+                                    <span class="stat-label">AI Nodes</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">5</span>
+                                    <span class="stat-label">Workflows</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">2M</span>
+                                    <span class="stat-label">Token Context</span>
+                                </div>
+                            </div>
+                            <p class="about-credit">Created by Yahya Yildirim</p>
+                            <p class="about-credit">Google DeepMind Gemini Hackathon 2026</p>
+                            <div class="about-links">
+                                <a href="https://github.com/yoyo967/-agenticum-g5-os" target="_blank">GitHub</a>
+                                <a href="AGENTICUM_G5_HANDBOOK.md" target="_blank">Documentation</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         NOTIFICATION TOAST CONTAINER
+         ============================================ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================
+         ASSET PREVIEW MODAL
+         ============================================ -->
+    <div class="modal hidden" id="assetPreviewModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h2 class="modal-title" id="assetPreviewTitle">📄 Asset Preview</h2>
+                <button class="modal-close" id="closeAssetPreview">×</button>
+            </div>
+            <div class="modal-body asset-preview-body">
+                <div class="asset-preview-content" id="assetPreviewContent">
+                    <!-- Asset content rendered here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="copyAsset">📋 Copy</button>
+                <button class="btn btn-secondary" id="downloadAsset">⬇️ Download</button>
+                <button class="btn btn-primary" id="editAsset">✏️ Edit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         WORKFLOW EXECUTION MODAL
+         ============================================ -->
+    <div class="modal hidden" id="workflowModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h2 class="modal-title" id="workflowModalTitle">⚡ Workflow Execution</h2>
+                <button class="modal-close" id="closeWorkflow">×</button>
+            </div>
+            <div class="modal-body workflow-modal-body">
+                <div class="workflow-input-section">
+                    <label>Input / Briefing</label>
+                    <textarea class="workflow-input" id="workflowInput" placeholder="Describe your objective..."></textarea>
+                    <div class="workflow-input-actions">
+                        <button class="btn btn-small" id="workflowAttach">📎 Attach Files</button>
+                        <span class="attached-count" id="attachedCount">0 files</span>
+                    </div>
+                </div>
+                <div class="workflow-progress-section hidden" id="workflowProgress">
+                    <label>Progress</label>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="workflowProgressFill"></div>
+                    </div>
+                    <div class="progress-steps" id="workflowSteps"></div>
+                </div>
+                <div class="workflow-output-section hidden" id="workflowOutput">
+                    <label>Output</label>
+                    <div class="workflow-output-content" id="workflowOutputContent"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelWorkflow">Cancel</button>
+                <button class="btn btn-primary" id="executeWorkflow">⚡ Execute</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         LOADING OVERLAY
+         ============================================ -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner-ring"></div>
+            <div class="spinner-text" id="loadingText">Processing...</div>
+        </div>
+    </div>
 
     <!-- SCRIPTS -->
     <script src="assets/js/g5_api.js?v=2"></script>
-    <script src="assets/js/g5-os-core.js?v=OS_V2"></script>
+    <script src="assets/js/g5-os-core.js?v=OS_V3"></script>
 </body>
 </html>
