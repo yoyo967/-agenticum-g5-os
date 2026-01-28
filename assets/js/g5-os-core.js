@@ -41,6 +41,7 @@ const G5OS = {
         this.setupPanelResize();
         this.startSystemClock();
         this.loadNodes();
+        this.initNeuralMesh();
         
         // Start Boot Sequence
         this.runBootSequence();
@@ -1320,18 +1321,177 @@ const G5OS = {
     },
 
     // ============================================
+    // NEURAL CANVAS MESH (ATOMIC VISUALS)
+    // ============================================
+    initNeuralMesh() {
+        this.neuralCanvas = document.getElementById('neuralCanvas');
+        if (!this.neuralCanvas) return;
+        
+        this.neuralCtx = this.neuralCanvas.getContext('2d');
+        this.nodePositions = [];
+        this.activeMeshCluster = null;
+        this.meshParticles = [];
+
+        // Resize observer
+        const resizeObserver = new ResizeObserver(() => {
+            this.resizeNeuralMesh();
+        });
+        resizeObserver.observe(document.getElementById('agentsGrid'));
+        
+        this.resizeNeuralMesh();
+        this.animateNeuralMesh();
+    },
+
+    resizeNeuralMesh() {
+        if (!this.neuralCanvas) return;
+        const parent = this.neuralCanvas.parentElement;
+        this.neuralCanvas.width = parent.clientWidth;
+        this.neuralCanvas.height = parent.clientHeight;
+        this.updateNodePositions();
+    },
+
+    updateNodePositions() {
+        this.nodePositions = [];
+        const tiles = document.querySelectorAll('.agent-tile');
+        const gridRect = document.getElementById('agentsGrid').getBoundingClientRect();
+        
+        tiles.forEach(tile => {
+            const rect = tile.getBoundingClientRect();
+            // Store relative center position
+            const x = rect.left - gridRect.left + (rect.width / 2);
+            const y = rect.top - gridRect.top + (rect.height / 2);
+            
+            // Extract cluster from class (e.g., 'agent-tile apex')
+            let cluster = 'unknown';
+            if (tile.classList.contains('apex')) cluster = 'APEX';
+            if (tile.classList.contains('sp')) cluster = 'STRATEGY';
+            if (tile.classList.contains('ra')) cluster = 'RESEARCH';
+            if (tile.classList.contains('cc')) cluster = 'CONTENT';
+            if (tile.classList.contains('mi')) cluster = 'GOVERNANCE';
+            if (tile.classList.contains('dt')) cluster = 'INTEL';
+
+            this.nodePositions.push({ x, y, cluster });
+        });
+    },
+
+    drawNeuralConnections() {
+        if (!this.neuralCtx || !this.activeMeshCluster) return;
+        
+        const ctx = this.neuralCtx;
+        ctx.clearRect(0, 0, this.neuralCanvas.width, this.neuralCanvas.height);
+        
+        // Filter nodes by active cluster
+        const targetCluster = this.activeMeshCluster.toUpperCase();
+        const activeNodes = this.nodePositions.filter(n => n.cluster === targetCluster || targetCluster === 'ACTIVE'); // 'ACTIVE' means all/base pulse
+        
+        if (activeNodes.length < 2) return;
+
+        // Draw connections
+        ctx.beginPath();
+        ctx.strokeStyle = this.getClusterColor(targetCluster);
+        ctx.lineWidth = 1;
+        ctx.globalAlpha = 0.3;
+
+        // Simple mesh: connect each node to up to 2 nearest neighbors
+        activeNodes.forEach((node, i) => {
+             activeNodes.forEach((other, j) => {
+                 if (i === j) return;
+                 const dx = node.x - other.x;
+                 const dy = node.y - other.y;
+                 const dist = Math.sqrt(dx*dx + dy*dy);
+                 
+                 if (dist < 150) { // Connection threshold
+                     ctx.moveTo(node.x, node.y);
+                     ctx.lineTo(other.x, other.y);
+                 }
+             });
+        });
+        
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+        
+        // Draw Particles
+        this.updateParticles(activeNodes);
+    },
+    
+    getClusterColor(cluster) {
+        // Match CSS variables
+        switch(cluster) {
+            case 'STRATEGY': return '#3b82f6'; // blue
+            case 'CONTENT': return '#d946ef'; // fuchsia
+            case 'RESEARCH': return '#10b981'; // emerald
+            case 'GOVERNANCE': return '#f59e0b'; // amber
+            case 'INTEL': return '#8b5cf6'; // violet
+            case 'APEX': return '#fbbf24'; // amber
+            default: return '#3b82f6';
+        }
+    },
+
+    updateParticles(nodes) {
+        const ctx = this.neuralCtx;
+        
+        // Spawn particle occasionally
+        if (Math.random() > 0.9 && this.meshParticles.length < 20) {
+            const startNode = nodes[Math.floor(Math.random() * nodes.length)];
+            const endNode = nodes[Math.floor(Math.random() * nodes.length)];
+            if (startNode !== endNode) {
+                this.meshParticles.push({
+                    x: startNode.x,
+                    y: startNode.y,
+                    tx: endNode.x,
+                    ty: endNode.y,
+                    progress: 0,
+                    speed: 0.02 + Math.random() * 0.03
+                });
+            }
+        }
+
+        // Update and draw particles
+        ctx.fillStyle = '#ffffff';
+        for (let i = this.meshParticles.length - 1; i >= 0; i--) {
+            const p = this.meshParticles[i];
+            p.progress += p.speed;
+            
+            const curX = p.x + (p.tx - p.x) * p.progress;
+            const curY = p.y + (p.ty - p.y) * p.progress;
+            
+            ctx.beginPath();
+            ctx.arc(curX, curY, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            if (p.progress >= 1) {
+                this.meshParticles.splice(i, 1);
+            }
+        }
+    },
+
+    animateNeuralMesh() {
+        if (this.activeMeshCluster) {
+            this.drawNeuralConnections();
+        } else if (this.neuralCtx) {
+             this.neuralCtx.clearRect(0, 0, this.neuralCanvas.width, this.neuralCanvas.height);
+        }
+        requestAnimationFrame(() => this.animateNeuralMesh());
+    },
+
+    // ============================================
     // PUBLIC API FOR WORKFLOW ENGINE
     // ============================================
     pulseCluster(clusterName) {
         const grid = document.querySelector('.node-grid');
         if (!grid) return;
 
-        // Reset all pulses
+        // Reset visual state
         grid.classList.remove('pulse-active', 'pulse-strategy', 'pulse-content', 'pulse-research', 'pulse-governance', 'pulse-intel', 'pulse-apex');
+        this.activeMeshCluster = null; // Turn off mesh
         
-        // Apply specific pulse
+        // Apply new state
         if (clusterName) {
             grid.classList.add(`pulse-${clusterName.toLowerCase()}`);
+            this.activeMeshCluster = clusterName; // Turn on mesh
+            
+            // Force position update in case of layout shift
+            this.updateNodePositions();
         }
     },
 

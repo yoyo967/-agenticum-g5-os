@@ -577,7 +577,9 @@
                         </div>
                     </div>
                     
-                    <div class="agents-grid" id="agentsGrid">
+                    <div class="grid-wrapper" style="position: relative; width: 100%; height: 100%;">
+                        <canvas id="neuralCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;"></canvas>
+                        <div class="agents-grid" id="agentsGrid" style="position: relative; z-index: 1;">
                         <!-- APEX -->
                         <div class="agent-tile apex" data-node="SN-00">
                             <div class="tile-header">
@@ -728,6 +730,7 @@
                             </div>
                         </div>
                     </div>
+                    </div> <!-- End grid-wrapper -->
                     
                     <!-- NODE STATS -->
                     <div class="node-stats">
