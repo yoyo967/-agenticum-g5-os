@@ -3026,7 +3026,104 @@
     transform: scale(1.1);
 }
 
+
 .quick-action.active {
     background: var(--accent-primary);
     color: white;
+}
+
+/* SIMULATION RESULTS STYLING */
+.simulation-result {
+    animation: fadeIn 0.5s ease;
+    padding: 10px;
+}
+
+.sim-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sim-status.success {
+    color: var(--accent-success);
+    font-weight: 700;
+}
+
+.sim-meta {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    font-family: var(--font-mono);
+}
+
+.sim-section {
+    margin-bottom: 24px;
+}
+
+.sim-section h4 {
+    color: var(--accent-primary);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.sim-section p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.9);
+}
+
+.sim-assets-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.sim-asset-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.05);
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s ease;
+}
+
+.sim-asset-item:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: var(--accent-primary);
+}
+
+.sim-asset-icon {
+    font-size: 1.2rem;
+}
+
+.sim-asset-name {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sim-asset-action {
+    font-size: 0.7rem;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+
+.sim-note {
+    font-size: 0.8rem;
+    color: var(--accent-success);
+    font-style: italic;
+    border-top: 1px dashed rgba(52, 211, 153, 0.3);
+    padding-top: 12px;
 }

@@ -1044,32 +1044,102 @@ const G5OS = {
     async executeWorkflow() {
         const input = document.getElementById('workflowInput').value;
         if (!input.trim()) {
-            this.showToast('error', 'Please provide a briefing for the workflow');
+            this.showToast('error', 'Please provide a briefing');
             return;
         }
         
+        // UI Reset
         document.getElementById('workflowProgress')?.classList.remove('hidden');
+        document.getElementById('workflowOutput')?.classList.add('hidden');
         const progressFill = document.getElementById('workflowProgressFill');
         const stepsContainer = document.getElementById('workflowSteps');
         
-        const steps = ['Initializing...', 'Activating nodes...', 'Processing...', 'Finalizing...'];
-        
+        // SIMULATION STEPS based on workflow type
+        let steps = ['Initializing cluster...', 'Parsing intent...', 'Finalizing...'];
+        if (this.currentWorkflow === '5min-agency') {
+            steps = [
+                'Initializing Executive Cluster (SN-00)...',
+                'Analysing Briefing & Context...',
+                'SP-01: Generating Strategic Angles...',
+                'CC-01: Drafting Headlines & Copy...',
+                'CC-06: Rendering Visual Concepts...',
+                'MI-01: Verifying Compliance...',
+                'Packing Assets...'
+            ];
+        } else if (this.currentWorkflow === 'jit-reality') {
+            steps = ['Scanning Market Trends...', 'Identifying White Spots...', 'Simulating Product Launch...', 'Calculating ROI...', 'Generating Report...'];
+        }
+
+        // Animate Progress
         for (let i = 0; i < steps.length; i++) {
             stepsContainer.textContent = steps[i];
-            progressFill.style.width = `${(i + 1) * 25}%`;
-            await this.delay(800);
+            const progress = ((i + 1) / steps.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            
+            // Randomish delay for realism
+            await this.delay(800 + Math.random() * 600);
         }
         
-        // Show output
-        document.getElementById('workflowOutput')?.classList.remove('hidden');
-        document.getElementById('workflowOutputContent').innerHTML = `
-            <p><strong>Workflow Complete!</strong></p>
-            <p>Input processed through ${this.currentWorkflow} pipeline.</p>
-            <p>Results have been added to your assets.</p>
-        `;
+        // GENERATE FAKE ASSETS & OUTPUT
+        this.generateSimulationResult(this.currentWorkflow, input);
         
-        this.showToast('success', `${this.currentWorkflow} workflow completed`);
-        this.logToTerminal(`[WORKFLOW] ${this.currentWorkflow} completed successfully`);
+        // Show Output UI
+        document.getElementById('workflowOutput')?.classList.remove('hidden');
+        this.showToast('success', `${this.currentWorkflow} completed`);
+        this.logToTerminal(`[WORKFLOW] ${this.currentWorkflow} execution successful`);
+    },
+
+    generateSimulationResult(workflowId, input) {
+        const outputContainer = document.getElementById('workflowOutputContent');
+        let html = '';
+        
+        if (workflowId === '5min-agency') {
+            html = `
+                <div class="simulation-result">
+                    <div class="sim-header">
+                        <span class="sim-status success">✅ EXECUTION SUCCESSFUL</span>
+                        <span class="sim-meta">4 Assets Created | 5 Nodes Active</span>
+                    </div>
+                    <div class="sim-section">
+                        <h4>STRATEGIC ANGLE: "THE INVISIBLE LEVERAGE"</h4>
+                        <p>Focus on the hidden efficiency gains. Positioning the product not as a tool, but as a competitive secret weapon.</p>
+                    </div>
+                    <div class="sim-assets-list">
+                        ${this.createSimulatedAsset('Strategy_Brief_v4.pdf', 'pdf')}
+                        ${this.createSimulatedAsset('Campaign_Headlines.txt', 'text')}
+                        ${this.createSimulatedAsset('Hero_Image_Concept_A.jpg', 'image')}
+                        ${this.createSimulatedAsset('Social_Media_Plan.md', 'code')}
+                    </div>
+                    <div class="sim-footer">
+                        <p class="sim-note">All assets passed compliance (MI-01). Ready for deployment.</p>
+                    </div>
+                </div>
+            `;
+            // Add to main grid as well
+            this.addAssetToGrid({ name: 'Strategy_Brief_v4.pdf', size: 1024 * 450, type: 'application/pdf' });
+            this.addAssetToGrid({ name: 'Hero_Image_Concept_A.jpg', size: 1024 * 2400, type: 'image/jpeg' });
+        } else {
+             html = `
+                <div class="simulation-result">
+                    <h4>✅ PROCESSING COMPLETE</h4>
+                    <p>Workflow '${workflowId}' executed successfully based on input: "${input.substring(0,20)}..."</p>
+                    <p>Results have been indexed in the Asset Vault.</p>
+                </div>
+            `;
+        }
+        
+        outputContainer.innerHTML = html;
+    },
+
+    createSimulatedAsset(name, type) {
+        const icons = { pdf: '📄', text: '📝', image: '🖼️', code: '💻' };
+        return `
+            <div class="sim-asset-item">
+                <span class="sim-asset-icon">${icons[type] || '📄'}</span>
+                <span class="sim-asset-name">${name}</span>
+                <span class="sim-asset-action">OPEN</span>
+            </div>
+        `;
     },
 
     // ============================================
