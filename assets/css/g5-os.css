@@ -413,11 +413,41 @@
     font-size: 10px;
 }
 
+.tree-icon.node-icon.apex { color: #fbbf24; }
 .tree-icon.node-icon.sp { color: #60a5fa; }
 .tree-icon.node-icon.ra { color: #34d399; }
 .tree-icon.node-icon.cc { color: #f59e0b; }
 .tree-icon.node-icon.mi { color: #ec4899; }
 .tree-icon.node-icon.dt { color: #8b5cf6; }
+
+.tree-item.file.active {
+    background: rgba(96, 165, 250, 0.1);
+    border-left: 2px solid var(--accent-primary);
+}
+
+.tree-item.file.active .tree-label {
+    color: var(--text-primary);
+}
+
+.tree-count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 1px 5px;
+    background: var(--bg-overlay);
+    border-radius: 4px;
+    color: var(--text-muted);
+}
+
+.tree-status.processing {
+    background: var(--accent-primary);
+    animation: statusPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
 
 .tree-label {
     flex: 1;

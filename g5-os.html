@@ -83,10 +83,26 @@
                     <button class="section-action" title="Add Module">+</button>
                 </div>
                 <div class="module-tree" id="moduleTree">
-                    <div class="tree-item folder open">
+                    <!-- APEX NODE -->
+                    <div class="tree-item folder open" data-cluster="apex">
+                        <span class="tree-toggle">▼</span>
+                        <span class="tree-icon">👑</span>
+                        <span class="tree-label">APEX_NODE</span>
+                    </div>
+                    <div class="tree-children">
+                        <div class="tree-item file active" data-node="SN-00">
+                            <span class="tree-icon node-icon apex">◆</span>
+                            <span class="tree-label">SN-00 Orchestrator</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                    </div>
+
+                    <!-- STRATEGY CLUSTER -->
+                    <div class="tree-item folder open" data-cluster="strategy">
                         <span class="tree-toggle">▼</span>
                         <span class="tree-icon">📂</span>
                         <span class="tree-label">STRATEGY_CLUSTER</span>
+                        <span class="tree-count">3</span>
                     </div>
                     <div class="tree-children">
                         <div class="tree-item file" data-node="SP-01">
@@ -106,28 +122,174 @@
                         </div>
                     </div>
                     
-                    <div class="tree-item folder">
+                    <!-- RESEARCH CLUSTER -->
+                    <div class="tree-item folder" data-cluster="research">
                         <span class="tree-toggle">▶</span>
                         <span class="tree-icon">📂</span>
                         <span class="tree-label">RESEARCH_CLUSTER</span>
+                        <span class="tree-count">8</span>
+                    </div>
+                    <div class="tree-children" style="display: none;">
+                        <div class="tree-item file" data-node="RA-01">
+                            <span class="tree-icon node-icon ra">◆</span>
+                            <span class="tree-label">RA-01 Authority Auditor</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="RA-06">
+                            <span class="tree-icon node-icon ra">◆</span>
+                            <span class="tree-label">RA-06 Trend Forecaster</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="RA-52">
+                            <span class="tree-icon node-icon ra">◆</span>
+                            <span class="tree-label">RA-52 Red Team</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="RA-11">
+                            <span class="tree-icon node-icon ra">◆</span>
+                            <span class="tree-label">RA-11 Market Scanner</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="RA-22">
+                            <span class="tree-icon node-icon ra">◆</span>
+                            <span class="tree-label">RA-22 Sentiment Analyst</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="RA-33">
+                            <span class="tree-icon node-icon ra">◆</span>
+                            <span class="tree-label">RA-33 Patent Scout</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="RA-44">
+                            <span class="tree-icon node-icon ra">◆</span>
+                            <span class="tree-label">RA-44 Academic Miner</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="RA-55">
+                            <span class="tree-icon node-icon ra">◆</span>
+                            <span class="tree-label">RA-55 Social Listener</span>
+                            <span class="tree-status online"></span>
+                        </div>
                     </div>
                     
-                    <div class="tree-item folder">
+                    <!-- CONTENT CLUSTER -->
+                    <div class="tree-item folder" data-cluster="content">
                         <span class="tree-toggle">▶</span>
                         <span class="tree-icon">📂</span>
                         <span class="tree-label">CONTENT_CLUSTER</span>
+                        <span class="tree-count">32</span>
+                    </div>
+                    <div class="tree-children" style="display: none;">
+                        <div class="tree-item file" data-node="CC-01">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-01 Copy Chief</span>
+                            <span class="tree-status processing"></span>
+                        </div>
+                        <div class="tree-item file" data-node="CC-06">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-06 Video Director</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="CC-08">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-08 Flash Voice</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="CC-13">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-13 Music Composer</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="CC-02">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-02 Blog Writer</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="CC-03">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-03 Social Media</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="CC-04">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-04 Email Crafter</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="CC-05">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-05 Script Writer</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="CC-07">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-07 Image Gen (Imagen 3)</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="CC-09">
+                            <span class="tree-icon node-icon cc">◆</span>
+                            <span class="tree-label">CC-09 Podcast Producer</span>
+                            <span class="tree-status online"></span>
+                        </div>
                     </div>
                     
-                    <div class="tree-item folder">
+                    <!-- GOVERNANCE CLUSTER -->
+                    <div class="tree-item folder" data-cluster="governance">
                         <span class="tree-toggle">▶</span>
                         <span class="tree-icon">📂</span>
                         <span class="tree-label">GOVERNANCE_CLUSTER</span>
+                        <span class="tree-count">4</span>
+                    </div>
+                    <div class="tree-children" style="display: none;">
+                        <div class="tree-item file" data-node="MI-01">
+                            <span class="tree-icon node-icon mi">◆</span>
+                            <span class="tree-label">MI-01 Compliance Officer</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="MI-07">
+                            <span class="tree-icon node-icon mi">◆</span>
+                            <span class="tree-label">MI-07 Ethics Auditor</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="MI-03">
+                            <span class="tree-icon node-icon mi">◆</span>
+                            <span class="tree-label">MI-03 Brand Guardian</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="MI-04">
+                            <span class="tree-icon node-icon mi">◆</span>
+                            <span class="tree-label">MI-04 Legal Scanner</span>
+                            <span class="tree-status online"></span>
+                        </div>
                     </div>
                     
-                    <div class="tree-item folder">
+                    <!-- INTELLIGENCE CLUSTER -->
+                    <div class="tree-item folder" data-cluster="intelligence">
                         <span class="tree-toggle">▶</span>
                         <span class="tree-icon">📂</span>
                         <span class="tree-label">INTELLIGENCE_CLUSTER</span>
+                        <span class="tree-count">4</span>
+                    </div>
+                    <div class="tree-children" style="display: none;">
+                        <div class="tree-item file" data-node="DT-02">
+                            <span class="tree-icon node-icon dt">◆</span>
+                            <span class="tree-label">DT-02 Pricing Algorithm</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="DT-04">
+                            <span class="tree-icon node-icon dt">◆</span>
+                            <span class="tree-label">DT-04 Analytics Core</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="DT-05">
+                            <span class="tree-icon node-icon dt">◆</span>
+                            <span class="tree-label">DT-05 A/B Optimizer</span>
+                            <span class="tree-status online"></span>
+                        </div>
+                        <div class="tree-item file" data-node="DT-06">
+                            <span class="tree-icon node-icon dt">◆</span>
+                            <span class="tree-label">DT-06 Conversion Predictor</span>
+                            <span class="tree-status online"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -483,6 +645,7 @@
     <input type="file" id="fileInput" class="hidden" accept="*/*">
 
     <!-- SCRIPTS -->
-    <script src="assets/js/g5-os-core.js?v=OS_V1"></script>
+    <script src="assets/js/g5_api.js?v=2"></script>
+    <script src="assets/js/g5-os-core.js?v=OS_V2"></script>
 </body>
 </html>
