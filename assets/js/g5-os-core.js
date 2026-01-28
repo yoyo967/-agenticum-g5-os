@@ -1313,6 +1313,9 @@ const G5OS = {
         }
         
         // Random follow-up log after 200ms
+        setTimeout(() => {
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            this.logToTerminal(`[${nodeId}] ${action}`);
         }, 200 + Math.random() * 200);
     },
 
