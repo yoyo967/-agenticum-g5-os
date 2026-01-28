@@ -1456,6 +1456,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button class="btn btn-primary hidden" id="saveAsset">💾 Save Changes</button>
                 <button class="btn btn-secondary" id="copyAsset">📋 Copy</button>
                 <button class="btn btn-secondary" id="downloadAsset">⬇️ Download</button>
                 <button class="btn btn-primary" id="editAsset">✏️ Edit</button>
@@ -1566,8 +1567,230 @@
         </div>
     </div>
 
+    <!-- ============================================
+         NODE DETAILS MODAL
+         ============================================ -->
+    <div class="modal hidden" id="nodeDetailsModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container modal-large">
+            <div class="modal-header">
+                <h3 id="nodeDetailsTitle">◆ SN-00 Orchestrator</h3>
+                <button class="modal-close" id="closeNodeDetails">×</button>
+            </div>
+            <div class="modal-body node-details-body">
+                <div class="node-detail-grid">
+                    <!-- Node Info -->
+                    <div class="node-detail-section">
+                        <h4>Node Information</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">ID</span>
+                            <span class="detail-value" id="nodeDetailId">SN-00</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Name</span>
+                            <span class="detail-value" id="nodeDetailName">Orchestrator</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Cluster</span>
+                            <span class="detail-value" id="nodeDetailCluster">APEX</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Status</span>
+                            <span class="detail-value status-online" id="nodeDetailStatus">ONLINE</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Uptime</span>
+                            <span class="detail-value" id="nodeDetailUptime">99.97%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Node Stats -->
+                    <div class="node-detail-section">
+                        <h4>Performance Metrics</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Avg Response</span>
+                            <span class="detail-value">87ms</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Tokens/sec</span>
+                            <span class="detail-value">1,247</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Tasks Today</span>
+                            <span class="detail-value">156</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Success Rate</span>
+                            <span class="detail-value">98.7%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Node Capabilities -->
+                    <div class="node-detail-section full-width">
+                        <h4>Capabilities</h4>
+                        <div class="capability-tags" id="nodeCapabilities">
+                            <span class="cap-tag">Orchestration</span>
+                            <span class="cap-tag">Routing</span>
+                            <span class="cap-tag">Decision Making</span>
+                            <span class="cap-tag">Multi-Agent Coordination</span>
+                            <span class="cap-tag">Context Management</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Node Logs -->
+                    <div class="node-detail-section full-width">
+                        <h4>Recent Activity</h4>
+                        <div class="node-logs">
+                            <div class="log-entry">[01:42:15] Routed campaign brief to SP-01</div>
+                            <div class="log-entry">[01:42:08] Coordinated content pipeline</div>
+                            <div class="log-entry">[01:41:55] Optimized context window</div>
+                            <div class="log-entry">[01:41:32] Initiated 5-Minute Agency workflow</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="nodeLogsBtn">📋 View Full Logs</button>
+                <button class="btn btn-primary" id="nodeActivateBtn">⚡ Activate Node</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         CHAT HISTORY PANEL (Slide-in)
+         ============================================ -->
+    <div class="history-panel hidden" id="historyPanel">
+        <div class="history-panel-header">
+            <h3>💬 Chat History</h3>
+            <button class="panel-close" id="closeHistoryPanel">×</button>
+        </div>
+        <div class="history-search">
+            <input type="text" placeholder="Search conversations..." id="historySearch">
+        </div>
+        <div class="history-sessions" id="historySessions">
+            <div class="history-session active">
+                <div class="session-header">
+                    <span class="session-icon">💬</span>
+                    <span class="session-title">Current Session</span>
+                    <span class="session-time">Now</span>
+                </div>
+                <p class="session-preview">52 nodes online and ready...</p>
+            </div>
+            <div class="history-session">
+                <div class="session-header">
+                    <span class="session-icon">📝</span>
+                    <span class="session-title">Campaign Strategy</span>
+                    <span class="session-time">2h ago</span>
+                </div>
+                <p class="session-preview">Create a comprehensive marketing...</p>
+            </div>
+            <div class="history-session">
+                <div class="session-header">
+                    <span class="session-icon">🔍</span>
+                    <span class="session-title">Competitor Analysis</span>
+                    <span class="session-time">Yesterday</span>
+                </div>
+                <p class="session-preview">Analyze the top 5 competitors...</p>
+            </div>
+            <div class="history-session">
+                <div class="session-header">
+                    <span class="session-icon">📊</span>
+                    <span class="session-title">Q4 Report Generation</span>
+                    <span class="session-time">Jan 26</span>
+                </div>
+                <p class="session-preview">Generate a comprehensive Q4...</p>
+            </div>
+            <div class="history-session">
+                <div class="session-header">
+                    <span class="session-icon">🎬</span>
+                    <span class="session-title">Video Script Draft</span>
+                    <span class="session-time">Jan 25</span>
+                </div>
+                <p class="session-preview">Write a compelling 60-second...</p>
+            </div>
+        </div>
+        <div class="history-panel-footer">
+            <button class="btn btn-small btn-secondary" id="clearAllHistory">🗑️ Clear All</button>
+            <button class="btn btn-small btn-primary" id="exportAllHistory">💾 Export All</button>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SPLIT VIEW TOGGLE
+         ============================================ -->
+    <div class="split-view-controls hidden" id="splitViewControls">
+        <button class="split-btn" data-mode="single" title="Single View">
+            <span>▣</span>
+        </button>
+        <button class="split-btn" data-mode="vertical" title="Vertical Split">
+            <span>◫</span>
+        </button>
+        <button class="split-btn active" data-mode="horizontal" title="Horizontal Split">
+            <span>⬓</span>
+        </button>
+    </div>
+
+    <!-- ============================================
+         THEME SELECTOR (Floating)
+         ============================================ -->
+    <div class="theme-selector hidden" id="themeSelector">
+        <div class="theme-option active" data-theme="obsidian">
+            <div class="theme-preview obsidian"></div>
+            <span>Obsidian</span>
+        </div>
+        <div class="theme-option" data-theme="midnight">
+            <div class="theme-preview midnight"></div>
+            <span>Midnight</span>
+        </div>
+        <div class="theme-option" data-theme="terminal">
+            <div class="theme-preview terminal"></div>
+            <span>Terminal</span>
+        </div>
+    </div>
+
+    <!-- ============================================
+         KEYBOARD SHORTCUTS OVERLAY
+         ============================================ -->
+    <div class="shortcuts-overlay hidden" id="shortcutsOverlay">
+        <div class="shortcuts-container">
+            <div class="shortcuts-header">
+                <h3>⌨️ Keyboard Shortcuts</h3>
+                <button class="close-shortcuts" id="closeShortcuts">×</button>
+            </div>
+            <div class="shortcuts-grid">
+                <div class="shortcut-group">
+                    <h4>General</h4>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>K</kbd> Command Palette</div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>,</kbd> Settings</div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>N</kbd> New Chat</div>
+                    <div class="shortcut-item"><kbd>Esc</kbd> Close Modal</div>
+                </div>
+                <div class="shortcut-group">
+                    <h4>Panels</h4>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>`</kbd> Toggle Terminal</div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>B</kbd> Toggle Explorer</div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> Toggle Agent</div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>H</kbd> History Panel</div>
+                </div>
+                <div class="shortcut-group">
+                    <h4>Views</h4>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>1</kbd> Chat View</div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>2</kbd> Agents View</div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>3</kbd> Workflows View</div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>4</kbd> Assets View</div>
+                </div>
+                <div class="shortcut-group">
+                    <h4>Chat</h4>
+                    <div class="shortcut-item"><kbd>Enter</kbd> Send Message</div>
+                    <div class="shortcut-item"><kbd>Shift</kbd>+<kbd>Enter</kbd> New Line</div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>L</kbd> Clear Chat</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- SCRIPTS -->
     <script src="assets/js/g5_api.js?v=2"></script>
-    <script src="assets/js/g5-os-core.js?v=OS_V4"></script>
+    <script src="assets/js/g5-os-core.js?v=OS_V5"></script>
 </body>
 </html>
