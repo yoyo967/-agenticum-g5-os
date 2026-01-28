@@ -1130,7 +1130,7 @@ const G5OS = {
                 <div class="simulation-result">
                     <div class="sim-header">
                         <span class="sim-status success">✅ EXECUTION SUCCESSFUL</span>
-                        <span class="sim-meta">4 Assets Created | 5 Nodes Active</span>
+                        <span class="sim-meta">6 Assets Created | 5 Nodes Active</span>
                     </div>
                     <div class="sim-section">
                         <h4>STRATEGIC ANGLE: "THE INVISIBLE LEVERAGE"</h4>
@@ -1138,9 +1138,11 @@ const G5OS = {
                     </div>
                     <div class="sim-assets-list">
                         ${this.createSimulatedAsset('Strategy_Brief_v4.pdf', 'pdf')}
-                        ${this.createSimulatedAsset('Campaign_Headlines.txt', 'text')}
+                        ${this.createSimulatedAsset('Campaign_Teaser_Final.mp4', 'video')}
                         ${this.createSimulatedAsset('Hero_Image_Concept_A.jpg', 'image')}
                         ${this.createSimulatedAsset('Social_Media_Plan.md', 'code')}
+                        ${this.createSimulatedAsset('Podcast_Spot_Intro.mp3', 'audio')}
+                        ${this.createSimulatedAsset('Audience_Data.csv', 'sheet')}
                     </div>
                     <div class="sim-footer">
                         <p class="sim-note">All assets passed compliance (MI-01). Ready for deployment.</p>
@@ -1149,7 +1151,8 @@ const G5OS = {
             `;
             // Add to main grid as well
             this.addAssetToGrid({ name: 'Strategy_Brief_v4.pdf', size: 1024 * 450, type: 'application/pdf' });
-            this.addAssetToGrid({ name: 'Hero_Image_Concept_A.jpg', size: 1024 * 2400, type: 'image/jpeg' });
+            this.addAssetToGrid({ name: 'Campaign_Teaser_Final.mp4', size: 1024 * 15000, type: 'video/mp4' });
+            this.addAssetToGrid({ name: 'Podcast_Spot_Intro.mp3', size: 1024 * 3200, type: 'audio/mpeg' });
         } else {
              html = `
                 <div class="simulation-result">
@@ -1164,7 +1167,7 @@ const G5OS = {
     },
 
     createSimulatedAsset(name, type) {
-        const icons = { pdf: '📄', text: '📝', image: '🖼️', code: '💻' };
+        const icons = { pdf: '📄', text: '📝', image: '🖼️', code: '💻', video: '🎬', audio: '🎵', sheet: '📊' };
         // Escape quotes safely
         const safeName = name.replace(/'/g, "\\'");
         return `
@@ -1197,6 +1200,38 @@ const G5OS = {
                     <img src="https://placehold.co/600x400/1a1a1a/4ade80?text=${encodeURIComponent(name)}" style="max-width:100%;border-radius:8px;box-shadow:0 0 20px rgba(74, 222, 128, 0.2);">
                 </div>`;
         } 
+        else if (type.includes('video') || name.endsWith('.mp4')) {
+            viewHtml = `
+                <div class="preview-video-container" style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:400px;background:#000;">
+                    <div style="font-size:3rem;margin-bottom:20px;">🎬</div>
+                    <div style="color:white;margin-bottom:10px;">PREVIEW: ${name}</div>
+                    <div style="width:80%;height:4px;background:#333;border-radius:2px;overflow:hidden;">
+                        <div style="width:45%;height:100%;background:var(--accent-primary);"></div>
+                    </div>
+                    <div style="margin-top:10px;font-family:monospace;color:#666;">00:12 / 00:30</div>
+                </div>`;
+        }
+        else if (type.includes('audio') || name.endsWith('.mp3')) {
+            viewHtml = `
+                <div class="preview-audio-container" style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:200px;background:#111;border:1px solid #333;border-radius:8px;">
+                    <div style="font-size:2rem;margin-bottom:10px;">🎵</div>
+                    <div style="color:var(--text-primary);margin-bottom:20px;">${name}</div>
+                    <div style="display:flex;gap:4px;align-items:center;">
+                        ${Array(20).fill(0).map(() => `<div style="width:4px;height:${10 + Math.random() * 30}px;background:var(--accent-primary);"></div>`).join('')}
+                    </div>
+                </div>`;
+        }
+        else if (type.includes('sheet') || name.endsWith('.csv')) {
+            viewHtml = `
+                <div class="preview-table-container" style="height:400px;overflow:auto;background:#111;padding:20px;">
+                    <table style="width:100%;border-collapse:collapse;color:#ddd;font-family:monospace;">
+                        <tr style="border-bottom:1px solid #333;text-align:left;"><th style="padding:8px;">Metric</th><th style="padding:8px;">Current</th><th style="padding:8px;">Projected</th><th style="padding:8px;">Growth</th></tr>
+                        <tr style="border-bottom:1px solid #222;"><td style="padding:8px;">Impressions</td><td style="padding:8px;">12,500</td><td style="padding:8px;">45,000</td><td style="padding:8px;color:#4ade80;">+260%</td></tr>
+                        <tr style="border-bottom:1px solid #222;"><td style="padding:8px;">Engagement</td><td style="padding:8px;">1.2%</td><td style="padding:8px;">3.8%</td><td style="padding:8px;color:#4ade80;">+216%</td></tr>
+                        <tr style="border-bottom:1px solid #222;"><td style="padding:8px;">Leads</td><td style="padding:8px;">45</td><td style="padding:8px;">120</td><td style="padding:8px;color:#4ade80;">+166%</td></tr>
+                    </table>
+                </div>`;
+        }
         else if (type.includes('pdf') || name.endsWith('.pdf')) {
             viewHtml = `
                 <div class="preview-pdf-mock" style="height:500px;background:#1e1e1e;padding:40px;overflow-y:auto;font-family:serif;color:#ddd;">
@@ -1339,11 +1374,33 @@ const G5OS = {
              }
              return;
         }
+        
+        // VIDEO/AUDIO HANDLING (Simulated)
+        if (this.currentPreviewAsset.type.includes('video') || this.currentPreviewAsset.type.includes('audio') || name.endsWith('.mp4') || name.endsWith('.mp3')) {
+            const extension = name.split('.').pop();
+            const dummyContent = `[SIMULATED ${extension.toUpperCase()} FILE CONTENT]\n\nThis file was generated by the Agenticum G5 Simulation Engine.\n\nAsset: ${name}\nDate: ${new Date().toISOString()}`;
+            const blob = new Blob([dummyContent], { type: 'text/plain' }); // Download as text-masked-as-media for demo safety
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name + '.txt'; // Append .txt so user can read it and knows its a simulation
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            this.showToast('success', `Downloaded simulation asset: ${name}`);
+            return;
+        }
 
-        // TEXT/CODE HANDLING
+        // TEXT/CODE/CSV HANDLING
         let content = this.currentPreviewAsset.content || '';
         const editor = document.getElementById('assetEditor');
-        if (editor) {
+        
+        // Construct CSV content if needed
+        if (this.currentPreviewAsset.type.includes('sheet') || name.endsWith('.csv')) {
+            content = "Metric,Current,Projected,Growth\nImpressions,12500,45000,260%\nEngagement,1.2%,3.8%,216%\nLeads,45,120,166%";
+        }
+        else if (editor) {
             content = editor.value;
         } else if (!content) {
              content = "Simulation Content for " + name;
