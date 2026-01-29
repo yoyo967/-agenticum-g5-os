@@ -46,6 +46,10 @@ const G5OS = {
         this.loadNodes();
         this.initNeuralMesh();
         this.initAudio();
+        this.setupPlaygroundListeners();
+        this.renderExtensions();
+        this.setupMatrixListeners();
+        this.setupDockDragAndDrop();
         
         // Start Boot Sequence
         this.runBootSequence();
@@ -741,6 +745,10 @@ const G5OS = {
             this.switchWorkspaceTab('workflows');
         } else if (view === 'workspace') {
             this.switchWorkspaceTab('chat');
+        } else if (view === 'playground') {
+            this.switchWorkspaceTab('playground');
+        } else if (view === 'extensions') {
+            this.switchWorkspaceTab('extensions');
         }
         
         this.logToTerminal(`[UI] Switched to ${view.toUpperCase()} view`);
@@ -1023,10 +1031,41 @@ const G5OS = {
                 this.logToTerminal('[DEPLOY] Initiating deployment sequence...', 'system');
                 setTimeout(() => this.logToTerminal('[DEPLOY] ✓ Deployment complete', 'success'), 1500);
                 break;
+            case 'PYTHON':
+                if (window.hasPython) {
+                    this.logToTerminal('[PYTHON] Python 3.12.1 Interactive Shell', 'success');
+                    this.logToTerminal('>>> print("Neural Interface Active")', 'info');
+                    this.logToTerminal('Neural Interface Active', 'system');
+                } else {
+                    this.logToTerminal('[ERROR] Python Interpreter not installed. Visit Extensions Matrix.', 'error');
+                }
+                break;
+            case 'GIT':
+                this.logToTerminal('[GIT] git status', 'input');
+                this.logToTerminal('On branch main. Your branch is up to date with "origin/main".', 'system');
+                this.logToTerminal('nothing to commit, working tree clean', 'system');
+                break;
+            case 'SCAN':
+                if (window.hasVision) {
+                    this.logToTerminal('[VISION] Scanning active viewport...', 'info');
+                    setTimeout(() => {
+                        this.logToTerminal('[VISION] Objects detected: Agent_Grid, Terminal_Console, Neural_Mesh', 'success');
+                    }, 800);
+                } else {
+                    this.logToTerminal('[ERROR] Neural Vision Ext. required.', 'error');
+                }
+                break;
             default:
                 if (cmd.startsWith('WORKFLOW ')) {
                     const wf = cmd.replace('WORKFLOW ', '');
                     this.logToTerminal(`[WORKFLOW] Activating ${wf}...`, 'system');
+                } else if (cmd.startsWith('PYTHON ')) {
+                    if (window.hasPython) {
+                        this.logToTerminal(`[PYTHON] Executing script...`, 'info');
+                        setTimeout(() => this.logToTerminal(`[OUTPUT] Process completed (Exit Code 0)`, 'success'), 600);
+                    } else {
+                        this.logToTerminal('[ERROR] Python module missing.', 'error');
+                    } 
                 } else {
                     this.logToTerminal(`[ERROR] Unknown command: ${command}`, 'error');
                 }
@@ -1745,6 +1784,20 @@ const G5OS = {
         this.activeMeshCluster = null;
         this.meshParticles = [];
 
+        // Agent Foundry
+        document.getElementById('openFoundryBtn')?.addEventListener('click', () => this.openAgentFoundry());
+        document.getElementById('closeFoundry')?.addEventListener('click', () => this.closeAgentFoundry());
+        document.getElementById('spawnAgentBtn')?.addEventListener('click', () => this.spawnAgent());
+        
+        // Color picker live update
+        document.getElementById('foundryColor')?.addEventListener('input', (e) => {
+            document.getElementById('foundryColorHex').textContent = e.target.value;
+        });
+
+        // Neural 3D Resize Listener
+        window.addEventListener('resize', () => {
+             this.resizeNeuralMesh();
+        });
         // Resize observer
         const resizeObserver = new ResizeObserver(() => {
             this.resizeNeuralMesh();
@@ -2392,6 +2445,7 @@ const G5OS = {
                     </div>
                 </div>`;
         }
+
         else if (type.includes('sheet') || name.endsWith('.csv')) {
             viewHtml = `
                 <div class="preview-table-container" style="height:400px;overflow:auto;background:#111;padding:20px;">
@@ -3038,7 +3092,424 @@ const G5OS = {
         
         // Focus input
         setTimeout(() => document.getElementById('chatInput')?.focus(), 900);
+    },
+
+    // ============================================
+    // AGENT FOUNDRY (PHASE 5)
+    // ============================================
+    openAgentFoundry() {
+        document.getElementById('agentFoundryModal').classList.remove('hidden');
+    },
+
+    closeAgentFoundry() {
+        document.getElementById('agentFoundryModal').classList.add('hidden');
+    },
+
+    spawnAgent() {
+        // Collect Data
+        const name = document.getElementById('foundryName').value || 'UNKNOWN-NODE';
+        const role = document.getElementById('foundryRole').value;
+        const color = document.getElementById('foundryColor').value;
+        const prompt = document.getElementById('foundryPrompt').value;
+        
+        // Validation
+        if (!prompt) {
+            this.showToast('error', 'Cognitive Kernel requires instruction data.');
+            return;
+        }
+
+        this.showLoading('Fabricating Neural Pathways...');
+
+        // Simulate Creation Delay
+        setTimeout(() => {
+            // Create Agent Object
+            const id = `CUST-${Math.floor(Math.random() * 1000)}`;
+            const newAgent = {
+                id: id,
+                name: name,
+                role: role,
+                cluster: 'CUSTOM', // New cluster
+                status: 'online',
+                color: color
+            };
+
+            // Add to UI Grid
+            this.addAgentToGrid(newAgent);
+
+            // Add to 3D Mesh (Realtime Injection)
+            if (window.neuralNavigator) {
+                window.neuralNavigator.addNode(newAgent); 
+            }
+
+            this.hideLoading();
+            this.closeAgentFoundry();
+            this.renderNodes();
+            
+            // Audio Feedback
+            if (window.G5Audio) window.G5Audio.playAccessGranted();
+            
+            this.showToast('success', 'Neural Node Fabricated');
+            this.logToTerminal(`[FOUNDRY] Fabricated new node: ${id} (${role})`);
+        }, 1500);
+    },
+
+    addAgentToGrid(agent) {
+        const grid = document.getElementById('agentsGrid');
+        
+        const tile = document.createElement('div');
+        tile.className = 'agent-tile custom';
+        tile.dataset.node = agent.id;
+        tile.style.borderLeft = `3px solid ${agent.color}`;
+        
+        tile.innerHTML = `
+            <div class="tile-header">
+                <span class="tile-icon">🧬</span>
+                <span class="tile-status online"></span>
+            </div>
+            <div class="tile-body">
+                <span class="tile-id">${agent.id}</span>
+                <span class="tile-name">${agent.name}</span>
+                <span class="tile-cluster" style="color:${agent.color}">${agent.role}</span>
+            </div>
+            <div class="tile-actions">
+                <button class="tile-btn">⚙️</button>
+                <button class="tile-btn">📋</button>
+            </div>
+        `;
+        
+        // Add click listener
+         tile.addEventListener('click', (e) => {
+            if (!e.target.closest('.tile-btn')) {
+                this.selectNode(agent.id);
+                this.showToast('success', `Selected ${agent.id}`);
+            }
+        });
+        
+        grid.appendChild(tile);
+    },
+
+    // ============================================
+    // NEURAL PLAYGROUND (PHASE 5)
+    // ============================================
+    setupPlaygroundListeners() {
+        // Temperature Slider
+        document.getElementById('playgroundTemp')?.addEventListener('input', (e) => {
+            document.getElementById('tempValue').textContent = e.target.value;
+        });
+
+        // Run Button
+        document.getElementById('runPlaygroundBtn')?.addEventListener('click', () => {
+            this.runPlayground();
+        });
+
+        // Ctrl+Enter Shortcut for Prompt
+        document.getElementById('playgroundInput')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                this.runPlayground();
+            }
+        });
+    },
+
+    runPlayground() {
+        const input = document.getElementById('playgroundInput');
+        const output = document.getElementById('playgroundOutput');
+        const cost = document.getElementById('playgroundCost');
+        const model = document.getElementById('playgroundModel').value;
+        
+        if (!input || !input.value.trim()) return;
+
+        const prompt = input.value;
+        // Don't clear input, just focus output
+        
+        // 1. Initial State
+        output.innerHTML = `<span style="color:#6b7280;">// Processing Inference Stream via ${model}...</span>`;
+        cost.textContent = "CALCULATING...";
+        
+        // 2. Mock Reasoning / Thinking
+        setTimeout(() => {
+            output.innerHTML = `<div class="thinking-indicator"><div class="thinking-dot"></div><div class="thinking-dot"></div></div>`;
+            
+            // 3. Generation Stream
+            setTimeout(() => {
+                output.innerHTML = ''; // Clear thinking
+                const response = this.generateMockResponse(prompt);
+                const words = response.split(' ');
+                let i = 0;
+                
+                // Speed based on model choice
+                let speed = model === 'gemini-flash' ? 10 : 30; // ms per word
+                
+                // Audio Drone start
+                if (window.G5Audio) window.G5Audio.startDrone();
+                
+                const interval = setInterval(() => {
+                    if (i >= words.length) {
+                        clearInterval(interval);
+                        if (window.G5Audio) window.G5Audio.stopDrone();
+                        output.innerHTML += '<br><br><span style="color:#4ade80;">// END OF STREAM</span>';
+                        cost.textContent = `${Math.floor(words.length / (speed/1000))} T/s`;
+                        this.logToTerminal(`[PLAYGROUND] Inference complete: ${words.length} tokens`);
+                        return;
+                    }
+                    
+                    const span = document.createElement('span');
+                    span.textContent = words[i] + ' ';
+                    span.style.color = '#e5e7eb';
+                    span.style.animation = 'fadeIn 0.2s ease';
+                    output.appendChild(span);
+                    output.scrollTop = output.scrollHeight;
+                    
+                    // procedural typing sound could be here
+                    if (window.G5Audio) window.G5Audio.playTypingSound();
+                    
+                    // TPS Counter Update
+                    if (i % 5 === 0) {
+                        cost.textContent = `${Math.floor(Math.random() * 50 + 80)} T/s`;
+                    }
+                    
+                    i++;
+                }, speed);
+                
+            }, 1200); // Thinking delay
+        }, 300); // Network delay
+    },
+
+    generateMockResponse(prompt) {
+        // Simple heuristic response generator
+        const p = prompt.toLowerCase();
+        if (p.includes('code') || p.includes('function') || p.includes('script')) {
+            return "Here is the optimized implementation based on your constraints:\n\n```javascript\nfunction optimizedExecute(data) {\n  return data.reduce((acc, curr) => {\n    // Vectorized operation simulation\n    return acc + (curr.value * 0.95);\n  }, 0);\n}\n```\n\nThis approach minimizes memory overhead by O(n) complexity while maintaining stream integrity.";
+        } else if (p.includes('strategy') || p.includes('plan')) {
+            return "## Strategic Analysis\n\n1. **Market Penetration**: Current vector analysis suggests a 45% gap in the mid-market segment.\n2. **Resource Allocation**: Redirect 20% of compute interactons to outbound engagement.\n3. **Timeline**: Q3 execution window is optimal based on competitor signal noise.\n\nRecommendation: Proceed with Alpha Protocol launch sequence.";
+        } else {
+            return "I have analyzed the request parameters. The query suggests a need for high-level synthesis of existing data points. Based on the current knowledge graph, the optimal path forward involves iterative testing of the core hypothesis using a 52-node validation mesh. Accessing global context... Verified. The alignment score is 98.4%.";
+        }
+    },
+
+    // ============================================
+    // EXTENSIONS MATRIX (DEEP DIVE)
+    // ============================================
+    extensionsData: [
+        // NEURAL & AI
+        { id: 'ext-py', cat: 'neural', name: 'Python Interpreter', version: '3.12.1', author: 'Python Software Foundation', icon: '🐍', desc: 'Execute Python scripts locally within the browser sandbox. Includes NumPy and Pandas support.', installed: false, perms: ['Local Compute', 'File System'] },
+        { id: 'ext-vis', cat: 'neural', name: 'Neural Vision', version: '2.0.4', author: 'Google DeepMind', icon: '👁️', desc: 'Real-time image analysis, object detection, and OCR capabilities via WebGPU.', installed: false, perms: ['Camera Access', 'GPU Acceleration'] },
+        { id: 'ext-mem', cat: 'neural', name: 'Long-Term Memory', version: '1.5.0', author: 'Pinecone', icon: '🧠', desc: 'Vector database persistency layer for agentic context retention.', installed: false, perms: ['Storage', 'Network'] },
+        { id: 'ext-voice', cat: 'neural', name: 'Voice Synthesis', version: '4.1.2', author: 'ElevenLabs', icon: '🎙️', desc: 'High-fidelity text-to-speech generation with emotion control.', installed: false, perms: ['Microphone', 'Audio Output'] },
+        
+        // DEVTOOLS
+        { id: 'ext-term', cat: 'dev', name: 'Terminal Pro', version: '5.0.0', author: 'GNU Project', icon: '💻', desc: 'Advanced bash access, networking tools, and SSH capabilities.', installed: true, perms: ['System Root'] },
+        { id: 'ext-git', cat: 'dev', name: 'Git Integration', version: '2.43.0', author: 'GitHub', icon: '🐙', desc: 'Full version control suite with commit graph visualization.', installed: false, perms: ['Network', 'File System'] },
+        { id: 'ext-docker', cat: 'dev', name: 'Container Engine', version: '24.0.7', author: 'Docker Inc.', icon: '🐳', desc: 'Manage lightweight containers for isolated agent execution.', installed: false, perms: ['Virtualization'] },
+        { id: 'ext-vscode', cat: 'dev', name: 'Monaco Editor', version: '1.85.0', author: 'Microsoft', icon: '📝', desc: 'Embeds VS Code architecture for advanced code editing.', installed: true, perms: ['UI Overlay'] },
+
+        // SECURITY
+        { id: 'ext-vpn', cat: 'security', name: 'Quantum VPN', version: '1.0.0', author: 'Nord Security', icon: '🛡️', desc: 'Encrypted tunnel for anonymous neural operations.', installed: false, perms: ['Network Proxy'] },
+        { id: 'ext-fire', cat: 'security', name: 'Firewall AI', version: '3.2.1', author: 'CrowdStrike', icon: '🔥', desc: 'Predictive threat protection against adversarial prompts.', installed: true, perms: ['Network Monitor'] },
+        { id: 'ext-auth', cat: 'security', name: 'Biometric Auth', version: '2.1.0', author: 'Yubico', icon: '👆', desc: 'Hardware-backed authentication for operator identity.', installed: false, perms: ['USB Access'] },
+
+        // LEGACY
+        { id: 'ext-win', cat: 'legacy', name: 'Win32 Bridge', version: '0.9.0', author: 'WineHQ', icon: '🪟', desc: 'Compatibility layer for legacy Windows executables.', installed: false, perms: ['System Hooks'] },
+        { id: 'ext-dos', cat: 'legacy', name: 'DOSBox core', version: '0.74', author: 'OpenSource', icon: '📼', desc: 'x86 emulator for retro software preservation.', installed: false, perms: ['CPU Emulation'] }
+    ],
+
+    renderExtensions(category = 'all', searchQuery = '') {
+        const grid = document.getElementById('extensionsGrid');
+        if (!grid) return;
+
+        // Filter Data
+        let filtered = this.extensionsData;
+        if (category !== 'all') {
+            filtered = filtered.filter(e => e.cat === category);
+        }
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            filtered = filtered.filter(e => e.name.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q));
+        }
+
+        grid.innerHTML = filtered.map(ext => `
+            <div class="extension-card ${ext.installed ? 'installed' : ''}" onclick="G5OS.openExtensionDetail('${ext.id}')"
+                 style="background:var(--bg-elevated); border:1px solid ${ext.installed ? 'var(--accent-primary)' : 'var(--border-color)'}; padding:20px; border-radius:8px; transition:all 0.3s; cursor:pointer;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                    <span style="font-size:32px;">${ext.icon}</span>
+                    <span class="ext-status" style="font-size:10px; padding:2px 8px; border:1px solid var(--border-color); border-radius:4px; margin-left:auto; color:${ext.installed ? 'var(--accent-primary)' : 'var(--text-secondary)'};">
+                        ${ext.installed ? 'ACTIVE' : 'AVAILABLE'}
+                    </span>
+                </div>
+                <h3 style="margin:0 0 5px 0; color:var(--text-primary); font-size:16px;">${ext.name}</h3>
+                <div style="font-size:10px; color:var(--text-secondary); margin-bottom:8px;">${ext.author} • v${ext.version}</div>
+                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px; height:32px; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">${ext.desc}</p>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                     <span style="font-size:10px; color:#555;">${ext.perms.length} Permissions</span>
+                     ${ext.installed ? '<span style="font-size:16px;">✅</span>' : '<span style="font-size:16px; opacity:0.3;">📥</span>'}
+                </div>
+            </div>
+        `).join('');
+    },
+
+    setupMatrixListeners() {
+        // Category Buttons
+        document.querySelectorAll('.matrix-cat').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.matrix-cat').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.background = 'transparent';
+                });
+                btn.classList.add('active');
+                btn.style.background = 'rgba(255,255,255,0.05)';
+                
+                const cat = btn.dataset.cat;
+                const title = btn.textContent;
+                document.getElementById('matrixTitle').textContent = title;
+                this.renderExtensions(cat, document.getElementById('matrixSearch').value);
+            });
+        });
+
+        // Search Input
+        document.getElementById('matrixSearch')?.addEventListener('input', (e) => {
+             const activeCat = document.querySelector('.matrix-cat.active')?.dataset.cat || 'all';
+             this.renderExtensions(activeCat, e.target.value);
+        });
+
+        // Modal Close
+        document.getElementById('closeExtDetail')?.addEventListener('click', () => {
+            document.getElementById('extDetailModal').classList.add('hidden');
+        });
+        document.querySelector('#extDetailModal .modal-backdrop')?.addEventListener('click', () => {
+            document.getElementById('extDetailModal').classList.add('hidden');
+        });
+    },
+
+    openExtensionDetail(id) {
+        const ext = this.extensionsData.find(e => e.id === id);
+        if (!ext) return;
+
+        // Populate Modal
+        document.getElementById('extDetailIcon').textContent = ext.icon;
+        document.getElementById('extDetailName').textContent = ext.name;
+        document.getElementById('extDetailVersion').textContent = `v${ext.version}`;
+        document.getElementById('extDetailAuthor').textContent = ext.author;
+        document.getElementById('extDetailDesc').textContent = ext.desc;
+        
+        // Populate Permissions
+        const permList = document.getElementById('extDetailPerms');
+        permList.innerHTML = ext.perms.map(p => `<li>${p}</li>`).join('');
+
+        // Action Button
+        const btn = document.getElementById('extDetailAction');
+        this.updateDetailButton(btn, ext);
+
+        btn.onclick = () => this.toggleExtension(id, btn);
+
+        // Show Modal
+        document.getElementById('extDetailModal').classList.remove('hidden');
+    },
+
+    updateDetailButton(btn, ext) {
+        if (ext.installed) {
+            btn.textContent = 'UNINSTALL';
+            btn.className = 'btn btn-secondary';
+        } else {
+            btn.textContent = 'INSTALL MODULE';
+            btn.className = 'btn btn-primary';
+        }
+    },
+
+    toggleExtension(id, btn) {
+        const ext = this.extensionsData.find(e => e.id === id);
+        const card = document.querySelector(`.extension-card[onclick*="${id}"]`);
+
+        if (!ext.installed) {
+            // INSTALL FLOW
+            btn.textContent = 'DOWNLOADING...';
+            btn.disabled = true;
+            this.showToast('info', `Downloading ${ext.name}...`);
+
+            setTimeout(() => {
+                ext.installed = true;
+                this.updateDetailButton(btn, ext);
+                btn.disabled = false;
+                
+                // Update functional hooks
+                if (id === 'ext-py') window.hasPython = true;
+                if (id === 'ext-vis') window.hasVision = true;
+
+                this.showToast('success', `${ext.name} installed.`);
+                this.logToTerminal(`[PKG] Installed: ${ext.id} | Integrity Verified`);
+                if (window.G5Audio) window.G5Audio.playAccessGranted();
+                
+                // Refresh Grid if visible
+                const activeCat = document.querySelector('.matrix-cat.active')?.dataset.cat || 'all';
+                this.renderExtensions(activeCat, document.getElementById('matrixSearch').value);
+            }, 1500);
+        } else {
+            // UNINSTALL FLOW
+            ext.installed = false;
+            this.updateDetailButton(btn, ext);
+            
+            if (id === 'ext-py') window.hasPython = false;
+            if (id === 'ext-vis') window.hasVision = false;
+
+            this.showToast('info', `${ext.name} removed.`);
+            this.logToTerminal(`[PKG] Removed: ${ext.id}`);
+            
+            // Refresh Grid
+            const activeCat = document.querySelector('.matrix-cat.active')?.dataset.cat || 'all';
+            this.renderExtensions(activeCat, document.getElementById('matrixSearch').value);
+        }
+    },
+
+    // ============================================
+    // DYNAMIC DOCK (PHASE 5)
+    // ============================================
+    setupDockDragAndDrop() {
+        const tabsContainer = document.querySelector('.os-tabs');
+        if (!tabsContainer) return;
+
+        const tabs = tabsContainer.querySelectorAll('.os-tab');
+        
+        tabs.forEach(tab => {
+            tab.setAttribute('draggable', 'true');
+            tab.style.cursor = 'grab';
+            
+            tab.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', tab.dataset.view);
+                e.dataTransfer.effectAllowed = 'move';
+                tab.classList.add('dragging');
+                this.draggedTab = tab;
+            });
+            
+            tab.addEventListener('dragend', () => {
+                tab.classList.remove('dragging');
+                this.draggedTab = null;
+                this.saveDockOrder(); // Persistence
+            });
+            
+            tab.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                
+                if (this.draggedTab && this.draggedTab !== tab) {
+                    const rect = tab.getBoundingClientRect();
+                    const next = (e.clientX - rect.left) > (rect.width / 2);
+                    if (next) {
+                        tabsContainer.insertBefore(this.draggedTab, tab.nextSibling);
+                    } else {
+                        tabsContainer.insertBefore(this.draggedTab, tab);
+                    }
+                }
+            });
+        });
+        
+        this.logToTerminal('[UI] Dynamic Dock Layout unlocked');
+    },
+
+    saveDockOrder() {
+        // Simulating persistence
+        // const order = Array.from(document.querySelectorAll('.os-tab')).map(t => t.dataset.view);
+        // localStorage.setItem('g5_dock_order', JSON.stringify(order));
+        this.showToast('info', 'Dock Layout Saved');
     }
+
 };
 
 // ============================================

@@ -71,64 +71,145 @@
     animation: ripple 0.4s linear;
 }
 
-/* 3D VIEW STATE */
-.agents-view-3d .agents-grid {
-    opacity: 0;
-    pointer-events: none;
-}
 
-.agents-view-3d #dashboard-neural-container {
-    opacity: 1 !important;
-    z-index: 10 !important;
-    pointer-events: auto !important;
-}
+        /* HOLOGRAPHIC GLITCH FX (PHASE 6) */
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(20px, 9999px, 81px, 0); transform: translate(-2px) skew(1deg); }
+            20% { clip: rect(61px, 9999px, 4px, 0); transform: translate(1px) skew(0deg); }
+            40% { clip: rect(56px, 9999px, 78px, 0); transform: translate(3px) skew(-1deg); }
+            60% { clip: rect(65px, 9999px, 49px, 0); transform: translate(-1px) skew(2deg); }
+            80% { clip: rect(3px, 9999px, 20px, 0); transform: translate(2px) skew(0deg); }
+            100% { clip: rect(6px, 9999px, 67px, 0); transform: translate(1px) skew(-0.5deg); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(10px, 9999px, 91px, 0); transform: translate(1px) skew(-0.5deg); }
+            20% { clip: rect(5px, 9999px, 34px, 0); transform: translate(-2px) skew(1deg); }
+            40% { clip: rect(51px, 9999px, 28px, 0); transform: translate(2px) skew(-1deg); }
+            60% { clip: rect(15px, 9999px, 12px, 0); transform: translate(-1px) skew(2deg); }
+            80% { clip: rect(33px, 9999px, 74px, 0); transform: translate(1px) skew(0deg); }
+            100% { clip: rect(2px, 9999px, 47px, 0); transform: translate(-2px) skew(0.5deg); }
+        }
+        .glitch-active {
+            position: relative;
+        }
+        .glitch-active::before,
+        .glitch-active::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary, #000);
+            pointer-events: none;
+        }
+        .glitch-active::before {
+            left: 2px;
+            text-shadow: -1px 0 #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        .glitch-active::after {
+            left: -2px;
+            text-shadow: -1px 0 #00fff9;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim-2 2s infinite linear alternate-reverse;
+        }
 
-.agents-view-3d #neuralCanvas {
-    opacity: 0;
-}
+        /* 3D VIEW STATE */
+        .agents-view-3d .agents-grid {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .agents-view-3d #dashboard-neural-container {
+            opacity: 1 !important;
+            z-index: 10 !important;
+            pointer-events: auto !important;
+        }
+        
+        .agents-view-3d #neuralCanvas {
+            opacity: 0;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="g5-os-body">
-    <!-- BOOT OVERLAY (AUDIO UNLOCKER) -->
-    <div id="boot-overlay" style="position:fixed; inset:0; background:#000; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; font-family:'Rajdhani', sans-serif;">
-        <div class="boot-loader" style="width: 50px; height: 50px; border: 2px solid #333; border-top: 2px solid #60a5fa; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 2rem;"></div>
-        <h1 style="font-size: 2rem; letter-spacing: 5px; margin-bottom: 1rem;">AGENTICUM <span style="color:#60a5fa">G5</span></h1>
-        <p style="font-family:'JetBrains Mono', monospace; color:#6b7280; font-size: 0.8rem; margin-bottom: 2rem;">INITIALIZING NEURAL MESH V5.0.1</p>
-        <button id="boot-btn" onclick="startG5()" style="background: rgba(96, 165, 250, 0.1); border: 1px solid #60a5fa; color: #60a5fa; padding: 1rem 3rem; font-family:'JetBrains Mono'; cursor: pointer; transition: all 0.3s; letter-spacing: 2px;">
-            [ INITIALIZE SYSTEM ]
+    <!-- BOOT OVERLAY V2 (CINEMATIC BIOS) -->
+    <div id="boot-overlay" style="position:fixed; inset:0; background:#000; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;">
+        <!-- Matrix Rain Background (Simple CSS) -->
+        <div style="position:absolute; inset:0; opacity:0.1; background-image: linear-gradient(0deg, transparent 24%, rgba(32, 255, 77, .3) 25%, rgba(32, 255, 77, .3) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, .3) 75%, rgba(32, 255, 77, .3) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(32, 255, 77, .3) 25%, rgba(32, 255, 77, .3) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, .3) 75%, rgba(32, 255, 77, .3) 76%, transparent 77%, transparent); background-size: 50px 50px;"></div>
+        
+        <!-- CRT Scanline -->
+        <div style="position:absolute; inset:0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 2px, 3px 100%; pointer-events: none;"></div>
+        
+        <div id="boot-terminal" style="font-family:'JetBrains Mono', monospace; color:#4ade80; font-size:12px; width:600px; max-width:90%; margin-bottom:2rem; height:200px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; text-shadow: 0 0 5px #4ade80;">
+            <div>> BIOS CHECK... OK</div>
+            <div>> MEMORY TEST... 64GB OK</div>
+            <div>> NEURAL MESH... DETECTED</div>
+            <div>> LOADING KERNEL G5...</div>
+        </div>
+
+        <div style="position:relative;">
+            <div id="boot-logo-container" style="display:flex; flex-direction:column; align-items:center; opacity:0.5; transition:all 1s;">
+                <h1 class="glitch-active" data-text="AGENTICUM G5" style="font-family:'Rajdhani', sans-serif; font-size: 4rem; letter-spacing: 10px; margin: 0; color:#fff;">AGENTICUM G5</h1>
+                <p style="font-family:'JetBrains Mono'; color:#60a5fa; letter-spacing: 4px; font-size: 1rem;">AUTONOMOUS OPERATING SYSTEM</p>
+            </div>
+        </div>
+
+        <button id="boot-btn" onclick="startG5()" style="margin-top:3rem; background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 1rem 4rem; font-family:'JetBrains Mono'; cursor: pointer; transition: all 0.2s; letter-spacing: 2px; text-transform:uppercase; position:relative; overflow:hidden;">
+            <span style="position:relative; z-index:2;">[ INITIALIZE SYSTEM ]</span>
+            <div class="hover-fill" style="position:absolute; inset:0; background:#4ade80; transform:translateX(-100%); transition:transform 0.3s; z-index:1;"></div>
         </button>
+        
         <style>
-            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-            #boot-btn:hover { background: #60a5fa; color: #000; box-shadow: 0 0 20px rgba(96, 165, 250, 0.5); }
+            #boot-btn:hover { color: #000; box-shadow: 0 0 20px #4ade80; }
+            #boot-btn:hover .hover-fill { transform:translateX(0); }
         </style>
-    </div>
+    </div>    
 
     <script>
         function startG5() {
             const overlay = document.getElementById('boot-overlay');
             const btn = document.getElementById('boot-btn');
+            const logo = document.getElementById('boot-logo-container');
+            const terminal = document.getElementById('boot-terminal');
             
             // 1. Unlock Audio
-            if (window.G5Audio) window.G5Audio.init();
+            try {
+                if (window.G5Audio) {
+                    window.G5Audio.init();
+                    window.G5Audio.playBoot();
+                }
+            } catch(e) { console.log('Audio init failed', e); }
             
             // 2. Visual Feedback
-            btn.innerHTML = "ACCESS GRANTED";
-            btn.style.background = "#34d399";
-            btn.style.borderColor = "#34d399";
-            btn.style.color = "#000";
+            btn.innerHTML = "<span style='position:relative; z-index:2; color:#000;'>ACCESS GRANTED</span>";
+            btn.querySelector('span').style.color = '#000';
+            btn.style.boxShadow = "0 0 50px #4ade80";
+            document.querySelector('#boot-btn .hover-fill').style.transform = "translateX(0)";
             
-            if (window.G5Audio) window.G5Audio.playBoot();
+            // 3. Glitch Explosion
+            logo.style.transform = "scale(1.5)";
+            logo.style.filter = "brightness(2) contrast(1.5)";
+            logo.querySelector('h1').style.textShadow = "-2px 0 red, 2px 0 blue";
             
+            // Terminal Flash
+            terminal.innerHTML += "<div style='color:#fff; background:#4ade80;'>SYSTEM UNLOCKED</div>";
+            terminal.scrollTop = terminal.scrollHeight;
+
+            // 4. CRT Collapse Effect
             setTimeout(() => {
-                overlay.style.opacity = '0';
-                overlay.style.pointerEvents = 'none';
+                overlay.style.transition = "all 0.8s cubic-bezier(0.85, 0, 0.15, 1)";
+                overlay.style.transform = "scaleX(1.1) scaleY(0.01)";
+                overlay.style.filter = "brightness(5)";
                 
-                // 3. Start OS Logic (if not auto-started yet)
-                // Note: The main script runs on load, but we can hook into it if needed.
-                // For now, removing the overlay reveals the OS which is already booting underneath.
-                setTimeout(() => { overlay.remove(); }, 1000);
-            }, 800);
+                setTimeout(() => {
+                    overlay.style.transform = "scale(0)";
+                    overlay.style.opacity = "0";
+                    setTimeout(() => { overlay.remove(); }, 200);
+                }, 400);
+            }, 1200);
         }
         
         // Auto-click if parameter says so? No, we NEED the click for audio.
@@ -170,6 +251,14 @@
                 <button class="os-tab" data-view="workflows">
                     <span class="tab-icon">⚡</span>
                     <span>Workflows</span>
+                </button>
+                <button class="os-tab" data-view="playground">
+                    <span class="tab-icon">🧪</span>
+                    <span>Playground</span>
+                </button>
+                <button class="os-tab" data-view="extensions">
+                    <span class="tab-icon">🧩</span>
+                    <span>Extensions</span>
                 </button>
                 <button class="os-tab" data-view="assets">
                     <span class="tab-icon">📦</span>
@@ -715,6 +804,15 @@
                         
                         <!-- AGENTS GRID (Overlay) -->
                         <div class="agents-grid" id="agentsGrid" style="position: relative; z-index: 1; transition: opacity 0.5s;">
+                        
+                        <!-- CREATE NEW AGENT (User Action) -->
+                        <div class="agent-tile create-new" id="openFoundryBtn" style="border: 1px dashed var(--accent-primary); background: rgba(0,0,0,0.3); justify-content: center; align-items: center; cursor: pointer;">
+                            <div style="text-align: center;">
+                                <span style="font-size: 24px; display: block; margin-bottom: 5px;">＋</span>
+                                <span style="font-size: 12px; color: var(--accent-primary); letter-spacing: 1px;">FABRICATE NODE</span>
+                            </div>
+                        </div>
+
                         <!-- APEX -->
                         <div class="agent-tile apex" data-node="SN-00">
                             <div class="tile-header">
@@ -1107,6 +1205,86 @@
                     </div>
                 </div>
             </div>
+
+            <!-- PLAYGROUND VIEW (NEW PHASE 5) -->
+            <div class="workspace-content hidden" id="playgroundView" style="height:100%; display:none; flex-direction:column;">
+                <div class="playground-header" style="padding: 20px; border-bottom: 1px solid #333; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:24px;">🧪</span>
+                        <div>
+                            <h2 style="margin:0; font-size:18px; letter-spacing:1px;">NEURAL PLAYGROUND</h2>
+                            <span style="font-size:12px; color:var(--text-secondary);">Direct Model Inference Sandbox</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Playground Controls -->
+                    <div style="display:flex; gap:15px; align-items:center;">
+                        <select class="g5-select" id="playgroundModel" style="width:200px;">
+                            <option value="gemini-pro">Gemini 1.5 Pro (Reasoning)</option>
+                            <option value="gemini-flash">Gemini 1.5 Flash (Speed)</option>
+                            <option value="gemma-27b">Gemma 2 27B (Local Sim)</option>
+                        </select>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <span style="font-size:12px; color:var(--text-secondary);">TEMP:</span>
+                            <input type="range" class="g5-range" id="playgroundTemp" min="0" max="1" step="0.1" value="0.7" style="width:100px;">
+                            <span id="tempValue" style="font-size:12px; width:25px;">0.7</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="playground-body" style="flex:1; display:flex; overflow:hidden;">
+                    <!-- LEFT: PROMPT -->
+                    <div style="flex:1; display:flex; flex-direction:column; border-right:1px solid #333; padding:20px;">
+                        <div style="margin-bottom:10px; display:flex; justify-content:space-between;">
+                            <label style="font-size:12px; color:var(--accent-primary);">SYSTEM INSTRUCTION</label>
+                            <span style="font-size:10px; color:var(--text-secondary);">Use {{ }} for variables</span>
+                        </div>
+                        <textarea id="playgroundSystem" style="height:150px; background:#111; border:1px solid #333; color:var(--text-secondary); padding:10px; font-family:'JetBrains Mono'; resize:none; margin-bottom:20px; font-size:12px;" placeholder="You are a helpful assistant..."></textarea>
+                        
+                        <div style="margin-bottom:10px; display:flex; justify-content:space-between;">
+                            <label style="font-size:12px; color:var(--accent-primary);">USER INPUT</label>
+                            <button class="btn btn-primary btn-small" id="runPlaygroundBtn">▶ RUN (Ctrl+Enter)</button>
+                        </div>
+                        <textarea id="playgroundInput" style="flex:1; background:#0a0a0a; border:1px solid #333; color:var(--text-primary); padding:15px; font-family:'JetBrains Mono'; resize:none; font-size:14px;" placeholder="Enter your prompt here..."></textarea>
+                    </div>
+                    
+                    <!-- RIGHT: OUTPUT -->
+                    <div style="flex:1; background:#050505; display:flex; flex-direction:column;">
+                        <div style="padding:10px 20px; border-bottom:1px solid #333; display:flex; justify-content:space-between;">
+                            <span style="font-size:12px; color:var(--text-secondary);">OUTPUT STREAM</span>
+                            <span id="playgroundCost" style="font-size:12px; color:var(--text-secondary);">0 TPS</span>
+                        </div>
+                        <div id="playgroundOutput" style="flex:1; padding:20px; overflow-y:auto; font-family:'JetBrains Mono'; font-size:14px; line-height:1.6; color:#e5e7eb;">
+                            <span style="color:#444;">// Awaiting execution...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- EXTENSIONS VIEW (DEEP MATRIX) -->
+            <div class="workspace-content hidden" id="extensionsView" style="height:100%; display:none; flex-direction:row; overflow:hidden;">
+                <!-- SIDEBAR CATEGORIES -->
+                <div class="extensions-sidebar" style="width:240px; background:var(--bg-elevated); border-right:1px solid #333; padding:20px; display:flex; flex-direction:column;">
+                    <h2 style="font-size:18px; letter-spacing:1px; margin-bottom:20px;">MATRIX</h2>
+                    <nav class="matrix-nav" style="display:flex; flex-direction:column; gap:5px;">
+                        <button class="matrix-cat active" data-cat="all" style="text-align:left; padding:10px; border-radius:4px; background:rgba(255,255,255,0.05);">All Packages</button>
+                        <button class="matrix-cat" data-cat="neural" style="text-align:left; padding:10px; border-radius:4px;">Neural & AI</button>
+                        <button class="matrix-cat" data-cat="dev" style="text-align:left; padding:10px; border-radius:4px;">DevTools</button>
+                        <button class="matrix-cat" data-cat="security" style="text-align:left; padding:10px; border-radius:4px;">Security</button>
+                        <button class="matrix-cat" data-cat="legacy" style="text-align:left; padding:10px; border-radius:4px;">Legacy</button>
+                    </nav>
+                </div>
+
+                <!-- MAIN GRID -->
+                <div style="flex:1; display:flex; flex-direction:column; height:100%;">
+                    <div style="padding:20px; border-bottom:1px solid #333; display:flex; justify-content:space-between; align-items:center;">
+                        <h2 id="matrixTitle" style="margin:0; font-size:20px;">All Packages</h2>
+                        <input type="text" id="matrixSearch" placeholder="Search Matrix..." style="background:#111; border:1px solid #333; padding:8px 12px; color:#fff; border-radius:4px; width:200px; font-family:'JetBrains Mono';">
+                    </div>
+                    <div class="extensions-grid" id="extensionsGrid" style="flex:1; overflow-y:auto; padding:20px; display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:20px; align-content:start;">
+                        <!-- DYNAMICALLY POPULATED -->
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- RIGHT PANEL: AGENT CONFIGURATION -->
@@ -1377,10 +1555,73 @@
         </div>
     </div>
 
-    <!-- ============================================
-         SETTINGS MODAL
-         ============================================ -->
-    <div class="modal hidden" id="settingsModal">
+    <!-- AGENT FOUNDRY MODAL (NEW PHASE 5) -->
+    <div class="g5-modal hidden" id="agentFoundryModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content" style="max-width: 800px; border: 1px solid var(--accent-primary);">
+            <div class="modal-header">
+                <h2 style="color:var(--accent-primary);"><span class="icon">🧬</span> AGENT FOUNDRY <span style="font-size:0.6em; opacity:0.7;">// NEURAL FABRICATION</span></h2>
+                <button class="close-modal" id="closeFoundry">×</button>
+            </div>
+            <div class="modal-body" style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                <!-- Left: Identity -->
+                <div class="foundry-section">
+                    <h3 style="border-bottom:1px solid #333; padding-bottom:5px; margin-bottom:15px; color:var(--text-secondary);">IDENTITY MATRIX</h3>
+                    <div class="form-group">
+                        <label>Designation (Name)</label>
+                        <input type="text" class="g5-input" id="foundryName" placeholder="e.g. OMEGA-CODEX">
+                    </div>
+                    <div class="form-group">
+                        <label>Functional Role</label>
+                        <select class="g5-select" id="foundryRole">
+                            <option value="STRATEGIST">Strategist (Reasoning)</option>
+                            <option value="CODER">Technomancer (Code)</option>
+                            <option value="CREATIVE">Visionary (Image/Video)</option>
+                            <option value="ANALYST">Oracle (Data)</option>
+                            <option value="SECURITY">Sentinel (Security)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Hex Color Signature</label>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <input type="color" id="foundryColor" value="#3b82f6" style="background:none; border:none; height:30px; width:30px; cursor:pointer;">
+                            <span id="foundryColorHex" style="font-family:monospace; color:var(--text-secondary);">#3b82f6</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Cognition -->
+                <div class="foundry-section">
+                    <h3 style="border-bottom:1px solid #333; padding-bottom:5px; margin-bottom:15px; color:var(--text-secondary);">COGNITIVE KERNEL</h3>
+                    <div class="form-group">
+                        <label>System Instruction (Prompt)</label>
+                        <textarea class="g5-input" id="foundryPrompt" style="height:150px; font-family:monospace; font-size:12px;" placeholder="Define the agent's prime directive, behavioral constraints, and expertise..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Creativity Index (Temp)</label>
+                        <input type="range" class="g5-range" id="foundryTemp" min="0" max="1" step="0.1" value="0.7">
+                        <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-secondary);">
+                            <span>Precise</span>
+                            <span>Balanced</span>
+                            <span>Wild</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; border-top:1px solid #333; padding-top:20px;">
+                <div style="font-size:11px; color:var(--text-secondary);">
+                    <span>COST: </span><span style="color:var(--accent-primary);">500 COMPUTE CREDITS</span>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-secondary" id="resetFoundry">RESET</button>
+                    <button class="btn btn-primary" id="spawnAgentBtn">🧬 SPAWN NODE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SETTINGS MODAL (EXISTING) -->
+    <div class="g5-modal hidden" id="settingsModal">
         <div class="modal-backdrop"></div>
         <div class="modal-container modal-lg">
             <div class="modal-header">
@@ -2100,6 +2341,53 @@
 
     <!-- SCRIPTS -->
     <!-- SCRIPTS -->
+    <!-- EXTENSION DETAIL MODAL -->
+    <div id="extDetailModal" class="modal-overlay hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content" style="width: 700px; max-width: 90vw;">
+            <div class="modal-header">
+                <span class="modal-title">PACKAGE DETAILS</span>
+                <button class="modal-close" id="closeExtDetail">×</button>
+            </div>
+            <div class="modal-body" style="padding:0;">
+                <!-- Header -->
+                <div style="background:var(--bg-elevated); padding:30px; display:flex; gap:20px; border-bottom:1px solid #333;">
+                    <div id="extDetailIcon" style="font-size:64px;">📦</div>
+                    <div style="flex:1;">
+                        <h2 id="extDetailName" style="margin:0 0 5px 0; font-size:24px; color:var(--text-primary);">Package Name</h2>
+                        <div style="display:flex; gap:10px; font-size:12px; color:var(--text-secondary);">
+                            <span id="extDetailVersion">v1.0.0</span>
+                            <span>•</span>
+                            <span id="extDetailAuthor">Google DeepMind</span>
+                        </div>
+                    </div>
+                    <button id="extDetailAction" class="btn btn-primary">INSTALL</button>
+                </div>
+                
+                <!-- Info -->
+                <div style="padding:30px; display:flex; flex-direction:column; gap:20px;">
+                    <p id="extDetailDesc" style="color:var(--text-secondary); line-height:1.6;">Description goes here.</p>
+                    
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                        <div style="background:#111; padding:15px; border-radius:6px;">
+                            <h4 style="margin:0 0 10px 0; font-size:12px; color:#666;">PERMISSIONS</h4>
+                            <ul id="extDetailPerms" style="margin:0; padding-left:20px; font-size:12px; color:var(--text-primary);">
+                                <li>Read File System</li>
+                            </ul>
+                        </div>
+                         <div style="background:#111; padding:15px; border-radius:6px;">
+                            <h4 style="margin:0 0 10px 0; font-size:12px; color:#666;">DEPENDENCIES</h4>
+                            <ul style="margin:0; padding-left:20px; font-size:12px; color:var(--text-primary);">
+                                <li>G5 Core Kernel</li>
+                                <li>Node.js Runtime</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="assets/js/demo-data.js?v=HACKATHON"></script>
     <script src="assets/js/g5_api.js?v=V_FIX_FINAL"></script>
     <script src="assets/js/g5-os-core.js?v=V_FIX_FINAL"></script>

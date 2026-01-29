@@ -332,6 +332,23 @@ class NeuralNavigator3D {
 
         this.renderer.render(this.scene, this.camera);
     }
+    addNode(nodeData) {
+        console.log('🔮 NeuralNavigator3D: Injecting new atomic node', nodeData);
+        
+        // Add to data
+        this.nodesData.push(nodeData);
+        
+        // Clean up old scene objects
+        if (this.particles) this.scene.remove(this.particles);
+        if (this.lines) this.scene.remove(this.lines);
+        
+        // Re-generate mesh
+        this.nodes = []; // Reset internal nodes state
+        this.createParticles();
+        this.createConnections();
+        
+        console.log(`🔮 NeuralMesh Updated: ${this.nodesData.length} Nodes Active`);
+    }
 }
 
 // Global Initialization

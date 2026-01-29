@@ -142,6 +142,14 @@ const WorkflowEngine = {
             </div>
         `).join('');
 
+        // DYNAMIC EXTENSION INJECTION
+        if (window.hasPython && workflow.id === 'jit-reality') {
+             workflow.steps.splice(3, 0, { id: 'python-calc', name: 'PYTHON SIMULATION', desc: 'Running Monte Carlo analysis...', duration: 2000, cluster: 'intel' });
+        }
+        if (window.hasVision && workflow.id === '5min-agency') {
+             workflow.steps.splice(1, 0, { id: 'vision-scan', name: 'NEURAL VISION', desc: 'Analyzing visual trends...', duration: 2000, cluster: 'research' });
+        }
+
         // Run simulation
         this.runSimulation(workflow.steps, input);
     },
@@ -179,6 +187,9 @@ const WorkflowEngine = {
             // Mark as complete
             stepEl.dataset.status = 'complete';
             stepEl.querySelector('.step-status').textContent = 'COMPLETE';
+            
+            // Audio Ping
+            if (window.G5Audio) window.G5Audio.playTypingSound(); // Use typing sound as subtle step complete click
             
             // Update progress
             elapsed += step.duration;

@@ -152,6 +152,57 @@ class G5AudioController {
         this.enabled = !this.enabled;
         return this.enabled;
     }
+
+    /**
+     * Continuous background hum for "Deep Thinking"
+     */
+    startDrone() {
+        if (!this.enabled || this.droneOsc) return;
+        
+        this.droneOsc = this.ctx.createOscillator();
+        this.droneGain = this.ctx.createGain();
+        
+        this.droneOsc.connect(this.droneGain);
+        this.droneGain.connect(this.masterGain);
+        
+        this.droneOsc.type = 'sawtooth';
+        this.droneOsc.frequency.value = 55; // Low A
+        
+        this.droneGain.gain.setValueAtTime(0, this.ctx.currentTime);
+        this.droneGain.gain.linearRampToValueAtTime(0.05, this.ctx.currentTime + 1);
+        
+        this.droneOsc.start();
+    }
+
+    stopDrone() {
+        if (this.droneOsc) {
+            this.droneGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.5);
+            this.droneOsc.stop(this.ctx.currentTime + 0.5);
+            this.droneOsc = null;
+        }
+    }
+
+    /**
+     * Subtle click for text streaming
+     */
+    playTypingSound() {
+        if (!this.enabled || Math.random() > 0.3) return; // Don't play every letter
+        
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        
+        osc.type = 'triangle';
+        osc.frequency.value = 800 + Math.random() * 200;
+        
+        gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+        
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.03);
+    }
 }
 
 // Singleton Instance
