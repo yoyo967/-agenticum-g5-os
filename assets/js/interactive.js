@@ -305,7 +305,7 @@ class CommandPalette {
                         else G5Audio.toggle();
                         break;
                     case 'enter': 
-                        if (e.shiftKey) window.location.href = 'dashboard.html';
+                        if (e.shiftKey) window.location.href = 'commander.html';
                         break;
                 }
             }
@@ -344,7 +344,7 @@ class CommandPalette {
             case 'goto-capabilities': this.scrollTo('#capabilities'); break;
             case 'goto-architecture': this.scrollTo('#architecture'); break;
             case 'goto-demo': this.scrollTo('#demo'); break;
-            case 'enter-console': window.location.href = 'dashboard.html'; break;
+            case 'enter-console': window.location.href = 'commander.html'; break;
             case 'toggle-sound': G5Audio.toggle(); break;
             case 'share': this.share(); break;
         }

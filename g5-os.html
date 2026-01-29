@@ -138,7 +138,7 @@
     <!-- BOOT OVERLAY V2 (CINEMATIC BIOS) -->
     <div id="boot-overlay" style="position:fixed; inset:0; background:#000; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;">
         <!-- Matrix Rain Background (Simple CSS) -->
-        <div style="position:absolute; inset:0; opacity:0.1; background-image: linear-gradient(0deg, transparent 24%, rgba(32, 255, 77, .3) 25%, rgba(32, 255, 77, .3) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, .3) 75%, rgba(32, 255, 77, .3) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(32, 255, 77, .3) 25%, rgba(32, 255, 77, .3) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, .3) 75%, rgba(32, 255, 77, .3) 76%, transparent 77%, transparent); background-size: 50px 50px;"></div>
+        <div style="position:absolute; inset:0; opacity:0.1; pointer-events: none; background-image: linear-gradient(0deg, transparent 24%, rgba(32, 255, 77, .3) 25%, rgba(32, 255, 77, .3) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, .3) 75%, rgba(32, 255, 77, .3) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(32, 255, 77, .3) 25%, rgba(32, 255, 77, .3) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, .3) 75%, rgba(32, 255, 77, .3) 76%, transparent 77%, transparent); background-size: 50px 50px;"></div>
         
         <!-- CRT Scanline -->
         <div style="position:absolute; inset:0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 2px, 3px 100%; pointer-events: none;"></div>
@@ -157,7 +157,7 @@
             </div>
         </div>
 
-        <button id="boot-btn" onclick="startG5()" style="margin-top:3rem; background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 1rem 4rem; font-family:'JetBrains Mono'; cursor: pointer; transition: all 0.2s; letter-spacing: 2px; text-transform:uppercase; position:relative; overflow:hidden;">
+        <button id="boot-btn" onclick="G5OS.unlockSystem()" style="margin-top:3rem; background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 1rem 4rem; font-family:'JetBrains Mono'; cursor: pointer; transition: all 0.2s; letter-spacing: 2px; text-transform:uppercase; position:relative; overflow:hidden;">
             <span style="position:relative; z-index:2;">[ INITIALIZE SYSTEM ]</span>
             <div class="hover-fill" style="position:absolute; inset:0; background:#4ade80; transform:translateX(-100%); transition:transform 0.3s; z-index:1;"></div>
         </button>
@@ -168,66 +168,10 @@
         </style>
     </div>    
 
-    <script>
-        function startG5() {
-            const overlay = document.getElementById('boot-overlay');
-            const btn = document.getElementById('boot-btn');
-            const logo = document.getElementById('boot-logo-container');
-            const terminal = document.getElementById('boot-terminal');
-            
-            // 1. Unlock Audio
-            try {
-                if (window.G5Audio) {
-                    window.G5Audio.init();
-                    window.G5Audio.playBoot();
-                }
-            } catch(e) { console.log('Audio init failed', e); }
-            
-            // 2. Visual Feedback
-            btn.innerHTML = "<span style='position:relative; z-index:2; color:#000;'>ACCESS GRANTED</span>";
-            btn.querySelector('span').style.color = '#000';
-            btn.style.boxShadow = "0 0 50px #4ade80";
-            document.querySelector('#boot-btn .hover-fill').style.transform = "translateX(0)";
-            
-            // 3. Glitch Explosion
-            logo.style.transform = "scale(1.5)";
-            logo.style.filter = "brightness(2) contrast(1.5)";
-            logo.querySelector('h1').style.textShadow = "-2px 0 red, 2px 0 blue";
-            
-            // Terminal Flash
-            terminal.innerHTML += "<div style='color:#fff; background:#4ade80;'>SYSTEM UNLOCKED</div>";
-            terminal.scrollTop = terminal.scrollHeight;
-
-            // 4. CRT Collapse Effect
-            setTimeout(() => {
-                overlay.style.transition = "all 0.8s cubic-bezier(0.85, 0, 0.15, 1)";
-                overlay.style.transform = "scaleX(1.1) scaleY(0.01)";
-                overlay.style.filter = "brightness(5)";
-                
-                setTimeout(() => {
-                    overlay.style.transform = "scale(0)";
-                    overlay.style.opacity = "0";
-                    setTimeout(() => { overlay.remove(); }, 200);
-                }, 400);
-            }, 1200);
-        }
-        
-        // Auto-click if parameter says so? No, we NEED the click for audio.
-        // But we can Pulse the button.
-    </script>
+    <!-- BOOT SCRIPT MOVED TO CORE.JS -->
 
 
-    <!-- ============================================
-         BOOT SEQUENCE OVERLAY
-         ============================================ -->
-    <div id="bootOverlay" class="boot-overlay">
-        <div class="boot-content">
-            <div class="boot-logo">◆ AGENTICUM G5</div>
-            <div class="boot-terminal" id="bootTerminal">
-                <div class="boot-line">INITIALIZING KERNEL...</div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- ============================================
          TOP BAR - SYSTEM HEADER
@@ -303,16 +247,16 @@
             <!-- MODULE SELECTOR -->
             <div class="panel-section">
                 <div class="section-header">
-                    <span class="section-icon">📁</span>
-                    <span>MODULES</span>
-                    <button class="section-action" title="Add Module">+</button>
+                    <span class="section-icon">🧠</span>
+                    <span>NEURAL CLUSTERS</span>
+                    <button class="section-action" title="Add Node">+</button>
                 </div>
                 <div class="module-tree" id="moduleTree">
                     <!-- APEX NODE -->
                     <div class="tree-item folder open" data-cluster="apex">
                         <span class="tree-toggle">▼</span>
                         <span class="tree-icon">👑</span>
-                        <span class="tree-label">APEX_NODE</span>
+                        <span class="tree-label">APEX_NODE (Brain)</span>
                     </div>
                     <div class="tree-children">
                         <div class="tree-item file active" data-node="SN-00">
@@ -2388,11 +2332,12 @@
         </div>
     </div>
 
-    <script src="assets/js/demo-data.js?v=HACKATHON"></script>
-    <script src="assets/js/g5_api.js?v=V_FIX_FINAL"></script>
-    <script src="assets/js/g5-os-core.js?v=V_FIX_FINAL"></script>
+    <!-- CORE LOGIC (VERSION 6.0) -->
+    <script src="assets/js/jury-mode.js?v=RELEASE_CANDIDATE"></script>
+    <script src="assets/js/g5_api.js?v=RELEASE_CANDIDATE"></script>
+    <script src="assets/js/g5-os-core.js?v=RELEASE_CANDIDATE"></script>
     <!-- AUDIO SYSTEM -->
-    <script src="assets/js/audio-system.js?v=ATOMIC"></script>
+    <script src="assets/js/audio-system.js?v=RELEASE_CANDIDATE"></script>
     
     <!-- 3D NAVIGATOR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

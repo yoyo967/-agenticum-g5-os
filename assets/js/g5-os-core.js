@@ -84,40 +84,76 @@ const G5OS = {
     },
 
     runBootSequence() {
-        const terminal = document.getElementById('bootTerminal');
-        const overlay = document.getElementById('bootOverlay');
-        if (!terminal || !overlay) {
-            if (overlay) overlay.remove(); 
+        // FIXED: Correct ID references to match HTML
+        const terminal = document.getElementById('boot-terminal');
+        const overlay = document.getElementById('boot-overlay');
+        
+        if (!terminal) {
+            console.warn('[BOOT] Terminal not found');
             return;
         }
         
+        // Clear existing static lines if any (optional, but cleaner)
+        // terminal.innerHTML = ''; 
+
         const lines = [
             'LOADING KERNEL MODULES...',
             'MOUNTING G5 HYPERVISOR...',
             'CONNECTING TO 52-NODE CLUSTER...',
             'VERIFYING SECURITY TOKENS...',
-            'SYSTEM READY.'
+            'SYSTEM READY. WAITING FOR AUTHORIZATION...'
         ];
         
         let i = 0;
         const interval = setInterval(() => {
             if (i >= lines.length) {
                 clearInterval(interval);
-                setTimeout(() => {
-                    overlay.classList.add('fade-out');
-                    setTimeout(() => overlay.remove(), 1000);
-                }, 500);
+                // REMOVED: Auto-remove overlay. Now waits for user click.
                 return;
             }
             
             const line = document.createElement('div');
-            line.className = 'boot-line';
-            line.style.opacity = '0';
-            line.style.animation = 'typeLine 0.1s forwards';
+            // Use simple styles for reliability
+            line.style.color = '#4ade80';
+            line.style.fontFamily = 'monospace';
+            line.style.margin = '2px 0';
             line.textContent = `> ${lines[i]}`;
+            
             terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
             i++;
         }, 500); 
+    },
+
+    unlockSystem() {
+        console.log('[SYSTEM] UNLOCK SEQUENCE INITIATED');
+        const overlay = document.getElementById('boot-overlay');
+        const btn = document.getElementById('boot-btn');
+        
+        // 1. Audio
+        if (window.G5Audio) {
+            window.G5Audio.playBoot();
+        }
+
+        // 2. Visual Button Feedback
+        if(btn) {
+            btn.innerHTML = "<span style='position:relative; z-index:2; color:#000;'>ACCESS GRANTED</span>";
+            btn.style.boxShadow = "0 0 50px #4ade80";
+            btn.style.background = "#4ade80";
+            btn.style.color = "#000";
+        }
+
+        // 3. Remove Overlay after delay
+        setTimeout(() => {
+            if (overlay) {
+                overlay.style.transition = "opacity 1s ease";
+                overlay.style.opacity = "0";
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    overlay.remove(); // Cleanup
+                }, 1000);
+            }
+        }, 1500);
     },
 
     // ============================================
@@ -1029,7 +1065,29 @@ const G5OS = {
                 break;
             case 'DEPLOY':
                 this.logToTerminal('[DEPLOY] Initiating deployment sequence...', 'system');
-                setTimeout(() => this.logToTerminal('[DEPLOY] ✓ Deployment complete', 'success'), 1500);
+                this.logToTerminal('>> Target: Google Cloud Run (Region: europe-west3)', 'info');
+                
+                setTimeout(() => {
+                    this.logToTerminal('>> Bundling assets (Webpack 5)...', 'info');
+                }, 800);
+                
+                setTimeout(() => {
+                    this.logToTerminal('>> optimizing neural weights (Quantization: INT8)...', 'info');
+                }, 1600);
+                
+                setTimeout(() => {
+                    this.logToTerminal('>> Verifying Integrity shasum...', 'info');
+                }, 2400);
+
+                setTimeout(() => {
+                    this.logToTerminal('>> Pushing container to Artifact Registry...', 'info');
+                }, 3200);
+
+                setTimeout(() => {
+                    this.logToTerminal('[SUCCESS] Deployment Complete.', 'success');
+                    this.logToTerminal('>> Live URL: https://tutorai-e39uu.web.app', 'success');
+                    if (window.G5Audio) window.G5Audio.playAccessGranted();
+                }, 4500);
                 break;
             case 'PYTHON':
                 if (window.hasPython) {
@@ -1053,6 +1111,14 @@ const G5OS = {
                     }, 800);
                 } else {
                     this.logToTerminal('[ERROR] Neural Vision Ext. required.', 'error');
+                }
+                break;
+            case 'DEMO':
+            case 'JURY':
+                if (window.JuryMode) {
+                    window.JuryMode.init();
+                } else {
+                    this.logToTerminal('[ERROR] Jury Mode module not loaded.', 'error');
                 }
                 break;
             default:

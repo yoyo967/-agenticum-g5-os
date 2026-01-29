@@ -14,10 +14,10 @@
 
 ## 🌍 LIVE ACCESS
 
-| Environment          | URL                                                                                          |
-| -------------------- | -------------------------------------------------------------------------------------------- |
-| **Landing Page**     | [https://tutorai-e39uu.web.app](https://tutorai-e39uu.web.app)                               |
-| **Hegemony Console** | [https://tutorai-e39uu.web.app/dashboard.html](https://tutorai-e39uu.web.app/dashboard.html) |
+| Environment          | URL                                                                                  |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| **Landing Page**     | [https://tutorai-e39uu.web.app](https://tutorai-e39uu.web.app)                       |
+| **Hegemony Console** | [https://tutorai-e39uu.web.app/g5-os.html](https://tutorai-e39uu.web.app/g5-os.html) |
 
 ---
 
@@ -63,16 +63,17 @@
 
 ## 🖥️ DASHBOARD (HEGEMONY CONSOLE)
 
-### G5 OS Features
+### G5 OS Features (v6.0 Atomic)
 
-| Component                   | Description                            |
-| --------------------------- | -------------------------------------- |
-| **Terminal Interface**      | Full command-line with 15+ commands    |
-| **52-Node Navigator**       | Interactive node cluster visualization |
-| **Chain-of-Thought Viewer** | Real-time reasoning trace              |
-| **Asset Vault**             | Upload and preview generated assets    |
-| **Omni-Preview Window**     | Universal file previewer               |
-| **Jury Mode Protocol**      | Automated hackathon demo               |
+| Component              | Description                             |
+| ---------------------- | --------------------------------------- |
+| **Terminal Interface** | 15+ Commands including `PYTHON` & `GIT` |
+| **52-Node 3D Fabric**  | Interactive neural mesh visualization   |
+| **Agent Foundry**      | Fabricate custom AI nodes (Manager)     |
+| **Neural Playground**  | Sandbox for prompt engineering          |
+| **Extensions Matrix**  | "App Store" for adding capabilities     |
+| **Jury Mode Protocol** | Automated hackathon demo engine         |
+| **Audio Intelligence** | Procedural sound synthesis              |
 
 ---
 
@@ -98,41 +99,27 @@ Type these into the dashboard terminal:
 
 ### System Commands
 
-| Command           | Description                    |
-| ----------------- | ------------------------------ |
-| `HELP`            | Display all available commands |
-| `START_SYSTEM`    | Initialize all 52 nodes        |
-| `RUN_DIAGNOSTICS` | Execute system diagnostics     |
-| `STATUS`          | Show current system status     |
-| `CLEAR`           | Clear terminal output          |
+| Command  | Description                    |
+| -------- | ------------------------------ |
+| `HELP`   | Display all available commands |
+| `START`  | Initialize all 52 nodes        |
+| `STATUS` | Show current system status     |
+| `CLEAR`  | Clear terminal output          |
+| `DEPLOY` | Simulate Deployment Sequence   |
 
-### Simulation Commands
+### Extension Commands (Unlockable)
 
-| Command       | Description                         |
-| ------------- | ----------------------------------- |
-| `DEPLOY_DUNE` | DUNE cinematic marketing simulation |
-| `CRISIS_MODE` | Crisis management protocol          |
-| `VIRAL_LOOP`  | Viral marketing optimization        |
-
-### Node Commands
-
-| Command       | Description           |
-| ------------- | --------------------- |
-| `NODES`       | List all active nodes |
-| `NODE_STATUS` | Detailed node status  |
-
-### Asset Commands
-
-| Command    | Description                   |
-| ---------- | ----------------------------- |
-| `ASSETS`   | List assets in vault          |
-| `GENERATE` | Generate new marketing assets |
+| Command  | Requirement                      | Description       |
+| -------- | -------------------------------- | ----------------- |
+| `PYTHON` | **Python Interpreter** Extension | Interactive Shell |
+| `SCAN`   | **Neural Vision** Extension      | Analyze Content   |
+| `GIT`    | **DevTools** Extension           | Version Control   |
 
 ### Special Modes
 
-| Command          | Description                           |
-| ---------------- | ------------------------------------- |
-| **🏆 JURY MODE** | Full hackathon demo sequence (button) |
+| Command     | Description                         |
+| ----------- | ----------------------------------- |
+| **🏆 JURY** | **Run the "Perfect Demo" Sequence** |
 
 ---
 
@@ -254,17 +241,18 @@ Read the full [AGENTICUM G5 HANDBOOK](AGENTICUM_G5_HANDBOOK.md) to understand:
 ```
 agenticum-g5-os/
 ├── index.html                 # Landing Page
-├── dashboard.html             # Hegemony Console
+├── g5-os.html                 # Hegemony Console (Dashboard)
 ├── README.md                  # This file
 ├── AGENTICUM_G5_HANDBOOK.md   # Philosophy & Vision
 ├── assets/
 │   ├── css/
-│   │   ├── dashboard.css      # Console Styling
+│   │   ├── g5-os.css          # Console Styling
 │   │   ├── landing-enterprise.css
 │   │   └── million-dollar-v2.css  # Premium Design System
 │   └── js/
-│       ├── dashboard.js       # Console Logic
-│       ├── gemini-integration.js
+│       ├── g5-os-core.js      # Console Logic
+│       ├── jury-mode.js       # The "Showtime" Engine
+│       ├── audio-system.js    # Procedural Audio
 │       └── million-dollar-v2.js   # Premium Features
 ├── firebase.json              # Hosting Config
 └── .firebaserc               # Project Config

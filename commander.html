@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGENTICUM G5 | HEGEMONY CONSOLE</title>
+    
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- STYLES -->
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/dashboard-2030.css">
+    <link rel="stylesheet" href="assets/css/immersive.css">
+    
+    <style>
+        body { margin: 0; background: #050505; color: white; overflow: hidden; }
+    </style>
+</head>
+<body class="dashboard-body obsidian-theme">
+
+    <!-- CONSOLE HEADER -->
+    <header class="console-header">
+        <div class="header-left">
+            <a href="index.html" class="console-logo">
+                <span class="logo-text">AGENTICUM</span>
+                <span class="logo-version">G5</span>
+            </a>
+            <div class="system-badge">
+                <span class="badge-dot pulsing"></span>
+                <span class="badge-text">SYSTEM ONLINE</span>
+            </div>
+        </div>
+        
+        <div class="header-center">
+            <div class="global-status">
+                <div class="status-item">
+                    <span class="status-label">NODES</span>
+                    <span class="status-value live">52</span>
+                </div>
+                <div class="status-divider"></div>
+                <div class="status-item">
+                    <span class="status-label">LATENCY</span>
+                    <span class="status-value online" id="latency-display">12ms</span>
+                </div>
+                <div class="status-divider"></div>
+                <div class="status-item">
+                    <span class="status-label">MODE</span>
+                    <span class="status-value">COMMANDER</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <div class="clock-display">
+                <span class="clock-label">FRANKFURT TIME</span>
+                <span class="clock-value" id="system-clock">12:00:00</span>
+            </div>
+             <div class="operator-badge">
+                <span class="operator-icon">👤</span>
+                <div class="operator-info">
+                    <span class="operator-name">YILDIRIM</span>
+                    <span class="operator-level">LEVEL 5 ACCESS</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONSOLE LAYOUT -->
+    <main class="console-layout">
+        
+        <!-- COMMANDER INTERFACE (DEFAULT VIEW) -->
+        <div id="core-view" class="commander-interface">
+            <div class="commander-core-view">
+                <div class="core-center pulsing">
+                    <span class="core-logo">G5</span>
+                    <div class="orbit-ring r1"></div>
+                    <div class="orbit-ring r2"></div>
+                    <div class="orbit-ring r3"></div>
+                </div>
+                
+                <div class="commander-input-container">
+                    <div class="input-wrapper">
+                        <span class="prompt-symbol">➜</span>
+                        <input type="text" id="commander-input" class="commander-input" placeholder="Enter strategic command vector..." autocomplete="off">
+                        <button id="voice-command-btn" class="mic-btn" title="Voice Input">🎙️</button>
+                        <button id="execute-command-btn" class="execute-btn">EXECUTE</button>
+                    </div>
+                    
+                    <div id="voice-status" class="voice-status hidden">LISTENING...</div>
+                    
+                    <div class="input-suggestions">
+                        <button class="suggestion" data-cmd="Design a viral campaign for SaaS launch">🚀 Viral Campaign</button>
+                        <button class="suggestion" data-cmd="Analyze competitor vulnerabilities">🔍 Competitor Intel</button>
+                        <button class="suggestion" data-cmd="Generate 50 ad copy variations">✍️ Batch Copy</button>
+                        <button class="suggestion" data-cmd="Run full Red Team simulation">🛡️ Red Team</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WORKFLOW VISUALIZER (HIDDEN) -->
+        <div id="workflow-view" class="workflow-visualizer hidden">
+            <div class="workflow-status">
+                <span class="wf-label">ACTIVE_WORKFLOW:</span>
+                <span id="active-workflow-name" class="wf-name">WORKFLOW_ID_Default</span>
+                <span class="wf-progress">PROCESSING...</span>
+            </div>
+            <div id="node-pipeline" class="node-pipeline">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+        
+        <!-- NEURAL DIAGNOSTICS (HIDDEN) -->
+        <div id="neural-view" class="neural-diagnostics-layer hidden">
+            <div id="dashboard-neural-container"></div>
+            <div class="neural-overlay-stats">
+                 <div class="n-stat">Active Nodes: 52</div>
+                 <div class="n-stat">Synaptic Density: 98%</div>
+                 <div class="n-stat">Backprop Status: NOMINAL</div>
+            </div>
+        </div>
+
+        <!-- ASSET VAULT (RESULTS) -->
+        <section class="asset-vault-section">
+            <div class="vault-header">
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <h4>// CLASSIFIED_VAULT</h4>
+                    <div class="vault-tools">
+                        <button class="tool-btn action" onclick="document.getElementById('file-upload-input').click()">+ UPLOAD</button>
+                        <input type="file" id="file-upload-input" hidden onchange="G5Dashboard.handleUpload(this)">
+                    </div>
+                </div>
+                
+                <div class="vault-filters">
+                    <span class="filter active" data-filter="all">ALL</span>
+                    <span class="filter" data-filter="video">VIDEO</span>
+                    <span class="filter" data-filter="image">IMAGE</span>
+                    <span class="filter" data-filter="text">TEXT</span>
+                </div>
+            </div>
+            
+            <div id="asset-vault-grid" class="vault-grid">
+               <!-- Injected via JS -->
+            </div>
+            
+            <!-- SYSTEM LOG STREAM -->
+             <div class="log-stream-container compact-log">
+                <div class="log-stream" id="log-stream">
+                    <!-- Logs go here -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODALS -->
+    
+    <!-- NODE CONFIG MODAL -->
+    <div id="node-config-modal" class="overlay-modal hidden">
+        <div class="modal-panel">
+            <div class="modal-header">
+                <h3 id="modal-node-id">// NODE_CONFIG</h3>
+                <button class="modal-close" onclick="G5Dashboard.closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="config-group">
+                    <label>INSTRUCTION_VECTOR</label>
+                    <textarea class="config-textarea">You are an autonomous agent specialized in...</textarea>
+                </div>
+                <div class="config-group">
+                    <label>TEMPERATURE_SETTING</label>
+                    <input type="range" class="config-range">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="G5Dashboard.closeModal()">CANCEL</button>
+                <button class="btn-primary" onclick="G5Dashboard.saveNodeConfig()">SAVE CONFIG</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ASSET PREVIEW MODAL -->
+    <div id="asset-preview-modal" class="overlay-modal hidden">
+        <div class="modal-panel large-window">
+             <div class="modal-header">
+                <h3 id="preview-filename">FILENAME</h3>
+                <div class="window-controls">
+                    <div class="win-btn min"></div>
+                    <div class="win-btn max"></div>
+                    <div class="win-btn close" onclick="document.getElementById('asset-preview-modal').classList.add('hidden')"></div>
+                </div>
+            </div>
+            <div class="preview-body" id="preview-content-area">
+                <!-- Content -->
+            </div>
+             <div class="editor-footer">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span id="preview-meta" class="meta-info">METADATA</span>
+                    <div class="modal-actions">
+                        <button class="btn-secondary" onclick="G5Dashboard.saveAssetChanges()">SAVE EDIT</button>
+                        <button class="btn-primary" onclick="G5Dashboard.downloadCurrentAsset()">DOWNLOAD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="assets/js/neural-3d.js"></script> <!-- Optional 3D -->
+    <script src="assets/js/dashboard-core.js"></script>
+
+</body>
+</html>

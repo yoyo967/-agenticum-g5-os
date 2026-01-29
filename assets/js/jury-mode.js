@@ -1,316 +1,132 @@
 /**
- * AGENTICUM G5 | JURY MODE / HACKATHON DEMO SEQUENCE V5.0 (ENTERPRISE)
+ * AGENTICUM G5 | JURY MODE / HACKATHON DEMO SEQUENCE V6.0 (ATOMIC)
  * 
- * Complete rewrite for robust execution without dependencies on missing elements.
- * Designed for enterprise demo presentations.
+ * "The Perfect Demo" Engine.
+ * Auto-drives the OS through a "Showtime" sequence for the judges.
  */
 
-// Demo Assets
-const DEMO_ASSETS = [
-    { 
-        id: 'MANIFEST_V5', 
-        name: 'MANIFESTO_V5.md', 
-        type: 'text', 
-        content: 'The Architecture of Will: We license a civilization.\n\nWe have pulverized the era of tools. AGENTICUM G5 is not a chatbot. It is an industrial response to the fragmentation of the creative economy.\n\nBy leveraging Gemini 3 Pro\'s 2M token context, we create an "Infinite Present" where strategy and execution exist simultaneously.',
-        size: '4.2 KB'
-    },
-    { 
-        id: 'VEO_PROMPT', 
-        name: 'VEO_CINEMATIC.prompt', 
-        type: 'video', 
-        content: 'STYLE: Cinematic Noir, Obsidian & Chrome aesthetic\nSCENE: A single obsidian shard orbits slowly in a void of digital particles\nMOOD: Industrial, powerful, inevitable\nDURATION: 30 seconds\nRESOLUTION: 4K HDR',
-        size: '1.8 KB'
-    },
-    { 
-        id: 'SOCIAL_PACK', 
-        name: 'VIRAL_HOOKS.json', 
-        type: 'text', 
-        content: '{\n  "hooks": [\n    "Don\'t hire an agency. License a civilization.",\n    "52 AI nodes. One objective. Total dominance.",\n    "The infrastructure is the prophecy."\n  ],\n  "hashtags": ["#GeminiHackathon", "#AgenticAI", "#AGENTICUM"]\n}',
-        size: '0.9 KB'
-    },
-    {
-        id: 'IMAGEN_PACK',
-        name: 'VISUAL_ASSETS.zip',
-        type: 'image',
-        content: 'Collection of 12 Imagen 3 generated visuals:\n- Hero banners (3x)\n- Social media cards (6x)\n- Email headers (3x)\nStyle: Obsidian & Chrome aesthetic',
-        size: '24.6 MB'
-    }
-];
+window.JuryMode = {
+    active: false,
+    
+    // DEMO CONFIG
+    assets: [
+        { id: 'MAN_V5', type: 'text', name: 'MANIFESTO_V5.md', size: '4.2 KB', content: 'The Architecture of Will: We license a civilization.\n\nWe have pulverized the era of tools. AGENTICUM G5 is not a chatbot. It is an industrial response to the fragmentation of the creative economy.\n\nBy leveraging Gemini 3 2M context, we create an "Infinite Present".' },
+        { id: 'VEO_01', type: 'video', name: 'VEO_CINEMATIC.mp4', size: '420 MB', content: 'https://example.com/placeholder-video.mp4' },
+        { id: 'IMG_01', type: 'image', name: 'IMAGEN_GENERATION_01.png', size: '12 MB', content: 'https://example.com/placeholder-image.png' }
+    ],
 
-// Reasoning sequence
-const REASONING_SEQUENCE = [
-    { 
-        node: 'SN-00', 
-        role: 'ORCHESTRATOR', 
-        action: 'Initializing cognitive pipeline',
-        detail: 'Loading 2M token context window...'
-    },
-    { 
-        node: 'RA-01', 
-        role: 'AUTHORITY_AUDITOR', 
-        action: 'Scanning competition parameters',
-        detail: 'Google DeepMind Gemini API Hackathon criteria loaded'
-    },
-    { 
-        node: 'SP-99', 
-        role: 'HEGEMONY_MATRIX', 
-        action: 'Calculating dominance vector',
-        detail: 'Objective: Maximum jury impact'
-    },
-    { 
-        node: 'CC-01', 
-        role: 'COPY_CHIEF', 
-        action: 'Generating manifesto content',
-        detail: '"The Perfect Twin" narrative synthesized'
-    },
-    { 
-        node: 'CC-06', 
-        role: 'VIDEO_DIRECTOR', 
-        action: 'Queuing Veo 3.1 render pipeline',
-        detail: 'Cinematic noir sequence prepared'
-    },
-    { 
-        node: 'RA-52', 
-        role: 'RED_TEAM', 
-        action: 'Adversarial validation',
-        detail: 'Strategy stress-tested and approved'
-    }
-];
+    /**
+     * INITIATE THE "PERFECT DEMO"
+     */
+    init: async function() {
+        if (this.active) return;
+        this.active = true;
+        console.log("🏆 G5 >> INITIATING JURY MODE V6.0");
 
-/**
- * Main Jury Mode initialization function
- */
-async function initHackathonDemo() {
-    console.log("🏆 G5 >> INITIATING JURY MODE V5.0");
-    
-    const terminal = document.getElementById('terminal-output');
-    
-    // Clear terminal if exists
-    if (terminal) {
-        terminal.innerHTML = '';
-    }
-    
-    // Write intro
-    writeToTerminal('═══════════════════════════════════════════════════════', 'system');
-    writeToTerminal('   JURY MODE INITIATED :: HACKATHON DEMO SEQUENCE', 'system');
-    writeToTerminal('   Target: Google DeepMind Gemini API Hackathon 2026', 'system');
-    writeToTerminal('═══════════════════════════════════════════════════════', 'system');
-    writeToTerminal('', 'info');
-    
-    // Log to system
-    if (window.dashboardInstance) {
-        window.dashboardInstance.logSystem('🏆 JURY MODE ACTIVATED');
-    }
-    
-    // Run reasoning trace
-    await runJuryReasoningTrace();
-    
-    // Generate assets
-    await generateJuryAssets();
-    
-    // Show completion
-    showJuryResults();
-}
-
-/**
- * Run the reasoning trace animation
- */
-async function runJuryReasoningTrace() {
-    writeToTerminal('Initiating 52-node reasoning fabric...', 'info');
-    writeToTerminal('', 'info');
-    
-    for (const step of REASONING_SEQUENCE) {
-        // Animate node indicator
-        writeToTerminal(`[${step.node}] ${step.role}`, 'node');
-        writeToTerminal(`  → ${step.action}`, 'info');
-        writeToTerminal(`    ${step.detail}`, 'info');
-        
-        // Play sound if available
-        if (window.dashboardInstance) {
-            window.dashboardInstance.playSound('open');
+        // 1. CLEAR & PREPARE
+        if (window.G5OS) {
+            window.G5OS.clearTerminal();
+            window.G5OS.logToTerminal('════════════════════════════════════════', 'system');
+            window.G5OS.logToTerminal('   JURY MODE INITIATED :: HACKATHON 2026', 'system');
+            window.G5OS.logToTerminal('════════════════════════════════════════', 'system');
         }
         
-        // Wait for effect
-        await wait(800);
-    }
-    
-    writeToTerminal('', 'info');
-    writeToTerminal('✓ All 52 nodes synchronized', 'success');
-    writeToTerminal('✓ Chain-of-thought complete', 'success');
-    writeToTerminal('', 'info');
-}
+        if (window.G5Audio) window.G5Audio.playBoot();
 
-/**
- * Generate and display demo assets
- */
-async function generateJuryAssets() {
-    writeToTerminal('Generating GENESIS campaign assets...', 'info');
-    writeToTerminal('', 'info');
-    
-    for (const asset of DEMO_ASSETS) {
-        writeToTerminal(`  [${asset.type.toUpperCase()}] ${asset.name} (${asset.size})`, 'success');
+        // 2. NARRATIVE INJECTION
+        await this.typeToTerminal('TARGET: GOOGLE DEEPMIND JURY');
+        await this.typeToTerminal('OBJECTIVE: DEMONSTRATE "ARCHITECTURE OF WILL"');
+        await this.wait(1000);
+
+        // 3. EXECUTE WORKFLOW (SIMULATED)
+        await this.typeToTerminal('>> INITIALIZING 5-MINUTE AGENCY PIPELINE...');
         
-        // Add to dashboard vault if available
-        if (window.dashboardInstance) {
-            window.dashboardInstance.assets.unshift({
-                id: asset.id,
-                type: asset.type,
-                title: asset.name,
-                date: new Date().toLocaleTimeString(),
-                data: asset.content,
-                size: asset.size
+        // Open Workflow Modal Programmatically
+        if (window.WorkflowEngine) {
+            window.WorkflowEngine.start('5min-agency');
+            // Mock Input
+            document.getElementById('wfmInput').value = "CLIENT: TechCorp | GOAL: Dominate Q3 Market | TONE: Aggressive Futurism";
+            
+            await this.wait(1500);
+            
+            // Click Execute
+            window.WorkflowEngine.execute();
+        }
+
+        // 4. SYNCED AUDIO/VISUALS DURING WORKFLOW
+        // We let the workflow engine run for a bit (it takes ~10s total)
+        await this.wait(2000);
+        if (window.G5Audio) window.G5Audio.startDrone();
+        
+        // Artificial "Moments of Awe"
+        if (window.G5OS) window.G5OS.showToast('info', 'DeepMind Gemini 2M Context Loaded');
+        await this.wait(3000);
+        
+        if (window.G5OS) window.G5OS.showToast('info', 'Veo 2 Video Generation Active');
+        await this.wait(3000);
+
+        if (window.G5Audio) window.G5Audio.stopDrone();
+        if (window.G5OS) window.G5OS.showToast('success', 'Campaign Generation Complete');
+        if (window.G5Audio) window.G5Audio.playAccessGranted();
+
+        // 5. ASSET REVEAL
+        await this.wait(1000);
+        window.WorkflowEngine.close();
+        
+        await this.typeToTerminal('>> ACCESSING ASSET VAULT...');
+        // Simulate populating vault
+        this.populateVault();
+        
+        // 6. FINALE
+        this.showFinaleModal();
+        this.active = false;
+    },
+
+    /**
+     * Helper: Typewriter effect for terminal
+     */
+    typeToTerminal: async function(text) {
+        if (!window.G5OS) return;
+        window.G5OS.logToTerminal(text, 'input');
+        if (window.G5Audio) window.G5Audio.playTypingSound();
+        await this.wait(600);
+    },
+
+    /**
+     * Helper: Populate UI Vault
+     */
+    populateVault: function() {
+        const vault = document.getElementById('vault-list');
+        if (vault) {
+            vault.innerHTML = ''; // clear
+            this.assets.forEach(asset => {
+                const div = document.createElement('div');
+                div.className = 'vault-item';
+                div.innerHTML = `<span style="color:var(--accent-primary)">[${asset.type.toUpperCase()}]</span> ${asset.name} <span style="opacity:0.5">(${asset.size})</span>`;
+                div.onclick = () => alert(`Previewing ${asset.name}... (Simulated)`);
+                vault.appendChild(div);
             });
         }
-        
-        await wait(400);
-    }
-    
-    // Refresh vault display
-    if (window.dashboardInstance) {
-        window.dashboardInstance.renderVault();
-    }
-    
-    writeToTerminal('', 'info');
-    writeToTerminal('═══════════════════════════════════════════════════════', 'system');
-    writeToTerminal('   GENESIS CAMPAIGN COMPLETE', 'system');
-    writeToTerminal('   Assets available in ASSET_VAULT', 'system');
-    writeToTerminal('═══════════════════════════════════════════════════════', 'system');
-    
-    if (window.dashboardInstance) {
-        window.dashboardInstance.playSound('success');
-    }
-}
+    },
 
-/**
- * Show the completion modal
- */
-function showJuryResults() {
-    // Create overlay
-    const overlay = document.createElement('div');
-    overlay.className = 'jury-results-overlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.85);
-        backdrop-filter: blur(8px);
-        z-index: 25000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        animation: fadeIn 0.3s ease;
-    `;
-    
-    overlay.innerHTML = `
-        <div style="
-            background: var(--bg-panel, #12151a);
-            border: 1px solid var(--border-color, #2a2e36);
-            border-radius: 12px;
-            padding: 2.5rem;
-            max-width: 600px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        ">
-            <div style="
-                font-size: 3rem;
-                margin-bottom: 1rem;
-            ">🏆</div>
-            
-            <h2 style="
-                font-family: var(--font-heading, 'Rajdhani', sans-serif);
-                font-size: 1.8rem;
-                color: var(--accent-primary, #4a9eff);
-                margin-bottom: 1rem;
-                letter-spacing: 2px;
-            ">GENESIS CAMPAIGN READY</h2>
-            
-            <p style="
-                color: var(--text-secondary, #9aa0aa);
-                font-size: 1rem;
-                margin-bottom: 2rem;
-                line-height: 1.6;
-            ">
-                The 52-node reasoning fabric has completed the GENESIS campaign.<br>
-                All assets have been transferred to your <strong>ASSET_VAULT</strong>.
-            </p>
-            
-            <div style="
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-                margin-bottom: 2rem;
-            ">
-                <div style="
-                    background: rgba(74, 158, 255, 0.08);
-                    border: 1px solid rgba(74, 158, 255, 0.2);
-                    padding: 1rem;
-                    border-radius: 8px;
-                ">
-                    <div style="font-size: 1.5rem; color: var(--accent-primary, #4a9eff); font-weight: 700;">4</div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary, #9aa0aa); letter-spacing: 1px;">ASSETS GENERATED</div>
-                </div>
-                <div style="
-                    background: rgba(52, 211, 153, 0.08);
-                    border: 1px solid rgba(52, 211, 153, 0.2);
-                    padding: 1rem;
-                    border-radius: 8px;
-                ">
-                    <div style="font-size: 1.5rem; color: var(--accent-success, #34d399); font-weight: 700;">6</div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary, #9aa0aa); letter-spacing: 1px;">NODES ACTIVATED</div>
+    /**
+     * Helper: Finale Modal
+     */
+    showFinaleModal: function() {
+        const modal = document.createElement('div');
+        modal.innerHTML = `
+            <div style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.5s;">
+                <div style="text-align:center; color:#fff; font-family:'Rajdhani';">
+                    <h1 style="font-size:4rem; color:#4ade80; text-shadow:0 0 20px #4ade80; margin-bottom:1rem;">DEMO COMPLETE</h1>
+                    <p style="font-family:'JetBrains Mono'; color:#888;">AGENTICUM G5 // RELEASING CONTROL</p>
+                    <button onclick="this.parentElement.parentElement.remove()" style="margin-top:2rem; padding:1rem 2rem; background:transparent; border:1px solid #4ade80; color:#4ade80; cursor:pointer;">CLOSE</button>
                 </div>
             </div>
-            
-            <button onclick="this.parentElement.parentElement.remove()" style="
-                background: var(--accent-primary, #4a9eff);
-                color: white;
-                border: none;
-                padding: 0.75rem 2rem;
-                font-family: var(--font-heading, 'Rajdhani', sans-serif);
-                font-size: 1rem;
-                font-weight: 600;
-                letter-spacing: 1px;
-                border-radius: 6px;
-                cursor: pointer;
-                transition: background 0.2s;
-            " onmouseover="this.style.background='#5eaaff'" onmouseout="this.style.background='var(--accent-primary, #4a9eff)'">
-                VIEW ASSETS IN VAULT
-            </button>
-        </div>
-    `;
-    
-    document.body.appendChild(overlay);
-    
-    // Close on background click
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-            overlay.remove();
-        }
-    });
-}
+        `;
+        document.body.appendChild(modal);
+    },
 
-// Ensure wait function exists
-if (!window.wait) {
-    window.wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-}
+    wait: (ms) => new Promise(resolve => setTimeout(resolve, ms))
+};
 
-// Ensure activateNode/deactivateNode exist (for backwards compatibility)
-if (!window.activateNode) {
-    window.activateNode = (nodeId) => console.log(`[G5] Node ${nodeId} activated`);
-}
-
-if (!window.deactivateNode) {
-    window.deactivateNode = (nodeId) => console.log(`[G5] Node ${nodeId} deactivated`);
-}
-
-// Global visualizer stub for backwards compatibility
-if (!window.visualizer) {
-    window.visualizer = { triggerPulse: () => {} };
-}
-
-// Expose globally
-window.initHackathonDemo = initHackathonDemo;
-
-console.log("✅ G5 JURY MODE V5.0 LOADED");
+console.log("🏆 JURY MODE ENGINE V6.0 LOADED");

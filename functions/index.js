@@ -120,7 +120,7 @@ function selectNodes(command) {
 // MAIN FUNCTION: AGENTIC SWARM
 // ============================================
 exports.agenticSwarm = onRequest({ 
-  secrets: ["GEMINI_API_KEY"],
+  // secrets: ["GEMINI_API_KEY"], // Disabled for initial deployment
   cors: true,
   maxInstances: 10
 }, async (req, res) => {
