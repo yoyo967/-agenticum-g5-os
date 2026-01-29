@@ -758,3 +758,52 @@
     gap: 1rem;
 }
 
+/* ============================================
+   FEATURED VIEW BUTTON (GLITCH STYLE)
+   ============================================ */
+.featured-btn {
+    position: relative;
+    background: rgba(0, 243, 255, 0.1) !important;
+    border: 1px solid var(--accent-teal) !important;
+    color: var(--accent-teal) !important;
+    font-weight: bold;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+    animation: btn-pulse 2s infinite;
+}
+
+.featured-btn:hover {
+    background: var(--accent-teal) !important;
+    color: black !important;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
+    transform: scale(1.05);
+}
+
+.btn-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.featured-btn:active .btn-glow {
+    opacity: 0.3;
+    animation: ripple 0.4s linear;
+}
+
+@keyframes btn-pulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); border-color: rgba(0, 243, 255, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(0, 243, 255, 0.4); border-color: rgba(0, 243, 255, 1); }
+}
+
+@keyframes ripple {
+    0% { transform: scale(0); opacity: 0.5; }
+    100% { transform: scale(2); opacity: 0; }
+}
+

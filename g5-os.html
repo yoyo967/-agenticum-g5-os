@@ -8,10 +8,133 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/g5-os.css?v=OS_V3">
+    <link rel="stylesheet" href="assets/css/g5-os.css">
+    <style>
+        /* DEMO SPOTLIGHT MODE */
+        .dimmed-node {
+            opacity: 0.2 !important;
+            filter: grayscale(100%) !important;
+            transition: all 0.5s ease;
+        }
+        
+        .active-demo-node {
+            opacity: 1 !important;
+            filter: none !important;
+            box-shadow: 0 0 20px var(--accent-primary), inset 0 0 10px var(--accent-primary) !important;
+            border-color: var(--accent-primary) !important;
+            z-index: 100;
+            transform: scale(1.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .tree-item.active-demo-node {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 2px solid var(--accent-primary);
+        }
+/* 3D TOGGLE BUTTON */
+.featured-btn {
+    background: rgba(0, 243, 255, 0.1);
+    border: 1px solid var(--accent-teal);
+    color: var(--accent-teal);
+    padding: 0.4rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+}
+
+.featured-btn:hover {
+    background: var(--accent-teal);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+}
+
+.btn-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.featured-btn:active .btn-glow {
+    opacity: 0.3;
+    animation: ripple 0.4s linear;
+}
+
+/* 3D VIEW STATE */
+.agents-view-3d .agents-grid {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.agents-view-3d #dashboard-neural-container {
+    opacity: 1 !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+}
+
+.agents-view-3d #neuralCanvas {
+    opacity: 0;
+}
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="g5-os-body">
+    <!-- BOOT OVERLAY (AUDIO UNLOCKER) -->
+    <div id="boot-overlay" style="position:fixed; inset:0; background:#000; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; font-family:'Rajdhani', sans-serif;">
+        <div class="boot-loader" style="width: 50px; height: 50px; border: 2px solid #333; border-top: 2px solid #60a5fa; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 2rem;"></div>
+        <h1 style="font-size: 2rem; letter-spacing: 5px; margin-bottom: 1rem;">AGENTICUM <span style="color:#60a5fa">G5</span></h1>
+        <p style="font-family:'JetBrains Mono', monospace; color:#6b7280; font-size: 0.8rem; margin-bottom: 2rem;">INITIALIZING NEURAL MESH V5.0.1</p>
+        <button id="boot-btn" onclick="startG5()" style="background: rgba(96, 165, 250, 0.1); border: 1px solid #60a5fa; color: #60a5fa; padding: 1rem 3rem; font-family:'JetBrains Mono'; cursor: pointer; transition: all 0.3s; letter-spacing: 2px;">
+            [ INITIALIZE SYSTEM ]
+        </button>
+        <style>
+            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            #boot-btn:hover { background: #60a5fa; color: #000; box-shadow: 0 0 20px rgba(96, 165, 250, 0.5); }
+        </style>
+    </div>
+
+    <script>
+        function startG5() {
+            const overlay = document.getElementById('boot-overlay');
+            const btn = document.getElementById('boot-btn');
+            
+            // 1. Unlock Audio
+            if (window.G5Audio) window.G5Audio.init();
+            
+            // 2. Visual Feedback
+            btn.innerHTML = "ACCESS GRANTED";
+            btn.style.background = "#34d399";
+            btn.style.borderColor = "#34d399";
+            btn.style.color = "#000";
+            
+            if (window.G5Audio) window.G5Audio.playBoot();
+            
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none';
+                
+                // 3. Start OS Logic (if not auto-started yet)
+                // Note: The main script runs on load, but we can hook into it if needed.
+                // For now, removing the overlay reveals the OS which is already booting underneath.
+                setTimeout(() => { overlay.remove(); }, 1000);
+            }, 800);
+        }
+        
+        // Auto-click if parameter says so? No, we NEED the click for audio.
+        // But we can Pulse the button.
+    </script>
+
 
     <!-- ============================================
          BOOT SEQUENCE OVERLAY
@@ -558,6 +681,12 @@
                 <div class="agents-container">
                     <div class="agents-header">
                         <h2>🤖 Node Configuration</h2>
+                        <div class="agents-actions">
+                            <button class="os-btn featured-btn" id="toggle3dBtn" onclick="toggle3DView()">
+                                <span class="btn-glow"></span>
+                                👁️ 3D VIEW
+                            </button>
+                        </div>
                         <div class="agents-filters">
                             <select class="filter-select" id="clusterFilter">
                                 <option value="all">All Clusters</option>
@@ -577,9 +706,15 @@
                         </div>
                     </div>
                     
-                    <div class="grid-wrapper" style="position: relative; width: 100%; height: 100%;">
+                    <div class="grid-wrapper" style="position: relative; width: 100%; height: 100%; overflow: hidden;">
+                        <!-- 3D CONTAINER -->
+                        <div id="dashboard-neural-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0; transition: opacity 0.5s;"></div>
+                        
+                        <!-- 2D CANVAS (Legacy) -->
                         <canvas id="neuralCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;"></canvas>
-                        <div class="agents-grid" id="agentsGrid" style="position: relative; z-index: 1;">
+                        
+                        <!-- AGENTS GRID (Overlay) -->
+                        <div class="agents-grid" id="agentsGrid" style="position: relative; z-index: 1; transition: opacity 0.5s;">
                         <!-- APEX -->
                         <div class="agent-tile apex" data-node="SN-00">
                             <div class="tile-header">
@@ -798,7 +933,7 @@
                             </div>
                             <div class="wf-card-actions">
                                 <button class="btn btn-primary btn-small wf-run-btn">▶ Execute</button>
-                                <button class="btn btn-secondary btn-small">Configure</button>
+                                <button class="btn btn-secondary btn-small wf-config-btn">Configure</button>
                             </div>
                         </div>
                         
@@ -832,7 +967,7 @@
                             </div>
                             <div class="wf-card-actions">
                                 <button class="btn btn-primary btn-small wf-run-btn">▶ Execute</button>
-                                <button class="btn btn-secondary btn-small">Configure</button>
+                                <button class="btn btn-secondary btn-small wf-config-btn">Configure</button>
                             </div>
                         </div>
                         
@@ -864,7 +999,7 @@
                             </div>
                             <div class="wf-card-actions">
                                 <button class="btn btn-primary btn-small wf-run-btn">▶ Execute</button>
-                                <button class="btn btn-secondary btn-small">Configure</button>
+                                <button class="btn btn-secondary btn-small wf-config-btn">Configure</button>
                             </div>
                         </div>
                         
@@ -896,7 +1031,7 @@
                             </div>
                             <div class="wf-card-actions">
                                 <button class="btn btn-primary btn-small wf-run-btn">▶ Execute</button>
-                                <button class="btn btn-secondary btn-small">Configure</button>
+                                <button class="btn btn-secondary btn-small wf-config-btn">Configure</button>
                             </div>
                         </div>
                         
@@ -928,8 +1063,8 @@
                                 </div>
                             </div>
                             <div class="wf-card-actions">
-                                <button class="btn btn-secondary btn-small">⏸ Pause</button>
-                                <button class="btn btn-secondary btn-small">Configure</button>
+                                <button class="btn btn-primary btn-small wf-run-btn">▶ Execute</button>
+                                <button class="btn btn-secondary btn-small wf-config-btn">Configure</button>
                             </div>
                         </div>
                     </div>
@@ -1264,9 +1399,30 @@
                 <div class="settings-content">
                     <!-- General Settings -->
                     <div class="settings-section active" id="settings-general">
-                        <h3>General Settings</h3>
+                        <h3>System Preferences</h3>
+                        
+                        <!-- OPERATOR PROFILE PROFILE (ENTERPRISE) -->
+                        <div class="setting-group" style="padding:15px; background:rgba(255,255,255,0.03); border-radius:6px; border:1px solid var(--border-color); margin-bottom:20px;">
+                            <label class="setting-label" style="color:var(--text-primary); margin-bottom:10px;">Operator Identity</label>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                                <div class="form-group">
+                                    <label style="font-size:0.7em; color:var(--text-secondary);">Codename / ID</label>
+                                    <input type="text" class="g5-input" id="profileName" value="YILDIRIM" placeholder="ENTER ID">
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-size:0.7em; color:var(--text-secondary);">Clearance Level</label>
+                                    <select class="g5-select" id="profileRole">
+                                        <option value="sysadmin">SYSADMIN (L5)</option>
+                                        <option value="commander">COMMANDER (L4)</option>
+                                        <option value="observer">OBSERVER (L1)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-small" id="saveProfile" style="margin-top:10px; width:100%;">Update Identity</button>
+                        </div>
+
                         <div class="setting-group">
-                            <label class="setting-label">Operator Name</label>
+                            <label class="setting-label">Theme Mode</label>
                             <input type="text" class="setting-input" id="operatorName" value="OPERATOR_YILDIRIM">
                         </div>
                         <div class="setting-group">
@@ -1327,6 +1483,54 @@
                                 Enable animations
                             </label>
                         </div>
+                        
+                        <!-- NEW LAYOUT CONTROLS -->
+                        <div class="setting-group">
+                            <label class="setting-label">Sidebar Width</label>
+                            <input type="range" class="setting-range" id="layoutSidebar" min="200" max="400" value="260">
+                            <span class="range-value" id="valSidebar">260px</span>
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label">Terminal Height</label>
+                            <input type="range" class="setting-range" id="layoutTerminal" min="100" max="500" value="200">
+                            <span class="range-value" id="valTerminal">200px</span>
+                        </div>
+                        <div class="setting-group">
+                             <button class="btn btn-secondary btn-small" id="resetLayout">Reset Layout</button>
+                        </div>
+                    </div>
+
+                    <!-- BRANDING KIT (ENTERPRISE) -->
+                    <div class="settings-section" id="settings-branding">
+                        <h3>Enterprise Branding</h3>
+                        <div class="setting-group">
+                            <label class="setting-label">Primary Signal Color</label>
+                            <div class="color-picker-grid">
+                                <button class="color-btn active" style="background:#3b82f6;" data-color="#3b82f6"></button>
+                                <button class="color-btn" style="background:#d946ef;" data-color="#d946ef"></button>
+                                <button class="color-btn" style="background:#10b981;" data-color="#10b981"></button>
+                                <button class="color-btn" style="background:#f59e0b;" data-color="#f59e0b"></button>
+                                <button class="color-btn" style="background:#ef4444;" data-color="#ef4444"></button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top:15px;">
+                            <label class="setting-label">Brand Tone of Voice</label>
+                            <select class="g5-select" id="brandTone" style="width:100%;">
+                                <option value="corporate">Corporate Professional</option>
+                                <option value="disruptive">Disruptive / Edgy</option>
+                                <option value="friendly">Friendly & Approachable</option>
+                                <option value="academic">Academic / Scientific</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="margin-top:20px;">
+                            <label class="setting-label">Upload Brand Assets (Logo/Fonts)</label>
+                            <div class="upload-zone-mini" id="brandUploadZone" style="border:1px dashed var(--border-color); padding:20px; text-align:center; border-radius:4px; cursor:pointer;">
+                                <span style="font-size:20px;">📤</span>
+                                <p style="font-size:0.8em; color:var(--text-secondary); margin-top:5px;">Click to upload style guide</p>
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- Nodes Settings -->
@@ -1369,12 +1573,14 @@
                                 <button class="btn-small" id="testConnection">Test Connection</button>
                             </div>
                         </div>
+                        </div>
                         <div class="setting-group">
                             <label class="setting-toggle-label">
-                                <input type="checkbox" id="useLocalApi">
+                                <input type="checkbox" id="evolutionMode">
                                 <span class="toggle-slider"></span>
-                                Use local development endpoint
+                                <span class="highlight-text">Activate EVOLUTION MODE (Gemini 3 Integration)</span>
                             </label>
+                            <p class="setting-desc">Connects to live Gemini Reasoning Cluster. Costs tokens.</p>
                         </div>
                     </div>
                     
@@ -1515,6 +1721,63 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="cancelWorkflow">Cancel</button>
                 <button class="btn btn-primary" id="executeWorkflow">⚡ Execute</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         WORKFLOW CONFIGURATION MODAL
+         ============================================ -->
+    <div class="modal hidden" id="workflowConfigModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title">⚙️ Configure Protocol</h2>
+                <button class="modal-close" id="closeWorkflowConfig">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="config-section">
+                    <h4 id="configWorkflowName">WORKFLOW_ID</h4>
+                    <p class="config-desc">Adjust parameters for the next execution cycle.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Recursion Depth (Quality vs Speed)</label>
+                    <input type="range" class="config-range" min="1" max="5" value="2" id="confDepth">
+                    <div class="range-labels">
+                        <span>Speed (1)</span>
+                        <span id="depthVal" class="highlight-text">Normal (2)</span>
+                        <span>Deep (5)</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Creativity Index (Temperature)</label>
+                    <input type="range" class="config-range" min="0" max="100" value="70" id="confTemp">
+                     <div class="range-labels">
+                        <span>Deterministic (0.0)</span>
+                        <span id="tempVal" class="highlight-text">0.7</span>
+                        <span>Chaotic (1.0)</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Human-in-the-Loop</label>
+                    <div class="setting-toggle-label">
+                        <input type="checkbox" id="confHumanLoop" checked>
+                        <span class="toggle-slider"></span>
+                        <span>Require approval for asset generation</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Target Audience / Persona</label>
+                    <input type="text" class="g5-input" id="confAudience" placeholder="e.g. Gen Z, Enterprise CTOs, Gamers..." value="General">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="resetConfig">Default</button>
+                <button class="btn btn-primary" id="saveConfig">💾 Save Configuration</button>
             </div>
         </div>
     </div>
@@ -1837,7 +2100,30 @@
 
     <!-- SCRIPTS -->
     <!-- SCRIPTS -->
+    <script src="assets/js/demo-data.js?v=HACKATHON"></script>
     <script src="assets/js/g5_api.js?v=V_FIX_FINAL"></script>
     <script src="assets/js/g5-os-core.js?v=V_FIX_FINAL"></script>
+    <!-- AUDIO SYSTEM -->
+    <script src="assets/js/audio-system.js?v=ATOMIC"></script>
+    
+    <!-- 3D NAVIGATOR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="assets/js/neural-3d.js?v=ATOMIC" defer></script>
+    
+    <script>
+    function toggle3DView() {
+        const container = document.querySelector('.agents-container');
+        const btn = document.getElementById('toggle3dBtn');
+        container.classList.toggle('agents-view-3d');
+        
+        if (container.classList.contains('agents-view-3d')) {
+            btn.innerHTML = '<span class="btn-glow"></span>📋 GRID VIEW';
+            // Trigger 3D init if not already running
+            if (window.initNeural3D) window.initNeural3D();
+        } else {
+            btn.innerHTML = '<span class="btn-glow"></span>👁️ 3D VIEW';
+        }
+    }
+    </script>
 </body>
 </html>

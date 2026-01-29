@@ -140,7 +140,23 @@ function executeCommand(command) {
     if (matchingCmd) {
         G5Commands[matchingCmd].handler();
     } else {
-        // Simulate AI processing for unknown commands
+        // HACKER MODE DELEGATION:
+        // Text commands like "Initiate Campaign..." should be handled by the Core OS logic
+        // which now contains the Demo Trap Door.
+        if (window.g5Instance && window.g5Instance.processCommand) {
+            // Let the main OS handle it (including NEURA-FIZZ trigger)
+            const resultPromise = window.g5Instance.processCommand(command);
+            
+            // If it returns a promise, wait for it (optional, just logging here)
+            if (resultPromise && resultPromise.then) {
+                 resultPromise.then(res => {
+                     writeToTerminal(res.replace(/<[^>]*>/g, ''), 'success'); // Strip HTML for terminal
+                 });
+                 return; 
+            }
+        }
+
+        // Fallback to local simulation if OS didn't pick it up or returns nothing relevant
         handleAIQuery(command);
     }
 }

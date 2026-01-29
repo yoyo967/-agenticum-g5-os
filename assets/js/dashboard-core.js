@@ -314,12 +314,18 @@ class G5Dashboard {
             
             // Initialize Neural Network if not already done
             if (!this.neuralNet) {
-                // Check if NeuralNetwork class is available (from neural-network.js)
-                if (typeof NeuralNetwork !== 'undefined') {
-                    // Slight delay to ensure DOM is ready
+                // Check if NeuralNavigator3D (Three.js) is available
+                if (typeof NeuralNavigator3D !== 'undefined') {
+                     setTimeout(() => {
+                         this.neuralNet = new NeuralNavigator3D('dashboard-neural-container');
+                         this.logSystem('✓ NEURAL 3D MESH VISUALIZED');
+                     }, 100);
+                }
+                // Fallback to legacy 2D Canvas
+                else if (typeof NeuralNetwork !== 'undefined') {
                     setTimeout(() => {
                          this.neuralNet = new NeuralNetwork('dashboard-neural-container');
-                         this.logSystem('✓ NEURAL FABRIC VISUALIZED');
+                         this.logSystem('✓ NEURAL FABRIC VISUALIZED (LEGACY)');
                     }, 100);
                 } else {
                     this.logSystem('⚠ NEURAL SCRIPT NOT LOADED');

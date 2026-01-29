@@ -37,6 +37,9 @@ const G5OS = {
     init() {
         console.log('⬡ AGENTICUM G5 OS | INITIALIZING...');
         
+        // EXPOSE FOR TERMINAL
+        window.g5Instance = this;
+        
         this.setupEventListeners();
         this.setupPanelResize();
         this.startSystemClock();
@@ -47,7 +50,33 @@ const G5OS = {
         // Start Boot Sequence
         this.runBootSequence();
 
+        // ONE-CLICK DEMO CHECK
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('demo') === 'launch') {
+            setTimeout(() => {
+                this.runAutoDemo("Initiate Campaign Genesis for NEURA-FIZZ");
+            }, 2500); // Wait for boot
+        }
+
+        // PERSISTENCE LAYER: LOAD STATE
+        this.loadState();
+
         console.log('✅ G5 OS READY | 52 NODES ONLINE');
+    },
+
+    async runAutoDemo(commandText) {
+        const input = document.getElementById('chatInput');
+        if (!input) return;
+
+        // Type Effect
+        input.focus();
+        for (let i = 0; i < commandText.length; i++) {
+            input.value += commandText[i];
+            await new Promise(r => setTimeout(r, 50)); // Typing speed
+        }
+        
+        await new Promise(r => setTimeout(r, 300)); // Hesitation for realism
+        this.sendMessage();
     },
 
     runBootSequence() {
@@ -246,6 +275,38 @@ const G5OS = {
         document.getElementById('paletteInput')?.addEventListener('input', (e) => {
             this.filterPaletteResults(e.target.value);
         });
+        
+        // ============================
+        // LAYOUT CONTROLS (ANTIGRAVITY)
+        // ============================
+        const sidebarSlider = document.getElementById('layoutSidebar');
+        if (sidebarSlider) {
+            sidebarSlider.addEventListener('input', (e) => {
+                 const val = e.target.value;
+                 document.getElementById('valSidebar').textContent = `${val}px`;
+                 document.documentElement.style.setProperty('--panel-left-width', `${val}px`);
+                 
+                 // Trigger resize for canvas
+                 if(this.resizeNeuralMesh) this.resizeNeuralMesh();
+            });
+        }
+
+        const terminalSlider = document.getElementById('layoutTerminal');
+        if (terminalSlider) {
+             terminalSlider.addEventListener('input', (e) => {
+                 const val = e.target.value;
+                 document.getElementById('valTerminal').textContent = `${val}px`;
+                 document.documentElement.style.setProperty('--footer-height', `${val}px`);
+             });
+        }
+        
+        document.getElementById('resetLayout')?.addEventListener('click', () => {
+             document.documentElement.style.removeProperty('--panel-left-width');
+             document.documentElement.style.removeProperty('--footer-height');
+             if(sidebarSlider) { sidebarSlider.value = 260; document.getElementById('valSidebar').textContent = '260px'; }
+             if(terminalSlider) { terminalSlider.value = 200; document.getElementById('valTerminal').textContent = '200px'; }
+             this.showToast('info', 'Layout reset to defaults');
+        });
 
         // Workflow modal
         document.getElementById('closeWorkflow')?.addEventListener('click', () => this.closeWorkflowModal());
@@ -273,6 +334,40 @@ const G5OS = {
                 }
             });
         });
+
+        // ============================
+        // BRANDING KIT (ENTERPRISE)
+        // ============================
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const color = btn.dataset.color;
+                document.documentElement.style.setProperty('--accent-primary', color);
+                
+                // Optional: Flash effect
+                this.showToast('success', `OPERATING SYSTEM RE-SKINNED: ${color}`);
+                this.logToTerminal(`[SYSTEM] Applied Theme Override: ${color}`);
+            });
+        });
+
+        document.getElementById('brandTone')?.addEventListener('change', (e) => {
+             this.logToTerminal(`[STRATEGY] Tone of Voice calibrated: ${e.target.value.toUpperCase()}`);
+             this.showToast('info', 'Language Models Re-Aligned');
+        });
+
+        const brandUpload = document.getElementById('brandUploadZone');
+        if (brandUpload) {
+            brandUpload.addEventListener('click', () => {
+                 this.logToTerminal(`[UPLOAD] Processing Brand Assets...`);
+                 
+                 setTimeout(() => {
+                     this.showToast('success', 'Brand Assets Ingested (7 Files)');
+                     brandUpload.innerHTML = '<span style="color:#4ade80; font-size:20px;">✅</span><p style="color:#4ade80;">Assets Linked</p>';
+                 }, 1200);
+            });
+        }
 
         // Preview tabs
         document.querySelectorAll('.preview-tab').forEach(tab => {
@@ -330,7 +425,43 @@ const G5OS = {
         document.getElementById('quickPalette')?.addEventListener('click', () => this.togglePalette());
         document.getElementById('quickSettings')?.addEventListener('click', () => this.openSettings());
 
-        // Workflow card execute buttons
+
+
+        // ============================
+        // OPERATOR PROFILE (ENTERPRISE)
+        // ============================
+        document.getElementById('saveProfile')?.addEventListener('click', () => {
+             const name = document.getElementById('profileName').value;
+             const role = document.getElementById('profileRole').value;
+             
+             // Update State
+             this.state.operator = { name, role };
+             
+             // Update UI
+             const osUser = document.querySelector('.os-user');
+             if (osUser) osUser.textContent = `OPERATOR: ${name.toUpperCase()}`;
+             
+             this.showToast('success', `IDENTITY UPDATED: ${name.toUpperCase()} (${role.toUpperCase()})`);
+             this.logToTerminal(`[AUTH] User Identity Refreshed: ${name}`);
+        });
+
+        // ============================
+        // PERSISTENT ASSET UPLOAD
+        // ============================
+        document.getElementById('fileInput')?.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                this.handleFileUpload(e.target.files);
+                e.target.value = ''; // Reset
+            }
+        });
+        
+        // Ensure "attachBtn" triggers the file input
+        document.getElementById('attachBtn')?.addEventListener('click', () => {
+             document.getElementById('fileInput').click();
+        });
+
+
+        // Workflow car execute buttons
         document.querySelectorAll('.wf-run-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -339,6 +470,36 @@ const G5OS = {
                     this.openWorkflowModal(card.dataset.workflow);
                 }
             });
+        });
+
+        // Workflow card CONFIGURE buttons
+        document.querySelectorAll('.wf-config-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = btn.closest('.workflow-card');
+                if (card) {
+                    this.openWorkflowConfig(card.dataset.workflow);
+                }
+            });
+        });
+
+        // WORKFLOW CONFIG MODAL LISTENERS
+        document.getElementById('closeWorkflowConfig')?.addEventListener('click', () => this.closeWorkflowConfig());
+        document.querySelector('#workflowConfigModal .modal-backdrop')?.addEventListener('click', () => this.closeWorkflowConfig());
+        document.getElementById('saveConfig')?.addEventListener('click', () => this.saveWorkflowConfig());
+        
+        // Range Sliders update text
+        document.getElementById('confDepth')?.addEventListener('input', (e) => {
+             const val = e.target.value;
+             const labels = {1: 'Speed (1)', 2: 'Normal (2)', 3: 'High (3)', 4: 'Very High (4)', 5: 'Deep (5)'};
+             const span = document.getElementById('depthVal');
+             if(span) span.textContent = labels[val] || val;
+        });
+
+        document.getElementById('confTemp')?.addEventListener('input', (e) => {
+             const val = e.target.value;
+             const span = document.getElementById('tempVal');
+             if(span) span.textContent = (val / 100).toFixed(1);
         });
 
         // WORKFLOW MODAL ACTIONS
@@ -699,6 +860,8 @@ const G5OS = {
         container.scrollTop = container.scrollHeight;
         
         this.state.chatHistory.push({ type, content, time: Date.now() });
+        // PERSIST
+        if (this.saveState) this.saveState();
     },
 
     showThinking() {
@@ -754,6 +917,21 @@ const G5OS = {
         const cmd = command.toLowerCase();
         
         if (cmd.includes('campaign') || cmd.includes('marketing')) {
+            // DEMO TRAP DOOR: If specific phrasing is used, auto-trigger the workflow
+            if (cmd.includes('initiate') || cmd.includes('neura-fizz')) {
+                 setTimeout(() => {
+                     this.openWorkflowModal('5min-agency');
+                     // Small delay to allow modal to open then execute
+                     setTimeout(() => {
+                         const input = document.getElementById('workflowInput');
+                         if (input) input.value = "Create viral campaign for NEURA-FIZZ (Nootropic Drink)";
+                     }, 500);
+                 }, 1000);
+                 
+                 return `<p><strong>[SN-00 ORCHESTRATOR]</strong></p>
+                 <p>Command recognized: CAMPAIGN_GENESIS_PROTOCOL.</p>
+                 <p>Initializing 5-Minute Agency Matrix... [STANDBY]</p>`;
+            }
             return `<p><strong>[SP-01 CAMPAIGN STRATEGIST]</strong></p>
             <p>Strategic analysis complete. Recommendations:</p>
             <ul>
@@ -922,6 +1100,97 @@ const G5OS = {
             'DT-02': { name: 'Pricing Algorithm', cluster: 'INTEL', status: 'online' },
             'DT-04': { name: 'Analytics Core', cluster: 'INTEL', status: 'online' }
         };
+    },
+
+    // ============================================
+    // DYNAMIC VAULT RENDERER (ATOMIC DEPTH)
+    // ============================================
+
+    renderVault() {
+        const vaultContainer = document.querySelector('.asset-list');
+        if (!vaultContainer) return;
+
+        // Clear existing content
+        vaultContainer.innerHTML = '';
+
+        if (!this.assets || this.assets.length === 0) {
+            vaultContainer.innerHTML = '<div style="padding:10px; color:#666; font-size:11px;">[VAULT EMPTY]</div>';
+            return;
+        }
+
+        // Render assets (Newest first)
+        [...this.assets].reverse().forEach(asset => {
+            let icon = '📄';
+            if (asset.type === 'video') icon = '🎬';
+            if (asset.type === 'image') icon = '🖼️';
+            if (asset.type === 'audio') icon = '🔊';
+            
+            // Truncate title
+            const title = asset.title.length > 25 ? asset.title.substring(0, 22) + '...' : asset.title;
+            
+            const item = document.createElement('div');
+            item.className = 'asset-mini';
+            item.innerHTML = `
+                <span class="asset-icon">${icon}</span>
+                <span class="asset-name" title="${asset.title}">${title}</span>
+                <span style="margin-left:auto; font-size:9px; color:#666;">${asset.timestamp ? new Date(asset.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : 'NOW'}</span>
+            `;
+            item.onclick = () => window.g5Instance.previewAsset(asset.id);
+            vaultContainer.appendChild(item);
+        });
+        
+        // Sync with terminal
+        if (window.listAssets) window.listAssets();
+    },
+
+    previewAsset(id) {
+        const asset = this.assets.find(a => a.id === id);
+        if (!asset) return;
+        
+        // Create Modal
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.style.position = 'fixed';
+        modal.style.inset = '0';
+        modal.style.background = 'rgba(0,0,0,0.85)';
+        modal.style.backdropFilter = 'blur(5px)';
+        modal.style.zIndex = '10000';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.animation = 'fadeIn 0.3s ease';
+        
+        let contentDisplay = `<div style="background:#1a1a1a; padding:1rem; border:1px solid #333; color:#aaa; font-family:'JetBrains Mono'; white-space:pre-wrap; max-height:400px; overflow:auto; min-height:200px;">${asset.content || 'Content binary not loaded.'}</div>`;
+        
+        if (asset.type === 'image') {
+            contentDisplay = `<div style="display:flex; justify-content:center; background:#000; padding:1rem; border:1px solid #333;"><img src="${asset.content || 'assets/img/placeholder.jpg'}" style="max-width:100%; max-height:500px; object-fit:contain; border:1px solid #333;"></div>`;
+        }
+        
+        modal.innerHTML = `
+            <div class="modal-content" style="background:#0f1115; border:1px solid #3b82f6; box-shadow:0 0 40px rgba(59, 130, 246, 0.2); padding:0; width:700px; max-width:95%; position:relative; display:flex; flex-direction:column;">
+                <div style="padding:1rem 1.5rem; border-bottom:1px solid #333; display:flex; align-items:center; justify-content:space-between; background:#14171c;">
+                    <h2 style="color:#fff; font-family:'Rajdhani'; font-size:1.2rem; letter-spacing:1px; margin:0;">${asset.title}</h2>
+                    <div style="font-family:'JetBrains Mono'; color:#60a5fa; font-size:0.7rem;">[${asset.type.toUpperCase()}]</div>
+                </div>
+                
+                <div style="padding:1.5rem;">
+                    ${contentDisplay}
+                </div>
+                
+                <div style="padding:1rem 1.5rem; border-top:1px solid #333; display:flex; gap:10px; justify-content:flex-end; background:#14171c;">
+                    <button class="os-btn" onclick="this.closest('.modal-overlay').remove()" style="opacity:0.7;">CLOSE</button>
+                    <button class="os-btn" onclick="alert('Sent to Production Pipeline');" style="border-color:#34d399; color:#34d399;">DEPLOY ASSET</button>
+                    <button class="os-btn" onclick="window.g5Instance.deleteAsset('${asset.id}'); this.closest('.modal-overlay').remove();" style="border-color:#f87171; color:#f87171;">DELETE</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    },
+
+    deleteAsset(id) {
+        this.assets = this.assets.filter(a => a.id !== id);
+        if (this.saveState) this.saveState();
+        this.renderVault();
     },
 
     selectNode(nodeId) {
@@ -1175,18 +1444,53 @@ const G5OS = {
     },
 
     // ============================================
-    // SYSTEM CLOCK
+    // SYSTEM CLOCK & DYNAMIC METRICS
     // ============================================
     startSystemClock() {
+        // 1. TEXT METRICS LOOP (5s)
         setInterval(() => {
-            const now = new Date();
-            // Update metrics periodically
             const tokens = (1.7 + Math.random() * 0.1).toFixed(1);
             const latency = Math.floor(80 + Math.random() * 20);
             
-            document.getElementById('tokenCount').textContent = `${tokens}M`;
-            document.getElementById('latencyDisplay').textContent = `~${latency}ms`;
+            const tokenDisplay = document.getElementById('tokenCount');
+            const latencyDisplay = document.getElementById('latencyDisplay');
+            
+            if (tokenDisplay) tokenDisplay.textContent = `${tokens}M`;
+            if (latencyDisplay) latencyDisplay.textContent = `~${latency}ms`;
         }, 5000);
+
+        // 2. CHART ANIMATION LOOP (1s) - "ATOMIC DEPTH"
+        // Updates the canvas elements to show living data
+        setInterval(() => {
+            this.updateCharts();
+        }, 1000);
+    },
+
+    updateCharts() {
+        // Simple canvas drawing for "Activity" and "Sentiment"
+        const charts = [
+            { id: 'activityChart', color: '#60a5fa' },
+            { id: 'sentimentChart', color: '#34d399' }
+        ];
+
+        charts.forEach(c => {
+            const canvas = document.getElementById(c.id);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            // Shift old image left
+            const imageData = ctx.getImageData(1, 0, w - 1, h);
+            ctx.putImageData(imageData, 0, 0);
+            ctx.clearRect(w - 1, 0, 1, h);
+            
+            // Draw new point
+            const value = Math.random() * h;
+            ctx.fillStyle = c.color;
+            ctx.fillRect(w - 2, value, 2, 2);
+        });
     },
 
     // ============================================
@@ -1619,6 +1923,102 @@ const G5OS = {
         }, 400); // Short burst
     },
 
+    // ============================================
+    // DEMO FOCUS MODE (Visual Spotlight)
+    // ============================================
+    focusCriticalNodes(nodeIds) {
+        // Dim everything first
+        document.querySelectorAll('.tree-item.file').forEach(node => {
+            node.classList.add('dimmed-node');
+            node.classList.remove('active-demo-node');
+        });
+        
+        document.querySelectorAll('.agent-tile').forEach(tile => {
+            tile.classList.add('dimmed-node');
+            tile.classList.remove('active-demo-node');
+        });
+
+        // Highlight specific nodes
+        nodeIds.forEach(id => {
+            // Highlight in Tree
+            const treeNode = document.querySelector(`.tree-item.file[data-node="${id}"]`);
+            if (treeNode) {
+                treeNode.classList.remove('dimmed-node');
+                treeNode.classList.add('active-demo-node');
+                // Auto-expand parent folder if possible (simple assumption)
+                const parent = treeNode.parentElement;
+                if (parent && parent.style.display === 'none') {
+                    parent.style.display = 'block';
+                }
+            }
+
+            // Highlight in Grid (Agent Tiles)
+            const tileNode = document.querySelector(`.agent-tile[data-node="${id}"]`);
+            if (tileNode) {
+                tileNode.classList.remove('dimmed-node');
+                tileNode.classList.add('active-demo-node');
+            }
+        });
+        
+        this.logToTerminal(`[DEMO] Focus Mode Active: ${nodeIds.length} nodes locked.`);
+    },
+
+    resetNodeFocus() {
+        document.querySelectorAll('.dimmed-node').forEach(el => el.classList.remove('dimmed-node'));
+        document.querySelectorAll('.active-demo-node').forEach(el => el.classList.remove('active-demo-node'));
+        this.logToTerminal(`[DEMO] Focus Mode Released.`);
+    },
+
+    // ============================================
+    // WORKFLOW CONFIGURATION LOGIC
+    // ============================================
+    openWorkflowConfig(workflowId) {
+        this.currentConfigWorkflowId = workflowId;
+        const modal = document.getElementById('workflowConfigModal');
+        const title = document.getElementById('configWorkflowName');
+        
+        if (title) title.textContent = workflowId.toUpperCase().replace('-', ' ');
+        
+        // Load existing config if any
+        if (this.state.workflowConfigs && this.state.workflowConfigs[workflowId]) {
+            const config = this.state.workflowConfigs[workflowId];
+            if(document.getElementById('confDepth')) document.getElementById('confDepth').value = config.depth || 2;
+            if(document.getElementById('confTemp')) document.getElementById('confTemp').value = config.temp || 70;
+            if(document.getElementById('confAudience')) document.getElementById('confAudience').value = config.audience || '';
+        }
+
+        modal?.classList.remove('hidden');
+        this.logToTerminal(`[CONFIG] Opened parameters for ${workflowId}`);
+    },
+
+    closeWorkflowConfig() {
+        document.getElementById('workflowConfigModal')?.classList.add('hidden');
+        this.currentConfigWorkflowId = null;
+    },
+
+    saveWorkflowConfig() {
+        if (!this.currentConfigWorkflowId) return;
+        
+        const depth = document.getElementById('confDepth').value;
+        const temp = document.getElementById('confTemp').value;
+        const audience = document.getElementById('confAudience').value;
+        
+        // Init state obj if missing
+        if (!this.state.workflowConfigs) this.state.workflowConfigs = {};
+        
+        this.state.workflowConfigs[this.currentConfigWorkflowId] = {
+            depth,
+            temp,
+            audience,
+            updatedAt: Date.now()
+        };
+        
+        this.showToast('success', `PROTOCOL UPDATED: ${this.currentConfigWorkflowId.toUpperCase()}`);
+        this.logToTerminal(`[CONFIG] Saved params for ${this.currentConfigWorkflowId}: Depth=${depth}, Temp=${temp/100}`);
+        
+        this.closeWorkflowConfig();
+    },
+
     closeWorkflowModal() {
         document.getElementById('workflowModal')?.classList.add('hidden');
         this.currentWorkflow = null;
@@ -1662,14 +2062,18 @@ const G5OS = {
 
         if (wfId === '5min-agency') {
             simulationSteps = [
-                { label: 'Initializing Executive Cluster (SN-00)...', cluster: 'strategy' },
-                { label: 'Analysing Briefing & Context...', cluster: 'strategy' },
-                { label: 'SP-01: Generating Strategic Angles...', cluster: 'strategy' },
-                { label: 'CC-01: Drafting Headlines & Copy...', cluster: 'content' },
-                { label: 'CC-06: Rendering Visual Concepts...', cluster: 'content' },
-                { label: 'MI-01: Verifying Compliance & Safety...', cluster: 'governance' },
-                { label: 'Packing Assets for Delivery...', cluster: 'apex' }
+                // NEURA-FIZZ SCENARIO STEPS (Hardcoded for Demo)
+                { label: 'SN-00: Analyzing Intent (Category: Nootropic Beverage)...', cluster: 'apex' },
+                { label: 'SP-01: Defining "Liquid Lucid Dreaming" Positioning...', cluster: 'strategy' },
+                { label: 'RA-06: Validating Trend "Gen Z Cognitive Health"...', cluster: 'research' },
+                { label: 'CC-01: Drafting Viral Social Copy...', cluster: 'content' },
+                { label: 'CC-06: Rending "Cyberpunk Can" Visuals...', cluster: 'content' },
+                { label: 'MI-01: Compliance Check (Claim Verification)...', cluster: 'governance' },
+                { label: 'Packaging Assets for Launch...', cluster: 'apex' }
             ];
+            
+            // ACTIVATE DEMO MODE HIGHLIGHTS
+            this.focusCriticalNodes(['SN-00', 'SP-01', 'RA-06', 'CC-01', 'CC-06', 'MI-01', 'DT-04']);
         } else if (wfId === 'senate') {
             simulationSteps = [
                 { label: 'Convening Algorithmic Senate...', cluster: 'governance' },
@@ -1694,6 +2098,14 @@ const G5OS = {
                 { label: 'Simulating A/B Variants...', cluster: 'intel' },
                 { label: 'Morphing Final Output...', cluster: 'content' }
             ];
+        } else if (wfId === 'autopoiesis') {
+            simulationSteps = [
+                { label: 'Analyzing System Efficiency...', cluster: 'intel' },
+                { label: 'Detecting Logic Bottlenecks...', cluster: 'research' },
+                { label: 'RA-52: Simulating Attack Vectors...', cluster: 'research' },
+                { label: 'Optimizing Neural Pathways...', cluster: 'apex' },
+                { label: 'Deploying Self-Patcher v5.1...', cluster: 'governance' }
+            ];
         } else {
              // Fallback
              simulationSteps = [
@@ -1710,6 +2122,13 @@ const G5OS = {
             for (let i = 0; i < simulationSteps.length; i++) {
                 const step = simulationSteps[i];
                 
+                // INJECT CONFIG LOGIC
+                if (i === 0 && this.state.workflowConfigs && this.state.workflowConfigs[wfId]) {
+                    const cfg = this.state.workflowConfigs[wfId];
+                    this.logToTerminal(`[PARAM] Applied Config: Depth=${cfg.depth}, Temp=${cfg.temp/100}, Audience="${cfg.audience}"`);
+                    await new Promise(r => setTimeout(r, 400));
+                }
+
                 // UI Text
                 stepsContainer.textContent = step.label;
                 const progress = ((i + 1) / simulationSteps.length) * 100;
@@ -1745,12 +2164,16 @@ const G5OS = {
         }
         
         // CLEANUP PULSE
+        // CLEANUP PULSE & FOCUS
         if (this.pulseCluster) {
             this.pulseCluster(null);
         } else {
              const grid = document.querySelector('.node-grid');
              grid?.classList.remove('pulse-active', 'pulse-strategy', 'pulse-content', 'pulse-research', 'pulse-governance', 'pulse-intel');
         }
+        
+        // RESET DEMO FOCUS
+        this.resetNodeFocus();
         
         // GENERATE FAKE ASSETS & OUTPUT
         this.generateSimulationResult(this.currentWorkflow || wfId, input);
@@ -1773,27 +2196,121 @@ const G5OS = {
                         <span class="sim-status success">✅ EXECUTION SUCCESSFUL</span>
                         <span class="sim-meta">6 Assets Created | 5 Nodes Active</span>
                     </div>
+                    </div>
                     <div class="sim-section">
-                        <h4>STRATEGIC ANGLE: "THE INVISIBLE LEVERAGE"</h4>
-                        <p>Focus on the hidden efficiency gains. Positioning the product not as a tool, but as a competitive secret weapon.</p>
+                        <h4>STRATEGIC ANGLE: "LIQUID LUCID DREAMING"</h4>
+                        <p>Positioning NEURA-FIZZ not just as energy, but as a "Cognitive Unlock" for the creators economy. Targeting flow state, not just wakefulness.</p>
                     </div>
                     <div class="sim-assets-list">
-                        ${this.createSimulatedAsset('Strategy_Brief_v4.pdf', 'pdf')}
-                        ${this.createSimulatedAsset('Campaign_Teaser_Final.mp4', 'video')}
-                        ${this.createSimulatedAsset('Hero_Image_Concept_A.jpg', 'image')}
-                        ${this.createSimulatedAsset('Social_Media_Plan.md', 'code')}
-                        ${this.createSimulatedAsset('Podcast_Spot_Intro.mp3', 'audio')}
-                        ${this.createSimulatedAsset('Audience_Data.csv', 'sheet')}
+                        ${this.createSimulatedAsset('Strategy_Brief_NEURAFIZZ.pdf', 'pdf')}
+                        ${this.createSimulatedAsset('Teaser_Script_GenZ.txt', 'text')}
+                        ${this.createSimulatedAsset('Can_Design_Cyberpunk_v3.png', 'image')}
+                        ${this.createSimulatedAsset('Social_Media_Viral.md', 'code')}
+                        ${this.createSimulatedAsset('Audio_Logo_Synth.mp3', 'audio')}
+                        ${this.createSimulatedAsset('Compliance_Report_Clean.pdf', 'pdf')}
                     </div>
                     <div class="sim-footer">
-                        <p class="sim-note">All assets passed compliance (MI-01). Ready for deployment.</p>
+                        <p class="sim-note">All assets passed compliance (MI-01). Claims verified.</p>
                     </div>
                 </div>
             `;
             // Add to main grid as well
-            this.addAssetToGrid({ name: 'Strategy_Brief_v4.pdf', size: 1024 * 450, type: 'application/pdf' });
-            this.addAssetToGrid({ name: 'Campaign_Teaser_Final.mp4', size: 1024 * 15000, type: 'video/mp4' });
-            this.addAssetToGrid({ name: 'Podcast_Spot_Intro.mp3', size: 1024 * 3200, type: 'audio/mpeg' });
+            this.addAssetToGrid({ name: 'Strategy_Brief_NEURAFIZZ.pdf', size: 1024 * 450, type: 'application/pdf' });
+            this.addAssetToGrid({ name: 'Can_Design_Cyberpunk_v3.png', size: 1024 * 15000, type: 'image/png' });
+            this.addAssetToGrid({ name: 'Audio_Logo_Synth.mp3', size: 1024 * 3200, type: 'audio/mpeg' });
+        } else if (workflowId === 'senate') {
+            html = `
+                <div class="simulation-result">
+                    <div class="sim-header">
+                        <span class="sim-status success">⚖️ CONSENSUS REACHED</span>
+                        <span class="sim-meta">3 Proposals Debated | 99.8% Confidence</span>
+                    </div>
+                    <div class="sim-section">
+                        <h4>DECISION: "OPERATION VELVET" APPROVED</h4>
+                        <p>The Senate has authorized the strategic pivot. Ethical constraints (MI-07) successfully mitigated bias risks in the targeting algorithm.</p>
+                    </div>
+                    <div class="sim-assets-list">
+                        ${this.createSimulatedAsset('Decision_Matrix_8849.pdf', 'pdf')}
+                        ${this.createSimulatedAsset('Ethical_Compliance_Report.pdf', 'pdf')}
+                        ${this.createSimulatedAsset('Governance_Log_v2.txt', 'text')}
+                    </div>
+                    <div class="sim-footer">
+                        <p class="sim-note">Executed by Cluster: Governance (MI-01)</p>
+                    </div>
+                </div>
+            `;
+            this.addAssetToGrid({ name: 'Decision_Matrix_8849.pdf', size: 1024 * 350, type: 'application/pdf' });
+            this.addAssetToGrid({ name: 'Ethical_Compliance_Report.pdf', size: 1024 * 820, type: 'application/pdf' });
+        } else if (workflowId === 'jit-reality') {
+            html = `
+                <div class="simulation-result">
+                    <div class="sim-header">
+                        <span class="sim-status success">🔮 PREDICTION CONFIRMED</span>
+                        <span class="sim-meta">Probability > 0.94 | Trend Velocity: HIGH</span>
+                    </div>
+                    <div class="sim-section">
+                        <h4>OPPORTUNITY DETECTED: "NEURO-HAPTICS"</h4>
+                        <p>Market signal analysis suggests a 400% surge in haptic interface demand. Product concept generated and ready for rapid prototyping.</p>
+                    </div>
+                    <div class="sim-assets-list">
+                        ${this.createSimulatedAsset('Trend_Forecast_Q3.pdf', 'pdf')}
+                        ${this.createSimulatedAsset('Product_Concept_Render.jpg', 'image')}
+                        ${this.createSimulatedAsset('Launch_Strategy.md', 'code')}
+                    </div>
+                    <div class="sim-footer">
+                        <p class="sim-note">Executed by Cluster: Intel (DT-02)</p>
+                    </div>
+                </div>
+            `;
+            this.addAssetToGrid({ name: 'Trend_Forecast_Q3.pdf', size: 1024 * 1200, type: 'application/pdf' });
+            this.addAssetToGrid({ name: 'Product_Concept_Render.jpg', size: 1024 * 4100, type: 'image/jpeg' });
+        } else if (workflowId === 'morphosis') {
+            html = `
+                <div class="simulation-result">
+                    <div class="sim-header">
+                        <span class="sim-status success">🔄 TRANSFORMATION COMPLETE</span>
+                        <span class="sim-meta">8 Formats Generated | Omni-Channel Ready</span>
+                    </div>
+                    <div class="sim-section">
+                        <h4>SOURCE ADAPTED: CORE NARRATIVE</h4>
+                        <p>The core message has been successfully mutated into 8 distinct formats optimized for platform-specific engagement algorithms.</p>
+                    </div>
+                    <div class="sim-assets-list">
+                        ${this.createSimulatedAsset('Omni_Channel_Pack_v2.zip', 'text')}
+                        ${this.createSimulatedAsset('Blog_Post_Draft.md', 'code')}
+                        ${this.createSimulatedAsset('Twitter_Thread_Viral.txt', 'text')}
+                        ${this.createSimulatedAsset('Video_Script_Shorts.txt', 'text')}
+                    </div>
+                    <div class="sim-footer">
+                        <p class="sim-note">Executed by Cluster: Content (CC-01)</p>
+                    </div>
+                </div>
+            `;
+            this.addAssetToGrid({ name: 'Blog_Post_Draft.md', size: 1024 * 15, type: 'text/markdown' });
+            this.addAssetToGrid({ name: 'Twitter_Thread_Viral.txt', size: 1024 * 5, type: 'text/plain' });
+        } else if (workflowId === 'autopoiesis') {
+            html = `
+                <div class="simulation-result">
+                    <div class="sim-header">
+                        <span class="sim-status success">🧬 SELF-REPAIR COMPLETE</span>
+                        <span class="sim-meta">Efficiency +12% | Latency -15ms</span>
+                    </div>
+                    <div class="sim-section">
+                        <h4>OPTIMIZATION APPLIED: "LOGIC FRACTURE"</h4>
+                        <p>Detected and patched a recursive logic loop in the Strategy Cluster. Re-routed neural pathways for optimal throughput.</p>
+                    </div>
+                    <div class="sim-assets-list">
+                        ${this.createSimulatedAsset('Optimization_Log_Daily.txt', 'text')}
+                        ${this.createSimulatedAsset('System_Health_Report.pdf', 'pdf')}
+                        ${this.createSimulatedAsset('Patch_Notes_v5.1.md', 'code')}
+                    </div>
+                    <div class="sim-footer">
+                        <p class="sim-note">Executed by Cluster: Governance (MI-01)</p>
+                    </div>
+                </div>
+            `;
+            this.addAssetToGrid({ name: 'System_Health_Report.pdf', size: 1024 * 320, type: 'application/pdf' });
+            this.addAssetToGrid({ name: 'Optimization_Log_Daily.txt', size: 1024 * 12, type: 'text/plain' });
         } else {
              html = `
                 <div class="simulation-result">
@@ -1951,7 +2468,7 @@ const G5OS = {
         if (!this.currentPreviewAsset) return;
         
         const name = this.currentPreviewAsset.name;
-        
+
         // PDF HANDLING - Generate Real PDF
         if (this.currentPreviewAsset.type.includes('pdf') || name.endsWith('.pdf')) {
             try {
@@ -1962,9 +2479,7 @@ const G5OS = {
                 const doc = new jsPDF();
                 
                 // Styling
-                doc.setFillColor(20, 20, 20); // Dark background simulation (optional, standard PDF is white mostly)
-                // Actually keep it standard white for printability
-                
+                doc.setFillColor(20, 20, 20); 
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(22);
                 doc.setTextColor(40, 40, 40);
@@ -2028,6 +2543,9 @@ const G5OS = {
              }
              return;
         }
+        
+
+
         
         // VIDEO/AUDIO HANDLING (Simulated)
         if (this.currentPreviewAsset.type.includes('video') || this.currentPreviewAsset.type.includes('audio') || name.endsWith('.mp4') || name.endsWith('.mp3')) {

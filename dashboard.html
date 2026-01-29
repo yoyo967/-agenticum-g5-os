@@ -26,10 +26,17 @@
     <div class="vignette"></div>
     <canvas id="dashboard-particles"></canvas>
 
+    <!-- CORE DATA -->
+    <script src="assets/js/nodes.js?v=CORE"></script>
+    
     <!-- 2030 EXPERIENCE SCRIPTS -->
+    <!-- 3D LIBRARY -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script src="assets/js/immersive.js?v=OMEGA_V3" defer></script>
     <script src="assets/js/interactive.js?v=OMEGA_V3" defer></script>
-    <script src="assets/js/neural-network.js?v=OMEGA_V3" defer></script>
+    <!-- <script src="assets/js/neural-network.js?v=OMEGA_V3" defer></script> OLD 2D VIZ -->
+    <script src="assets/js/neural-3d.js?v=ATOMIC" defer></script>
 
     <!-- TOP BAR: System Status -->
     <header class="console-header">
@@ -168,7 +175,10 @@
                 <div class="header-actions">
                     <button class="header-btn" title="Initiate Red Team Attack" onclick="G5Dashboard.toggleRedTeam()">🛡️ RED_TEAM</button>
                     <button class="header-btn" title="System Diagnostics" onclick="G5Dashboard.runDiagnostics()">⚙️ DIAGNOSTICS</button>
-                    <button class="header-btn active" title="Switch View" onclick="G5Dashboard.toggleView()">👁️ VIEW</button>
+                    <button class="header-btn featured-btn" id="view-toggle-btn" title="Switch View" onclick="G5Dashboard.toggleView()">
+                        <span class="btn-glow"></span>
+                        <span class="btn-text">👁️ VIEW MODE</span>
+                    </button>
                 </div>
             </div>
 

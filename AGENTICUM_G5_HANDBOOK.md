@@ -102,6 +102,20 @@ The cursor is blinking. It challenges us. It waits for us.
 
 **System Status: Active. Command: Execute.**
 
+### APPENDIX A: HACKER MODE PROTOCOLS (CLASSIFIED)
+
+#### A.1 COMMAND LINE OVERRIDE
+
+The GUI is for clients. The Operator uses the terminal.
+
+- **Trigger:** Type `Initiate Campaign Genesis for NEURA-FIZZ`
+- **Result:** Bypasses manual selection. Auto-initializes the "5-Minute Agency" matrix.
+- **Visuals:** Activates "Spotlight Mode" (dims non-essential nodes).
+
+#### A.2 SPOTLIGHT FOCUS
+
+During high-latency operations, the OS automatically dims 80% of the grid to dedicate GPU cycles to the 10 active reasoning nodes.
+
 ---
 
 _End of Protocol (synchronized & absolute). Built by Operator Yahya Yildirim._

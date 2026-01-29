@@ -19,6 +19,21 @@
 }
 
 /* ============================================
+   CRITICAL Z-INDEX FIXES
+   ============================================ */
+.hero-content {
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+#hero-3d-container {
+    position: absolute !important;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0 !important;
+    opacity: 0.6 !important;
+}
+
+/* ============================================
    REMOVE GAMING EFFECTS
    ============================================ */
 .crt-overlay,
@@ -406,6 +421,24 @@
    ============================================ */
 .perfect-twin-section {
     background: #12151a !important;
+    position: relative;
+    overflow: hidden;
+}
+
+#twin-3d-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.6;
+    pointer-events: none; /* Let clicks pass through */
+}
+
+.twin-container {
+    position: relative;
+    z-index: 1; /* Keep content above 3D */
 }
 
 .twin-title {
@@ -633,19 +666,371 @@
     border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #3d4554;
+
+/* ============================================
+   DUAL ENTRY HERO BUTTONS
+   ============================================ */
+.hero-actions.dual-entry {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.primary-btn.cmd-btn {
+    background: linear-gradient(90deg, #00f3ff 0%, #0066ff 100%) !important;
+    border: none;
+    color: black !important;
+}
+
+.primary-btn.os-entry-btn {
+    background: transparent !important;
+    border: 1px solid #bf00ff !important;
+    color: #bf00ff !important;
+    box-shadow: 0 0 20px rgba(191, 0, 255, 0.2);
+}
+
+.primary-btn.os-entry-btn:hover {
+    background: rgba(191, 0, 255, 0.1) !important;
+    box-shadow: 0 0 30px rgba(191, 0, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
 }
 
 /* ============================================
-   RESPONSIVE ADJUSTMENTS
+   DUAL INTERFACE COMPARISON (PERFECT TWIN)
    ============================================ */
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 2.5rem !important;
-    }
-    
-    .sub-hero {
-        font-size: 2rem !important;
-    }
+.dual-interface-grid {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 2rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.interface-card {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.interface-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.commander-card:hover { border-color: var(--accent-teal); box-shadow: 0 10px 40px rgba(0, 243, 255, 0.1); }
+.os-card:hover { border-color: var(--accent-magenta); box-shadow: 0 10px 40px rgba(191, 0, 255, 0.1); }
+
+.card-glow {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 5px;
+}
+.card-glow.teal { background: var(--accent-teal); box-shadow: 0 0 20px var(--accent-teal); }
+.card-glow.purple { background: var(--accent-magenta); box-shadow: 0 0 20px var(--accent-magenta); }
+
+.card-header { text-align: center; margin-bottom: 2rem; }
+.card-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+.card-header h3 { font-family: var(--font-heading); font-size: 1.5rem; color: white !important; margin-bottom: 0.2rem; }
+
+.card-role {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.7;
+}
+.commander-card .card-role { color: var(--accent-teal); }
+.os-card .card-role { color: var(--accent-magenta); }
+
+.card-visual {
+    height: 150px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Abstract Mockups */
+.screen-mockup { width: 80%; height: 80%; background: #050505; border: 1px solid #333; border-radius: 4px; padding: 5px; }
+.mock-header { height: 10%; background: #222; margin-bottom: 5px; border-radius: 2px; }
+
+/* Commander Visual */
+.mock-body { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80%; gap: 5px; }
+.mock-central { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--accent-teal); }
+
+/* OS Visual */
+.mock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; height: 80%; padding: 2px; }
+.grid-cell { background: rgba(191, 0, 255, 0.2); border-radius: 2px; }
+
+.card-desc { text-align: center; color: #aaa; margin-bottom: 2rem; flex-grow: 1; }
+.card-desc p { font-size: 0.9rem; line-height: 1.6; }
+
+.card-btn {
+    display: block;
+    text-align: center;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+.btn-teal { background: rgba(0, 243, 255, 0.1); color: var(--accent-teal); border: 1px solid var(--accent-teal); }
+.btn-teal:hover { background: var(--accent-teal); color: black !important; box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+
+.btn-purple { background: rgba(191, 0, 255, 0.1); color: var(--accent-magenta); border: 1px solid var(--accent-magenta); }
+.btn-purple:hover { background: var(--accent-magenta); color: white !important; box-shadow: 0 0 20px rgba(191, 0, 255, 0.4); }
+
+/* Connector */
+.interface-connector {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.connector-line { width: 2px; height: 50px; background: linear-gradient(to bottom, transparent, #555, transparent); }
+.connector-node {
+    background: #111;
+    border: 1px solid #555;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #888;
+}
+.node-pulse { width: 6px; height: 6px; background: #0f0; border-radius: 50%; animation: pulse 1s infinite; }
+
+@media (max-width: 900px) {
+    .dual-interface-grid { flex-direction: column; align-items: center; }
+    .interface-connector { transform: rotate(90deg); margin: 1rem 0; }
+}
+/* ============================================
+   COMMERCIAL PROTOCOL SECTION (NEW)
+   ============================================ */
+.commercial-section {
+    background: #0d0f12 !important;
+    padding: 6rem 2rem;
+    border-top: 1px solid #2a2e36;
+}
+
+.commercial-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.comm-card {
+    flex: 1;
+    min-width: 320px;
+    background: #12151a;
+    border: 1px solid #2a2e36;
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.agency-model { border-color: rgba(248, 113, 113, 0.2); }
+.os-model { border-color: rgba(74, 158, 255, 0.3); background: rgba(74, 158, 255, 0.02); }
+
+.comm-header { text-align: center; margin-bottom: 2rem; }
+.comm-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+.comm-sub { font-size: 0.75rem; color: #6b7a99; letter-spacing: 1px; text-transform: uppercase; }
+
+.comm-metrics { margin-top: 2rem; }
+.metric-row { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #1f2329; color: #9aa0aa; font-family: var(--font-mono); font-size: 0.9rem; }
+.metric-row:last-child { border-bottom: none; }
+.val.bad { color: #f87171; }
+.val.good { color: #4a9eff; font-weight: bold; }
+
+.vs-badge {
+    width: 50px; height: 50px;
+    background: #1f2329;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #6b7a99; font-weight: bold; border: 1px solid #2a2e36;
+    z-index: 10;
+}
+
+.access-badge {
+    display: inline-block;
+    background: rgba(74, 158, 255, 0.1);
+    color: #4a9eff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 2rem;
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(74, 158, 255, 0.2);
+}
+
+.efficiency-delta {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 1.2rem;
+    color: #6b7a99;
+}
+.delta-value {
+    color: #4a9eff;
+    font-size: 2.5rem;
+    font-weight: bold;
+    display: block;
+    text-shadow: 0 0 20px rgba(74, 158, 255, 0.3);
+}
+
+/* ============================================
+   FUTURE TENSOR (ROADMAP) SECTION (NEW)
+   ============================================ */
+.tensor-section {
+    background: #12151a !important;
+    padding: 6rem 2rem;
+    position: relative;
+    border-top: 1px solid #2a2e36;
+}
+
+.tensor-timeline {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4rem;
+    position: relative;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tensor-timeline::before {
+    content: '';
+    position: absolute;
+    top: 40px; left: 0; right: 0;
+    height: 2px;
+    background: #2a2e36;
+    z-index: 0;
+}
+
+.tensor-node {
+    position: relative;
+    z-index: 1;
+    width: 22%;
+    text-align: center;
+}
+
+.t-year {
+    font-family: var(--font-mono);
+    color: #6b7a99;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.t-marker {
+    width: 20px; height: 20px;
+    background: #12151a;
+    border: 2px solid #4a9eff;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem auto;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.t-dot { width: 8px; height: 8px; background: #4a9eff; border-radius: 50%; opacity: 0; transition: opacity 0.3s; }
+.tensor-node.active .t-dot { opacity: 1; box-shadow: 0 0 10px #4a9eff; }
+
+.t-content {
+    background: #0d0f12;
+    border: 1px solid #2a2e36;
+    padding: 1.5rem;
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+.tensor-node:hover .t-content {
+    border-color: #4a9eff;
+    transform: translateY(-5px);
+}
+
+.t-content h3 { font-size: 1rem; color: #e8eaed; margin-bottom: 0.5rem; }
+.t-model { color: #f59e0b; font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 0.8rem; }
+.t-content p { font-size: 0.85rem; color: #9aa0aa; line-height: 1.5; }
+
+
+/* ============================================
+   TECHNOLOGY CORE SECTION (NEW)
+   ============================================ */
+.tech-core-section {
+    background: #0d0f12 !important;
+    padding: 6rem 2rem;
+    border-top: 1px solid #2a2e36;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.tech-card {
+    background: #12151a;
+    border: 1px solid #2a2e36;
+    padding: 2.5rem;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.tech-card:hover {
+    border-color: #9775fa;
+    background: linear-gradient(145deg, #12151a, #1a1e26);
+}
+
+.tc-icon { font-size: 2.5rem; margin-bottom: 1.5rem; }
+.tech-card h3 { color: #e8eaed; margin-bottom: 1rem; }
+
+/* Roadmap Detail Lists */
+.t-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+    text-align: left;
+}
+
+.t-list li {
+    font-size: 0.8rem;
+    color: #6b7a99;
+    margin-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 0.2rem;
+}
+
+.t-list li:last-child {
+    border-bottom: none;
 }
