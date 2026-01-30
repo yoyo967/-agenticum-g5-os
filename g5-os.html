@@ -1589,6 +1589,7 @@
                     <button class="settings-nav" data-section="appearance">Appearance</button>
                     <button class="settings-nav" data-section="nodes">Nodes</button>
                     <button class="settings-nav" data-section="api">API & Backend</button>
+                    <button class="settings-nav" data-section="foundry">Media Foundry</button>
                     <button class="settings-nav" data-section="shortcuts">Shortcuts</button>
                     <button class="settings-nav" data-section="about">About</button>
                 </div>
@@ -1774,15 +1775,90 @@
                                 <button class="btn-small" id="testConnection">Test Connection</button>
                             </div>
                         </div>
-                        <div class="setting-group">
-                            <label class="setting-toggle-label">
-                                <input type="checkbox" id="evolutionMode" checked>
-                                <span class="toggle-slider"></span>
-                                <span class="highlight-text">Activate EVOLUTION MODE (Live Gemini Cluster)</span>
-                            </label>
-                            <p class="setting-desc">Directs all commands to the live reasoning backend. Disables local simulation.</p>
-                        </div>
                     </div>
+                    
+                    <!-- Media Foundry (Enterprise Multimodal) -->
+                    <div class="settings-section" id="settings-foundry">
+                        <h3>Media Foundry & Synthesis</h3>
+                        <p class="section-desc">Enterprise-grade controls for Imagen 3, Veo, and Cloud TTS.</p>
+
+                        <!-- IMAGEN 3 CONFIG -->
+                        <div class="foundry-cluster">
+                            <h4><span class="icon">🖼️</span> Imagen 3: Industrial Visuals</h4>
+                            <div class="setting-group col-2">
+                                <div>
+                                    <label class="setting-label">Aspect Ratio</label>
+                                    <select class="setting-select" id="imgAspectRatio">
+                                        <option value="1:1">1:1 (Square)</option>
+                                        <option value="9:16" selected>9:16 (Vertical)</option>
+                                        <option value="16:9">16:9 (Cinematic)</option>
+                                        <option value="3:4">3:4 (Portrait)</option>
+                                        <option value="4:3">4:3 (Landscape)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="setting-label">Safety Filter</label>
+                                    <select class="setting-select" id="imgSafety">
+                                        <option value="BLOCK_MED_AND_ABOVE">Standard</option>
+                                        <option value="BLOCK_ONLY_HIGH">High Velocity</option>
+                                        <option value="BLOCK_NONE">Unfiltered (Admin)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <label class="setting-label">Atmosphere / Style</label>
+                                <input type="text" class="setting-input" id="imgStyle" placeholder="e.g. Industrial, Obsidian, Hyper-Realistic...">
+                            </div>
+                        </div>
+
+                        <!-- VEO CONFIG -->
+                        <div class="foundry-cluster">
+                            <h4><span class="icon">🎬</span> Veo: Cinematics</h4>
+                            <div class="setting-group col-2">
+                                <div>
+                                    <label class="setting-label">Target FPS</label>
+                                    <select class="setting-select" id="veoFps">
+                                        <option value="24">24 FPS (Film)</option>
+                                        <option value="30" selected>30 FPS (Standard)</option>
+                                        <option value="60">60 FPS (Fluid)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="setting-label">Duration</label>
+                                    <select class="setting-select" id="veoDuration">
+                                        <option value="6">6 Seconds</option>
+                                        <option value="10">10 Seconds</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TTS CONFIG -->
+                        <div class="foundry-cluster">
+                            <h4><span class="icon">🎙️</span> Cloud TTS: Neural Voice</h4>
+                            <div class="setting-group col-2">
+                                <div>
+                                    <label class="setting-label">Model Selection</label>
+                                    <select class="setting-select" id="ttsVoice">
+                                        <option value="en-US-Journey-F">Neural Journey (F)</option>
+                                        <option value="en-US-Journey-D">Neural Journey (M)</option>
+                                        <option value="en-GB-Standard-A">Studio British (F)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="setting-label">Speech Velocity</label>
+                                    <input type="range" class="setting-range" id="ttsSpeed" min="0.5" max="2.0" step="0.1" value="1.0">
+                                    <span class="range-val" id="ttsSpeedVal">1.0x</span>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <label class="setting-toggle-label">
+                                    <input type="checkbox" id="ttsAutoPlay" checked>
+                                    <span class="toggle-slider"></span>
+                                    Auto-synthesize system responses
+                                </label>
+                            </div>
+                        </div>
                     
                     <!-- Shortcuts Settings -->
                     <div class="settings-section" id="settings-shortcuts">

@@ -1664,6 +1664,133 @@
     backdrop-filter: blur(4px);
 }
 
+/* ============================================
+   MEDIA FOUNDRY & FOUNDRY SETTINGS
+   ============================================ */
+.foundry-cluster {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.foundry-cluster h4 {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-primary);
+}
+
+.setting-group.col-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.range-val {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-primary);
+    margin-left: 8px;
+}
+
+/* ============================================
+   G5 MEDIA PIPELINE (VEO TRACKER)
+   ============================================ */
+.media-pipeline {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px dashed var(--border-color);
+    border-radius: 6px;
+}
+
+.pipeline-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+}
+
+.pipeline-status {
+    color: var(--accent-warning);
+}
+
+.pipeline-progress-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.pipeline-fill {
+    height: 100%;
+    background: var(--accent-primary);
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.pipeline-fill.processing {
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan));
+    animation: pipelineThrob 2s infinite;
+}
+
+@keyframes pipelineThrob {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* ============================================
+   RICH MEDIA MESSAGES
+   ============================================ */
+.chat-asset-preview {
+    margin-top: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.chat-asset-preview img, 
+.chat-asset-preview video {
+    width: 100%;
+    display: block;
+}
+
+.asset-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    display: flex;
+    gap: 8px;
+}
+
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: white;
+}
+
 .palette-container {
     position: absolute;
     top: 15%;

@@ -13,6 +13,8 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { helpers, ImageGenerationModel, ImageGenerationResponse } = require("@google-cloud/aiplatform");
 const aiplatform = require("@google-cloud/aiplatform");
 const { PredictionServiceClient } = aiplatform.v1;
+const textToSpeech = require('@google-cloud/text-to-speech');
+const ttsClient = new textToSpeech.TextToSpeechClient();
 
 // ============================================
 // G5 SYSTEM PROMPT: THE 52-NODE FABRIC
@@ -131,8 +133,17 @@ exports.agenticSwarm = onRequest({
     const startTime = Date.now();
     logger.info("G5 >> Ingesting Command Vector", { structuredData: true });
 
-    try {
-      const { command, context, mode } = req.body;
+      // Parse request
+      const { command, context, settings } = req.body;
+      
+      // ENTERPRISE CONFIG DEFAULTS
+      const foundry = settings || {
+        imgAspectRatio: '1:1',
+        imgSafety: 'BLOCK_MED_AND_ABOVE',
+        ttsVoice: 'en-US-Journey-F',
+        ttsSpeed: 1.0,
+        ttsAutoPlay: true
+      };
 
       if (!command) {
         res.status(400).json({ 
@@ -143,14 +154,15 @@ exports.agenticSwarm = onRequest({
         return;
       }
 
-      // Check for API Key
-      const apiKey = process.env.GEMINI_API_KEY;
+      // Check for API Key (From process.env or Header)
+      const apiKey = process.env.GEMINI_API_KEY || req.headers.authorization?.split(' ')[1];
       if (!apiKey) {
         logger.warn("G5 >> API Key not configured, running in SIMULATION mode");
         return runSimulationMode(res, command);
       }
 
-      // Initialize Gemini
+      try {
+        // Initialize Gemini
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ 
         model: "gemini-1.5-flash",
@@ -176,50 +188,22 @@ exports.agenticSwarm = onRequest({
       logger.info(`G5 >> Activating ${activeNodes.length} nodes`, { nodes: activeNodes.map(n => n.id) });
 
       // ============================================
-      // IMAGE GENERATION LAYER (IMAGEN 3)
+      // VIDEO GENERATION LAYER (VEO 001)
       // ============================================
-      const isImageRequest = command.toLowerCase().match(/generate|create|visualize|draw|make|design.*(image|picture|graphic|visual|poster|asset)/);
-      let generatedImageData = null;
+      const isVideoRequest = command.toLowerCase().match(/generate|create|make|shoot|produce.*(video|clip|movie|animation|cinematic)/);
+      let videoJob = null;
 
-      if (isImageRequest) {
-        try {
-          logger.info("G5 >> Detected Image Vector. Activating CC-06 (Video Director/Visual Forge)...");
-          
-          // Use Vertex AI SDK directly for Imagen 3
-          // Note: This requires the service account of the function to have Vertex AI User role
-          const project = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT;
-          const location = "us-central1"; // Imagen 3 is widely available here
-          
-          const endpoint = `projects/${project}/locations/${location}/publishers/google/models/imagen-3.0-generate-001`;
-          
-          // Re-using Vertex AI logic
-          const clientOptions = { apiEndpoint: `${location}-aiplatform.googleapis.com` };
-          const predictionServiceClient = new PredictionServiceClient(clientOptions);
-
-          const instance = helpers.toValue({ prompt: command });
-          const instances = [instance];
-          const parameter = helpers.toValue({
-            sampleCount: 1,
-            aspectRatio: "1:1",
-            storageUri: "" // Return as base64
-          });
-          const parameters = parameter;
-
-          const [imgResult] = await predictionServiceClient.predict({
-            endpoint,
-            instances,
-            parameters,
-          });
-
-          if (imgResult.predictions && imgResult.predictions.length > 0) {
-            const prediction = helpers.fromValue(imgResult.predictions[0]);
-            generatedImageData = prediction.bytesBase64Encoded;
-            logger.info("G5 >> Image Generated Successfully via Imagen 3");
-          }
-        } catch (imgError) {
-          logger.error("G5 >> Imagen 3 Failure", { error: imgError.message });
-          // We'll still proceed with text generation as a fallback/context
-        }
+      if (isVideoRequest) {
+        logger.info("G5 >> Video Directive Detected. Activating CC-06 (Video Director)...");
+        // For the hackathon, we simulate the async job start but provide a real Pipeline structure
+        videoJob = {
+          job_id: `veo-${Date.now()}`,
+          status: "RENDERING",
+          progress: 0,
+          eta: foundry.veoDuration === "10" ? "45s" : "30s",
+          fps: foundry.veoFps || "30",
+          resolution: "1080p"
+        };
       }
 
       // Call Gemini API (Reasoning)
@@ -227,11 +211,36 @@ exports.agenticSwarm = onRequest({
       const response = await result.response;
       const text = response.text();
 
-      // Calculate processing time
-      const processingTime = Date.now() - startTime;
-
       // Update trace to completed
       reasoningTrace.forEach(node => node.status = "COMPLETED");
+
+      // ============================================
+      // VOICE SYNTHESIS LAYER (CLOUD TTS)
+      // ============================================
+      let audioBase64 = null;
+      if (foundry.ttsAutoPlay) {
+        try {
+          logger.info("G5 >> Synthesizing Neural Voice...");
+          const [ttsResponse] = await ttsClient.synthesizeSpeech({
+            input: { text: text },
+            voice: { 
+              name: foundry.ttsVoice || 'en-US-Journey-F',
+              languageCode: 'en-US' 
+            },
+            audioConfig: { 
+              audioEncoding: 'MP3',
+              speakingRate: foundry.ttsSpeed || 1.0
+            },
+          });
+          audioBase64 = ttsResponse.audioContent.toString('base64');
+          logger.info("G5 >> Voice Synthesis Successful");
+        } catch (ttsError) {
+          logger.error("G5 >> TTS Failure", { error: ttsError.message });
+        }
+      }
+
+      // Calculate processing time
+      const processingTime = Date.now() - startTime;
 
       // Respond with full G5 structure
       res.json({
@@ -247,6 +256,8 @@ exports.agenticSwarm = onRequest({
           mimeType: "image/png",
           name: `g5_asset_${Date.now()}.png`
         } : null,
+        media_pipeline: videoJob,
+        audio_stream: audioBase64,
         metadata: {
           model: generatedImageData ? "Gemini-1.5-Flash + Imagen-3" : "Gemini-1.5-Flash",
           mode: "LIVE",

@@ -40,7 +40,7 @@ const G5_API = {
      * @param {string} context - Optional context for the command
      * @returns {Promise<Object>} - The G5 response
      */
-    async execute(command, context = null) {
+    async execute(command, context = null, settings = {}) {
         // HYBRID MODE CHECK
         // If we have a key in localStorage, try Real Mode.
         // Otherwise, or if Real Mode fails, fall back to Simulation.
@@ -79,7 +79,8 @@ const G5_API = {
                 },
                 body: JSON.stringify({
                     command: command,
-                    context: context
+                    context: context,
+                    settings: settings // ENTERPRISE CONFIG LAYER
                 })
             });
             
