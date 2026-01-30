@@ -4,6 +4,29 @@ All notable changes to AGENTICUM G5 will be documented in this file.
 
 ---
 
+## [7.0.0_RC] - 2026-01-30
+
+### 🚀 ENTERPRISE HARDENING (RELEASE CANDIDATE)
+
+The OS has been hardened from a prototype to a functional Enterprise Operational Environment.
+
+### ✨ Added
+
+- **Industrial Node Matrix** - Real-time `vCPU`, `MEM`, and `LATENCY` monitors for all 52 nodes.
+- **Parametric Neural Playground** - Live inference sandbox with Temperature/Top-K controls for Gemini 1.5 Pro/Flash.
+- **System Audit Trail** - Immutable operation logging with `INTEGRITY_SALT` hashing for compliance.
+- **Real-Time Workflow Trace** - Step-by-step visual execution trace for "5-Minute Agency" and "Senate" protocols.
+- **Hacker Mode Protocol** - Classified CLI override (`Initiate Campaign Genesis`) for demo acceleration.
+- **System Constitution** - Hidden `CTRL` modally accessible manifesto (Easter Egg).
+
+### 🎨 Changed
+
+- **Visual Core** - Unified `pulseCluster` animation engine color-synced with node categories (Strategy=Blue, Content=Fuchsia, etc.).
+- **Typography** - Enforced `JetBrains Mono` for all data-dense interfaces to match "BloomTerminal" aesthetic.
+- **Performance** - Optimized DOM node updates during high-frequency simulation steps.
+
+---
+
 ## [6.0.0] - 2026-01-28
 
 ### ✨ Added

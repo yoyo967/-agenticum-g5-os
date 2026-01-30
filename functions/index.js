@@ -14,7 +14,7 @@ const { helpers, ImageGenerationModel, ImageGenerationResponse } = require("@goo
 const aiplatform = require("@google-cloud/aiplatform");
 const { PredictionServiceClient } = aiplatform.v1;
 const textToSpeech = require('@google-cloud/text-to-speech');
-const ttsClient = new textToSpeech.TextToSpeechClient();
+let ttsClient = null;
 
 // ============================================
 // G5 SYSTEM PROMPT: THE 52-NODE FABRIC
@@ -144,6 +144,9 @@ exports.agenticSwarm = onRequest({
         ttsSpeed: 1.0,
         ttsAutoPlay: true
       };
+      
+      // Extract image if present (Multimodal Eye)
+      const imageBase64 = req.body.image || null;
 
       if (!command) {
         res.status(400).json({ 
@@ -170,9 +173,20 @@ exports.agenticSwarm = onRequest({
       });
 
       // Build the prompt with context
-      const fullPrompt = context 
-        ? `CONTEXT:\n${context}\n\nCOMMAND:\n${command}`
-        : `COMMAND:\n${command}`;
+      // Build the prompt with context and potential image
+      let fullPrompt = [];
+      
+      if (imageBase64) {
+          logger.info("G5 >> Multimodal Vision Payload Detected");
+          fullPrompt = [
+             { text: context ? `CONTEXT:\n${context}\n\nCOMMAND:\n${command}` : `COMMAND:\n${command}` },
+             { inlineData: { mimeType: "image/png", data: imageBase64 } }
+          ];
+      } else {
+          fullPrompt = context 
+            ? `CONTEXT:\n${context}\n\nCOMMAND:\n${command}`
+            : `COMMAND:\n${command}`;
+      }
 
       // Select active nodes for this command
       const activeNodes = selectNodes(command);
@@ -193,17 +207,46 @@ exports.agenticSwarm = onRequest({
       const isVideoRequest = command.toLowerCase().match(/generate|create|make|shoot|produce.*(video|clip|movie|animation|cinematic)/);
       let videoJob = null;
 
-      if (isVideoRequest) {
-        logger.info("G5 >> Video Directive Detected. Activating CC-06 (Video Director)...");
-        // For the hackathon, we simulate the async job start but provide a real Pipeline structure
-        videoJob = {
-          job_id: `veo-${Date.now()}`,
-          status: "RENDERING",
-          progress: 0,
-          eta: foundry.veoDuration === "10" ? "45s" : "30s",
-          fps: foundry.veoFps || "30",
-          resolution: "1080p"
-        };
+      // ============================================
+      // IMAGE GENERATION LAYER (IMAGEN 3)
+      // ============================================
+      let generatedImageData = null;
+      const isImageRequest = command.toLowerCase().match(/image|visual|picture|draw|sketch|generate.*(art|photo)/);
+      
+      if (isImageRequest && !isVideoRequest && !generatedImageData) {
+          logger.info("G5 >> Image Directive Detected. Activating CC-07 (Imagen 3)...");
+          try {
+             // Clean prompt
+             const imagePrompt = `high quality, professional, ${command.replace(/generate|create|make|image|picture/gi, '').trim()}`;
+             
+             // Initialize Vertex AI (Dynamic Init)
+             const aiplatform = require("@google-cloud/aiplatform");
+             const { ImageGenerationModel } = aiplatform;
+             
+             aiplatform.init({
+                project: process.env.GCP_PROJECT || 'tutorai-e39uu',
+                location: 'us-central1'
+             });
+
+             const imagenModel = new ImageGenerationModel({
+                 model: 'imagegeneration@006',
+             });
+
+             const response = await imagenModel.generate({
+                 prompt: imagePrompt,
+                 numberOfImages: 1,
+                 aspectRatio: foundry.imgAspectRatio || '1:1',
+                 safetyFilterLevel: foundry.imgSafety || 'block_medium_and_above',
+                 personGeneration: 'allow_adult',
+             });
+             
+             if (response.images && response.images.length > 0) {
+                 generatedImageData = response.images[0].toString('base64');
+                 logger.info("G5 >> Imagen 3 Generation Successful");
+             }
+          } catch (imgError) {
+             logger.error("G5 >> Imagen 3 Failure", { error: imgError.message });
+          }
       }
 
       // Call Gemini API (Reasoning)
@@ -221,6 +264,9 @@ exports.agenticSwarm = onRequest({
       if (foundry.ttsAutoPlay) {
         try {
           logger.info("G5 >> Synthesizing Neural Voice...");
+          if (!ttsClient) {
+              ttsClient = new textToSpeech.TextToSpeechClient();
+          }
           const [ttsResponse] = await ttsClient.synthesizeSpeech({
             input: { text: text },
             voice: { 

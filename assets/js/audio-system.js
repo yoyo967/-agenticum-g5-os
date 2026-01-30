@@ -203,6 +203,31 @@ class G5AudioController {
         osc.start();
         osc.stop(this.ctx.currentTime + 0.03);
     }
+
+    /**
+     * Chaotic burst for glitch effects
+     */
+    playGlitch() {
+        if (!this.enabled) return;
+        const now = this.ctx.currentTime;
+        const duration = 0.2;
+        
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(50 + Math.random() * 200, now);
+        osc.frequency.exponentialRampToValueAtTime(10, now + duration);
+        
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        
+        osc.start();
+        osc.stop(now + duration);
+    }
 }
 
 // Singleton Instance

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AGENTICUM G5 | OPERATING SYSTEM</title>
+    <title>AGENTICUM G5 | THE PERFECT TWIN</title>
     <meta name="description" content="Industrial Autonomous Marketing Operating System - 52 Specialized AI Nodes">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -189,11 +189,11 @@
          ============================================ -->
     <header class="os-header">
         <div class="os-header-left">
-            <div class="os-logo">
+            <a href="index.html" class="os-logo" style="text-decoration: none; cursor: pointer;">
                 <span class="logo-icon">◆</span>
                 <span class="logo-text">AGENTICUM</span>
                 <span class="logo-version">G5</span>
-            </div>
+            </a>
             <nav class="os-tabs">
                 <button class="os-tab active" data-view="workspace">
                     <span class="tab-icon">⬡</span>
@@ -219,12 +219,19 @@
                     <span class="tab-icon">📦</span>
                     <span>Assets</span>
                 </button>
+                <button class="os-tab" data-view="logs">
+                    <span class="tab-icon">📋</span>
+                    <span>Audit</span>
+                </button>
             </nav>
         </div>
         <div class="os-header-center">
             <div class="os-status">
                 <span class="status-dot online"></span>
                 <span class="status-text">52 NODES OPERATIONAL</span>
+            </div>
+            <div class="jury-indicator pulse-text" style="font-size: 8px; color: var(--accent-secondary); margin-top: 4px; letter-spacing: 1.5px; opacity:0.8;">
+                RECALL: SOVEREIGN_DB | <span style="color:#60a5fa;">MODE: JURY_CORE_UPLINK</span>
             </div>
         </div>
         <div class="os-header-right">
@@ -241,7 +248,10 @@
             <button class="os-btn-icon" id="settingsBtn" title="Settings">⚙️</button>
             <div class="os-user">
                 <span class="user-avatar">YY</span>
-                <span class="user-name">OPERATOR_YILDIRIM</span>
+                <div style="display:flex; flex-direction:column; align-items:flex-end; line-height:1.1;">
+                    <span class="user-name" style="font-size:11px;">OPERATOR_YILDIRIM</span>
+                    <span style="font-size:9px; color:var(--accent-primary);">ARCHITECT // G5_RC</span>
+                </div>
             </div>
         </div>
     </header>
@@ -767,6 +777,13 @@
                                 <span style="font-size: 12px; color: var(--accent-primary); letter-spacing: 1px;">FABRICATE NODE</span>
                             </div>
                         </div>
+              <!-- HEADER -->
+            <header class="os-header">
+                <div>
+                    <h1 class="logo-title">AGENTICUM G5 <span style="opacity:0.5; font-weight:300;">| THE PERFECT TWIN</span></h1>
+                    <div style="font-size:10px; color:var(--text-secondary); letter-spacing:2px; margin-top:2px;">DIGITAL ISOMORPHISM PROTOCOL • V5.0.0</div>
+                </div>
+            </header>
 
                         <!-- APEX -->
                         <div class="agent-tile apex" data-node="SN-00">
@@ -777,15 +794,15 @@
                             <div class="tile-body">
                                 <span class="tile-id">SN-00</span>
                                 <span class="tile-name">Orchestrator</span>
-                                <span class="tile-cluster">APEX</span>
-                            </div>
-                            <div class="tile-actions">
-                                <button class="tile-btn" title="Configure">⚙️</button>
-                                <button class="tile-btn" title="Logs">📋</button>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 45%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 62%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">12ms</span></div>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- STRATEGY -->
+                        <!-- STRATEGY CLUSTER -->
                         <div class="agent-tile sp" data-node="SP-01">
                             <div class="tile-header">
                                 <span class="tile-icon">◆</span>
@@ -794,11 +811,11 @@
                             <div class="tile-body">
                                 <span class="tile-id">SP-01</span>
                                 <span class="tile-name">Campaign Strategist</span>
-                                <span class="tile-cluster">STRATEGY</span>
-                            </div>
-                            <div class="tile-actions">
-                                <button class="tile-btn">⚙️</button>
-                                <button class="tile-btn">📋</button>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 22%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 31%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">45ms</span></div>
+                                </div>
                             </div>
                         </div>
                         
@@ -810,15 +827,15 @@
                             <div class="tile-body">
                                 <span class="tile-id">SP-99</span>
                                 <span class="tile-name">Hegemony Matrix</span>
-                                <span class="tile-cluster">STRATEGY</span>
-                            </div>
-                            <div class="tile-actions">
-                                <button class="tile-btn">⚙️</button>
-                                <button class="tile-btn">📋</button>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 88%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 92%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">120ms</span></div>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- RESEARCH -->
+                        <!-- RESEARCH CLUSTER -->
                         <div class="agent-tile ra" data-node="RA-01">
                             <div class="tile-header">
                                 <span class="tile-icon">◆</span>
@@ -827,11 +844,27 @@
                             <div class="tile-body">
                                 <span class="tile-id">RA-01</span>
                                 <span class="tile-name">Authority Auditor</span>
-                                <span class="tile-cluster">RESEARCH</span>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 15%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 28%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">32ms</span></div>
+                                </div>
                             </div>
-                            <div class="tile-actions">
-                                <button class="tile-btn">⚙️</button>
-                                <button class="tile-btn">📋</button>
+                        </div>
+                        
+                        <div class="agent-tile ra" data-node="RA-06">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">RA-06</span>
+                                <span class="tile-name">Trend Forecaster</span>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 35%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 42%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">65ms</span></div>
+                                </div>
                             </div>
                         </div>
                         
@@ -843,15 +876,15 @@
                             <div class="tile-body">
                                 <span class="tile-id">RA-52</span>
                                 <span class="tile-name">Red Team</span>
-                                <span class="tile-cluster">RESEARCH</span>
-                            </div>
-                            <div class="tile-actions">
-                                <button class="tile-btn">⚙️</button>
-                                <button class="tile-btn">📋</button>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill processing" style="width: 95%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 76%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">180ms</span></div>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- CONTENT -->
+                        <!-- CONTENT CLUSTER -->
                         <div class="agent-tile cc" data-node="CC-01">
                             <div class="tile-header">
                                 <span class="tile-icon">◆</span>
@@ -860,14 +893,30 @@
                             <div class="tile-body">
                                 <span class="tile-id">CC-01</span>
                                 <span class="tile-name">Copy Chief</span>
-                                <span class="tile-cluster">CONTENT</span>
-                            </div>
-                            <div class="tile-actions">
-                                <button class="tile-btn">⚙️</button>
-                                <button class="tile-btn">📋</button>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill processing" style="width: 65%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 44%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">55ms</span></div>
+                                </div>
                             </div>
                         </div>
                         
+                        <div class="agent-tile cc" data-node="CC-06">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">CC-06</span>
+                                <span class="tile-name">Video Director (Veo)</span>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 8%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 95%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">1.2s</span></div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="agent-tile cc" data-node="CC-07">
                             <div class="tile-header">
                                 <span class="tile-icon">◆</span>
@@ -875,16 +924,32 @@
                             </div>
                             <div class="tile-body">
                                 <span class="tile-id">CC-07</span>
-                                <span class="tile-name">Imagen 3 Gen</span>
-                                <span class="tile-cluster">CONTENT</span>
+                                <span class="tile-name">Imagen 3 Forge</span>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 12%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 85%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">900ms</span></div>
+                                </div>
                             </div>
-                            <div class="tile-actions">
-                                <button class="tile-btn">⚙️</button>
-                                <button class="tile-btn">📋</button>
+                        </div>
+
+                        <div class="agent-tile cc" data-node="CC-08">
+                            <div class="tile-header">
+                                <span class="tile-icon">◆</span>
+                                <span class="tile-status online"></span>
+                            </div>
+                            <div class="tile-body">
+                                <span class="tile-id">CC-08</span>
+                                <span class="tile-name">Flash Voice (TTS)</span>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 5%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 15%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">150ms</span></div>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- GOVERNANCE -->
+                        <!-- GOVERNANCE CLUSTER -->
                         <div class="agent-tile mi" data-node="MI-01">
                             <div class="tile-header">
                                 <span class="tile-icon">◆</span>
@@ -893,15 +958,15 @@
                             <div class="tile-body">
                                 <span class="tile-id">MI-01</span>
                                 <span class="tile-name">Compliance Officer</span>
-                                <span class="tile-cluster">GOVERNANCE</span>
-                            </div>
-                            <div class="tile-actions">
-                                <button class="tile-btn">⚙️</button>
-                                <button class="tile-btn">📋</button>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 5%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 10%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">8ms</span></div>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- INTEL -->
+                        <!-- INTEL CLUSTER -->
                         <div class="agent-tile dt" data-node="DT-02">
                             <div class="tile-header">
                                 <span class="tile-icon">◆</span>
@@ -910,11 +975,11 @@
                             <div class="tile-body">
                                 <span class="tile-id">DT-02</span>
                                 <span class="tile-name">Pricing Algorithm</span>
-                                <span class="tile-cluster">INTEL</span>
-                            </div>
-                            <div class="tile-actions">
-                                <button class="tile-btn">⚙️</button>
-                                <button class="tile-btn">📋</button>
+                                <div class="node-metrics-block">
+                                    <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 40%;"></div></div></div>
+                                    <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 55%;"></div></div></div>
+                                    <div class="metric-line"><span>LAT</span><span class="metric-val">220ms</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1088,13 +1153,13 @@
                             </div>
                         </div>
                         
-                        <!-- AUTOPOIESIS -->
+                        <!-- GEMINI TRAINS GEMINI (AUTOPOIESIS) -->
                         <div class="workflow-card active" data-workflow="autopoiesis">
                             <div class="wf-card-header">
                                 <span class="wf-card-icon">🔧</span>
                                 <div class="wf-card-info">
-                                    <span class="wf-card-name">Autopoiesis</span>
-                                    <span class="wf-card-desc">Self-optimizing content pipeline</span>
+                                    <span class="wf-card-name">Gemini Trains Gemini</span>
+                                    <span class="wf-card-desc">Self-Reflective Loop: AI critique & optimization cycle</span>
                                 </div>
                                 <span class="wf-card-status running">ACTIVE</span>
                             </div>
@@ -1196,9 +1261,12 @@
                         </div>
                         <textarea id="playgroundSystem" style="height:150px; background:#111; border:1px solid #333; color:var(--text-secondary); padding:10px; font-family:'JetBrains Mono'; resize:none; margin-bottom:20px; font-size:12px;" placeholder="You are a helpful assistant..."></textarea>
                         
-                        <div style="margin-bottom:10px; display:flex; justify-content:space-between;">
+                        <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
                             <label style="font-size:12px; color:var(--accent-primary);">USER INPUT</label>
-                            <button class="btn btn-primary btn-small" id="runPlaygroundBtn">▶ RUN (Ctrl+Enter)</button>
+                            <div>
+                                <button class="btn btn-secondary btn-small" id="micBtn" style="margin-right:10px;" title="Push to Talk (Voice Protocol)">🎙️</button>
+                                <button class="btn btn-primary btn-small" id="runPlaygroundBtn">▶ RUN (Ctrl+Enter)</button>
+                            </div>
                         </div>
                         <textarea id="playgroundInput" style="flex:1; background:#0a0a0a; border:1px solid #333; color:var(--text-primary); padding:15px; font-family:'JetBrains Mono'; resize:none; font-size:14px;" placeholder="Enter your prompt here..."></textarea>
                     </div>
@@ -1240,7 +1308,107 @@
                     </div>
                 </div>
             </div>
+            <!-- SYSTEM LOGS VIEW (ENTERPRISE AUDIT) -->
+            <div class="workspace-content hidden" id="logsView" style="height:100%; display:none; flex-direction:column;">
+                <div class="logs-header" style="padding: 20px; border-bottom: 1px solid #333; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:24px;">📋</span>
+                        <div>
+                            <h2 style="margin:0; font-size:18px; letter-spacing:1px;">SYSTEM AUDIT TRAIL</h2>
+                            <span style="font-size:12px; color:var(--text-secondary);">Enterprise Operational Integrity Logs</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-secondary btn-small" id="clearAudit">CLEAR LOGS</button>
+                        <button class="btn btn-primary btn-small" id="exportAudit">EXPORT PDF/JSON</button>
+                    </div>
+                </div>
+                <div class="logs-body" style="flex:1; overflow:hidden; display:flex; flex-direction:column; padding:0;">
+                    <table class="audit-table" style="width:100%; border-collapse:collapse; color:var(--text-secondary); font-size:11px; font-family:'JetBrains Mono';">
+                        <thead style="background:#111; position:sticky; top:0; z-index:10;">
+                            <tr>
+                                <th style="text-align:left; padding:12px 20px; border-bottom:1px solid #333;">TIMESTAMP</th>
+                                <th style="text-align:left; padding:12px; border-bottom:1px solid #333;">NODE_ID</th>
+                                <th style="text-align:left; padding:12px; border-bottom:1px solid #333;">EVENT_TYPE</th>
+                                <th style="text-align:left; padding:12px; border-bottom:1px solid #333;">DESCRIPTION</th>
+                                <th style="text-align:right; padding:12px 20px; border-bottom:1px solid #333;">INTEGRITY_SALT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditTrailBody">
+                            <!-- DYNAMIC LOGS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </main>
+
+        <!-- AGENT FOUNDRY MODAL (FABRICATE NODE) -->
+        <div id="agent-foundry-modal" class="modal hidden" style="z-index: 2000; background: rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center;">
+            <div class="modal-content industrial-modal" style="width: 800px; height: 600px; display:flex;">
+                <!-- PREVIEW COLUMN -->
+                <div class="foundry-preview" style="flex:1; background:#050505; border-right:1px solid #333; padding:20px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                    <div class="agent-tile active-demo-node" id="foundryPreviewTile" style="width:200px; height:200px; transform:scale(1.2);">
+                        <div class="tile-header">
+                            <span class="tile-icon" id="previewIcon">◆</span>
+                            <span class="tile-status online"></span>
+                        </div>
+                        <div class="tile-body">
+                            <span class="tile-id" id="previewId">XX-00</span>
+                            <span class="tile-name" id="previewName">New Node</span>
+                            <div class="node-metrics-block">
+                                <div class="metric-line"><span>vCPU</span><div class="metric-bar"><div class="bar-fill" style="width: 100%;"></div></div></div>
+                                <div class="metric-line"><span>MEM</span><div class="metric-bar"><div class="bar-fill" style="width: 100%;"></div></div></div>
+                                <div class="metric-line"><span>LAT</span><span class="metric-val">0ms</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top:30px; text-align:center;">
+                        <h3 style="color:var(--text-secondary); font-size:12px; letter-spacing:2px;">VISUALIZATION</h3>
+                        <div style="margin-top:10px; display:flex; gap:10px; justify-content:center;">
+                             <input type="color" id="foundryColor" value="#4ade80" style="background:none; border:none; width:30px; height:30px; cursor:pointer;">
+                             <span id="foundryColorHex" style="font-family:'JetBrains Mono'; font-size:12px; color:#fff; line-height:30px;">#4ade80</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONFIG COLUMN -->
+                <div class="foundry-config" style="flex:1; padding:30px; overflow-y:auto;">
+                    <h2 style="font-family:'Rajdhani'; font-size:24px; margin-bottom:5px;">FABRICATE NODE</h2>
+                    <p style="font-size:12px; color:var(--text-secondary); margin-bottom:30px;">Define neural architecture and role constraints.</p>
+
+                    <div class="form-group" style="margin-bottom:20px;">
+                        <label style="display:block; font-size:10px; color:var(--text-secondary); letter-spacing:1px; margin-bottom:5px;">DESIGNATION ID</label>
+                        <input type="text" id="foundryId" style="width:100%; background:#111; border:1px solid #333; padding:10px; color:#fff; font-family:'JetBrains Mono';" value="XX-99">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:20px;">
+                        <label style="display:block; font-size:10px; color:var(--text-secondary); letter-spacing:1px; margin-bottom:5px;">NODE NAME</label>
+                        <input type="text" id="foundryName" style="width:100%; background:#111; border:1px solid #333; padding:10px; color:#fff; font-family:'JetBrains Mono';" value="New Agent">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:20px;">
+                        <label style="display:block; font-size:10px; color:var(--text-secondary); letter-spacing:1px; margin-bottom:5px;">CLUSTER</label>
+                        <select id="foundryCluster" class="g5-select" style="width:100%;">
+                            <option value="STRATEGY">STRATEGY</option>
+                            <option value="CONTENT">CONTENT</option>
+                            <option value="RESEARCH">RESEARCH</option>
+                            <option value="GOVERNANCE">GOVERNANCE</option>
+                            <option value="INTEL">INTELLIGENCE</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:30px;">
+                         <label style="display:block; font-size:10px; color:var(--text-secondary); letter-spacing:1px; margin-bottom:5px;">SYSTEM PROMPT</label>
+                         <textarea id="foundryPrompt" style="width:100%; height:100px; background:#111; border:1px solid #333; padding:10px; color:#fff; font-family:'JetBrains Mono'; resize:none;">You are a specialized G5 node.</textarea>
+                    </div>
+
+                    <div style="display:flex; gap:10px; justify-content:flex-end;">
+                        <button class="btn btn-secondary" id="closeFoundry">CANCEL</button>
+                        <button class="btn btn-primary" id="spawnAgentBtn">INITIALIZE NODE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- RIGHT PANEL: AGENT CONFIGURATION -->
         <aside class="os-panel os-panel-right" id="rightPanel">
@@ -2432,6 +2600,59 @@
     
     <!-- 3D NAVIGATOR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* CONTEXT MENU & SYSTEM POLISH (PHASE 6) */
+        .context-menu {
+            position: fixed;
+            z-index: 10000 !important;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px 0;
+            width: 220px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            transform-origin: top left;
+            animation: menuFade 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .context-menu.hidden { display: none; }
+        .context-menu-item {
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-family: var(--font-primary);
+            transition: all 0.2s;
+        }
+        .context-menu-item:hover {
+            background: var(--bg-elevated);
+            color: var(--accent-primary);
+            padding-left: 20px;
+        }
+        .context-menu-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 6px 0;
+            opacity: 0.5;
+        }
+        .menu-shortcut {
+            margin-left: auto;
+            font-size: 10px;
+            opacity: 0.5;
+            font-family: var(--font-mono);
+        }
+        .context-menu-item.danger:hover {
+            color: #ef4444; 
+            background: rgba(239, 68, 68, 0.1);
+        }
+        @keyframes menuFade {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
     <script src="assets/js/neural-3d.js?v=ATOMIC" defer></script>
     
     <script>
@@ -2445,5 +2666,34 @@
         }
     }
     </script>
+    <!-- SYSTEM CONSTITUTION MODAL (EASTER EGG) -->
+    <div id="constitutionModal" class="modal hidden" style="z-index: 10000; background: rgba(0,0,0,0.95); display:none; justify-content:center; align-items:center;">
+        <div class="modal-content industrial-modal" style="width: 500px; border: 1px solid var(--accent-primary); box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);">
+            <div class="modal-header">
+                <h2>📜 G5 SYSTEM CONSTITUTION</h2>
+                <button class="close-btn" onclick="document.getElementById('constitutionModal').classList.add('hidden'); document.getElementById('constitutionModal').style.display='none';">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 30px;">
+                <pre style="color:var(--accent-primary); font-family:'JetBrains Mono'; font-size:12px; line-height:1.5; background:rgba(0,0,0,0.5); padding:20px; border:1px solid rgba(0,243,255,0.1);">
+{
+  "system_identity": "AGENTICUM_G5",
+  "version": "5.0.1_RC",
+  "core_directive": "AUTONOMOUS_VALUE_CREATION",
+  "ethical_guardrails": {
+    "framework": "STRICT_EU_COMPLIANCE",
+    "transparency": "radical"
+  },
+  "infrastructure": "ALPHABET_SOVEREIGN_CLOUD",
+  "reasoning_model": "GEMINI_3_PRO_ULTRA",
+  "operator_sovereignty": 1.0
+}
+                </pre>
+                <div style="margin-top:20px; font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:2px; text-align:center;">
+                    // The infrastructure is the prophecy //
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
