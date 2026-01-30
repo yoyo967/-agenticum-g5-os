@@ -2257,20 +2257,7 @@ const G5OS = {
 
 
 
-    initAudio() {
-        // Initialize AudioContext on first user interaction to comply with browser policies
-        this.audioCtx = null;
-        this.soundEnabled = true;
-        
-        const initAudioCtx = () => {
-            if (!this.audioCtx) {
-                this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                console.log('🔊 G5 AUDIO SUBSYSTEM ONLINE');
-            }
-            document.removeEventListener('click', initAudioCtx);
-        };
-        document.addEventListener('click', initAudioCtx);
-    },
+
 
     playResponseVoice(base64Audio) {
         try {
@@ -4947,8 +4934,6 @@ document.head.appendChild(thinkingStyle);
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     G5OS.init();
-    // G5OS.setupAssetListeners(); // Moved to init() or verified redundant
-    G5OS.startMatrixSimulation();
 });
 
 // Export globally
@@ -4959,118 +4944,3 @@ if (G5OS.processTerminalInput) {
     console.error("CRITICAL: G5OS.processTerminalInput not found.");
 }
 
-// ============================================
-// AUDIO KERNEL (SOUNDSCAPE V2)
-// ============================================
-class G5AudioController {
-    constructor() {
-        this.ctx = null;
-        this.droneOsc = null;
-        this.droneGain = null;
-        this.lfo = null;
-    }
-
-    init() {
-        if (!this.ctx) {
-            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-    }
-
-    playAccessGranted() {
-        this.init();
-        if (this.ctx.state === 'suspended') this.ctx.resume();
-        
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.1);
-        
-        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
-        
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.3);
-    }
-    
-    startDrone() {
-        this.init();
-        if (this.ctx.state === 'suspended') this.ctx.resume();
-        if (this.droneOsc) return; // Already running
-
-        // 1. Core Oscillator (Low Sine)
-        this.droneOsc = this.ctx.createOscillator();
-        this.droneOsc.type = 'sine';
-        this.droneOsc.frequency.setValueAtTime(60, this.ctx.currentTime); // Deep hum
-
-        // 2. LFO for Drift
-        this.lfo = this.ctx.createOscillator();
-        this.lfo.type = 'sine';
-        this.lfo.frequency.setValueAtTime(0.2, this.ctx.currentTime); // Slow drift
-        
-        const lfoGain = this.ctx.createGain();
-        lfoGain.gain.setValueAtTime(2, this.ctx.currentTime); // Modulation depth
-        
-        this.lfo.connect(lfoGain);
-        lfoGain.connect(this.droneOsc.frequency);
-
-        // 3. Master Gain
-        this.droneGain = this.ctx.createGain();
-        this.droneGain.gain.setValueAtTime(0, this.ctx.currentTime);
-        this.droneGain.gain.linearRampToValueAtTime(0.05, this.ctx.currentTime + 2); // Fade in
-
-        this.droneOsc.connect(this.droneGain);
-        this.droneGain.connect(this.ctx.destination);
-
-        this.droneOsc.start();
-        this.lfo.start();
-    }
-
-    stopDrone() {
-        if (!this.droneOsc || !this.droneGain) return;
-        
-        const now = this.ctx.currentTime;
-        this.droneGain.gain.cancelScheduledValues(now);
-        this.droneGain.gain.setValueAtTime(this.droneGain.gain.value, now);
-        this.droneGain.gain.linearRampToValueAtTime(0, now + 1); // Fade out
-        
-        setTimeout(() => {
-            if (this.droneOsc) {
-                this.droneOsc.stop();
-                this.lfo.stop();
-                this.droneOsc.disconnect();
-                this.lfo.disconnect();
-                this.droneOsc = null;
-                this.lfo = null;
-            }
-        }, 1100);
-    }
-
-    playTypingSound() {
-        if (!this.ctx) return;
-        
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        
-        // Random techy ticks
-        const freq = 800 + Math.random() * 400;
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-        
-        gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
-        
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.05);
-    }
-}
-
-// Global Audio Instance
-window.G5Audio = new G5AudioController();
