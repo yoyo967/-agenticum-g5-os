@@ -5,8 +5,9 @@
 
 const G5_API = {
     // Production endpoint (Firebase Functions)
-    ENDPOINT: 'https://us-central1-tutorai-e39uu.cloudfunctions.net/agenticSwarm',
-    HEALTH_ENDPOINT: 'https://us-central1-tutorai-e39uu.cloudfunctions.net/healthCheck',
+    // Production endpoint (Actual Cloud Run URL for Firebase Functions V2)
+    ENDPOINT: 'https://agenticswarm-4pucruljfa-uc.a.run.app',
+    HEALTH_ENDPOINT: 'https://healthcheck-4pucruljfa-uc.a.run.app',
     
     // Local development endpoint
     LOCAL_ENDPOINT: 'http://localhost:5001/tutorai-e39uu/us-central1/agenticSwarm',
@@ -15,11 +16,22 @@ const G5_API = {
     useLocal: false,
     
     // FORCE SIMULATION MODE (COST PROTECTION)
-    // Set to false only for Hackathon Submission
-    forceSimulation: true,
+    // Defaults to false (REAL MODE) as requested by user
+    forceSimulation: localStorage.getItem('G5_FORCE_SIM') === 'true',
     
     getEndpoint() {
         return this.useLocal ? this.LOCAL_ENDPOINT : this.ENDPOINT;
+    },
+
+    async checkHealth() {
+        try {
+            const response = await fetch(this.HEALTH_ENDPOINT);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.warn('G5 API Health Check Failed:', error);
+            return { status: 'error', message: error.message };
+        }
     },
     
     /**
@@ -36,11 +48,11 @@ const G5_API = {
         const cmd = command.toLowerCase();
         
         // 1. SIMULATION PRIORITY (For Demo Speed/Safety)
-        // If forceSimulation is true, OR no key, OR command matches a 'Golden Sample'
+        // Only trigger Golden Samples if ForceSimulation is ON or Key is MISSING
         const isGoldenSample = window.G5_DEMO_DATA && Object.keys(window.G5_DEMO_DATA).some(k => cmd.includes(k));
         
-        if (this.forceSimulation || !apiKey || isGoldenSample) {
-            console.log('🛡️ G5 API: Hybrid Mode -> Simulation Path');
+        if (this.forceSimulation || (isGoldenSample && !apiKey)) {
+            console.log('🛡️ G5 API: Simulation Path Active');
             
             // Artificial "Processing" Delay for realism
             await new Promise(r => setTimeout(r, 1200)); 

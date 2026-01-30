@@ -84,30 +84,78 @@ class G5Dashboard {
         }
     }
 
-    /* ============================================
-       COMMAND EXECUTION & WORKFLOW
-       ============================================ */
-    executeCommand(command) {
+    async executeCommand(command) {
         this.logSystem(`COMMAND RECEIVED: "${command}"`);
         this.transitionToWorkflowView(command);
         
-        // Simulate Chain of Thought
-        this.runReasoningTrace(command);
+        try {
+            // CALL REAL API
+            const result = await G5_API.execute(command);
+            this.processLiveResponse(result);
+        } catch (error) {
+            console.error('API Error:', error);
+            this.logSystem(`ERROR: ${error.message}. Switching to simulation.`);
+            this.runReasoningTrace(command); // Fallback to simulation
+        }
     }
 
     transitionToWorkflowView(command) {
         const coreView = document.getElementById('core-view');
         const wfView = document.getElementById('workflow-view');
         
-        if (coreView) coreView.classList.add('hidden'); // Implementation detail: CSS class to hide
+        if (coreView) coreView.classList.add('hidden'); 
         if (wfView) wfView.classList.remove('hidden');
         
-        // Manually show/hide via style if class logic isn't enough (robustness)
         if (coreView) coreView.style.display = 'none';
         if (wfView) wfView.style.display = 'block';
 
         const wfName = document.getElementById('active-workflow-name');
         if (wfName) wfName.textContent = `OP_${Math.floor(Math.random()*9000)+1000}: ${command.substring(0, 20).toUpperCase()}...`;
+    }
+
+    processLiveResponse(result) {
+        const pipeline = document.getElementById('node-pipeline');
+        if (!pipeline) return;
+        pipeline.innerHTML = '';
+
+        // Show live reasoning trace if available
+        if (result.reasoning_trace) {
+            result.reasoning_trace.forEach((step, index) => {
+                setTimeout(() => {
+                    this.renderPipelineStep({
+                        node: step.node,
+                        role: step.cluster || 'AGENT',
+                        action: step.status || 'PROCESSING'
+                    }, pipeline);
+                    this.logSystem(`[${step.node}] ${step.status}...`);
+                }, index * 800);
+            });
+        }
+
+        // Wait for all nodes, then show result
+        const waitTime = (result.reasoning_trace ? result.reasoning_trace.length : 1) * 800 + 500;
+        setTimeout(() => {
+            this.completeWorkflowLive(result);
+        }, waitTime);
+    }
+
+    completeWorkflowLive(result) {
+        this.logSystem('G5: REASONING CORE COMPLETED EXECUTION.');
+        
+        // Add results to vault if needed (simulated for now based on result)
+        this.generateMockAssets();
+        
+        // Show the actual AI response in the log for now
+        this.logSystem(`RESPONSE SUMMARY: ${result.response.substring(0, 50)}...`);
+
+        // Reset View after delay
+        setTimeout(() => {
+            const coreView = document.getElementById('core-view');
+            const wfView = document.getElementById('workflow-view');
+            if (coreView) coreView.style.display = 'flex';
+            if (wfView) wfView.style.display = 'none';
+            this.logSystem('SYSTEM READY FOR NEXT COMMAND.');
+        }, 3000);
     }
 
     runReasoningTrace(command) {
@@ -474,15 +522,17 @@ class G5Dashboard {
         filtered.forEach(asset => {
             const card = document.createElement('div');
             card.className = 'asset-card';
-            // FIX: Use explicit attribute binding for robustness
             card.setAttribute('onclick', `G5Dashboard.openAssetPreview('${asset.id}')`);
             
             // Visual Preview (Thumbnail)
             let thumbnail = '';
             if (asset.type === 'image') {
-                thumbnail = `<img src="${asset.data}" style="width:100%; height:100%; object-fit:cover; opacity:0.8;">`;
+                // FALLBACK: If asset.data is empty or placeholder, show generated mock
+                const imgSrc = asset.data || 'https://via.placeholder.com/300x200/0f1115/00f3ff?text=G5+GENERATING...';
+                thumbnail = `<img src="${imgSrc}" style="width:100%; height:100%; object-fit:cover; opacity:0.8;" onerror="this.src='https://via.placeholder.com/300x200/0f1115/00f3ff?text=IMAGE+LOST'">`;
             } else {
-                 thumbnail = `<div style="width: 40px; height: 40px; background: linear-gradient(45deg, var(--accent-teal), var(--accent-magenta)); border-radius: 50%; opacity: 0.5"></div>`;
+                 const icon = asset.type === 'video' ? '🎬' : '📄';
+                 thumbnail = `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(45deg, rgba(0,243,255,0.1), rgba(255,0,243,0.1)); font-size: 2rem;">${icon}</div>`;
             }
 
             card.innerHTML = `
@@ -546,9 +596,28 @@ class G5Dashboard {
     
     downloadCurrentAsset() {
         if(this.currentOpenAsset) {
-            this.logSystem(`DOWNLOADING ${this.currentOpenAsset.title}...`);
-            // Here we would trigger a real download, purely simulated for now to avoid popup blockers
-            this.playSound('success');
+            const asset = this.currentOpenAsset;
+            this.logSystem(`INITIATING DOWNLOAD: ${asset.title}...`);
+            
+            try {
+                const blob = new Blob([asset.data], { type: asset.type === 'image' ? 'image/png' : 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = asset.title;
+                document.body.appendChild(a);
+                a.click();
+                
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                this.logSystem(`✓ DOWNLOAD SUCCESSFUL.`);
+                this.playSound('success');
+            } catch (err) {
+                console.error('Download failed:', err);
+                this.logSystem(`❌ DOWNLOAD ERROR.`);
+            }
         }
     }
 

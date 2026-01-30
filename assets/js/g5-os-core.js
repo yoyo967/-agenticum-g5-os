@@ -54,18 +54,87 @@ const G5OS = {
         // Start Boot Sequence
         this.runBootSequence();
 
-        // ONE-CLICK DEMO CHECK
+        // One-Click Demo Check
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('demo') === 'launch') {
             setTimeout(() => {
                 this.runAutoDemo("Initiate Campaign Genesis for NEURA-FIZZ");
-            }, 2500); // Wait for boot
+            }, 2500); 
         }
 
-        // PERSISTENCE LAYER: LOAD STATE
         this.loadState();
-
+        this.initEliteBackground();
         console.log('✅ G5 OS READY | 52 NODES ONLINE');
+    },
+
+    initEliteBackground() {
+        const canvas = document.getElementById('neuralCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let width, height, particles;
+
+        const resize = () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            init();
+        };
+
+        const init = () => {
+            particles = [];
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    size: Math.random() * 2
+                });
+            }
+        };
+
+        const draw = () => {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#60a5fa';
+            ctx.strokeStyle = 'rgba(96, 165, 250, 0.1)';
+
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > width) p.vx *= -1;
+                if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(draw);
+        };
+
+        window.addEventListener('resize', resize);
+        resize();
+        draw();
+    },
+
+    triggerGlitch(duration = 500) {
+        document.body.classList.add('glitch-active');
+        setTimeout(() => {
+            document.body.classList.remove('glitch-active');
+        }, duration);
     },
 
     async runAutoDemo(commandText) {
@@ -84,18 +153,10 @@ const G5OS = {
     },
 
     runBootSequence() {
-        // FIXED: Correct ID references to match HTML
         const terminal = document.getElementById('boot-terminal');
-        const overlay = document.getElementById('boot-overlay');
+        const btn = document.getElementById('boot-btn');
+        if (!terminal) return;
         
-        if (!terminal) {
-            console.warn('[BOOT] Terminal not found');
-            return;
-        }
-        
-        // Clear existing static lines if any (optional, but cleaner)
-        // terminal.innerHTML = ''; 
-
         const lines = [
             'LOADING KERNEL MODULES...',
             'MOUNTING G5 HYPERVISOR...',
@@ -108,21 +169,35 @@ const G5OS = {
         const interval = setInterval(() => {
             if (i >= lines.length) {
                 clearInterval(interval);
-                // REMOVED: Auto-remove overlay. Now waits for user click.
+                if (btn) {
+                    btn.classList.remove('hidden');
+                    btn.style.display = 'block'; 
+                    btn.style.opacity = '0';
+                    btn.style.transform = 'translateY(20px)';
+                    btn.style.transition = 'opacity 1s, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    
+                    setTimeout(() => {
+                        btn.style.opacity = '1';
+                        btn.style.transform = 'translateY(0)';
+                    }, 100);
+                }
                 return;
             }
             
             const line = document.createElement('div');
-            // Use simple styles for reliability
-            line.style.color = '#4ade80';
-            line.style.fontFamily = 'monospace';
-            line.style.margin = '2px 0';
+            line.className = 'boot-line';
             line.textContent = `> ${lines[i]}`;
             
             terminal.appendChild(line);
-            terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
+            
+            requestAnimationFrame(() => {
+                line.style.opacity = '1';
+                line.style.transform = 'translateX(0)';
+            });
+
+            terminal.scrollTop = terminal.scrollHeight;
             i++;
-        }, 500); 
+        }, 150); 
     },
 
     unlockSystem() {
@@ -130,30 +205,53 @@ const G5OS = {
         const overlay = document.getElementById('boot-overlay');
         const btn = document.getElementById('boot-btn');
         
-        // 1. Audio
+        // 1. Audio & Glitch
         if (window.G5Audio) {
             window.G5Audio.playBoot();
         }
+        this.triggerGlitch(1000);
 
         // 2. Visual Button Feedback
         if(btn) {
-            btn.innerHTML = "<span style='position:relative; z-index:2; color:#000;'>ACCESS GRANTED</span>";
+            btn.innerHTML = "<span style='position:relative; z-index:2; color:#000; letter-spacing: 5px;'>ACCESS GRANTED</span>";
             btn.style.boxShadow = "0 0 50px #4ade80";
             btn.style.background = "#4ade80";
             btn.style.color = "#000";
+            btn.style.transform = "scale(1.1)";
+            btn.style.blur = "filter(blur(10px))";
         }
 
-        // 3. Remove Overlay after delay
+        // 3. Cinematic Exit
         setTimeout(() => {
             if (overlay) {
-                overlay.style.transition = "opacity 1s ease";
+                overlay.style.transition = "all 1.5s cubic-bezier(0.19, 1, 0.22, 1)";
                 overlay.style.opacity = "0";
+                overlay.style.transform = "scale(1.5)";
+                overlay.style.filter = "blur(100px)";
+                
                 setTimeout(() => {
                     overlay.style.display = 'none';
                     overlay.remove(); // Cleanup
-                }, 1000);
+                    this.logToTerminal('SYSTEM UNLOCKED. WELCOME OPERATOR.', 'system');
+                    this.triggerGlitch(300);
+                }, 1500);
             }
-        }, 1500);
+        }, 800);
+    },
+
+    toggle3DView() {
+        const agentsView = document.getElementById('agentsView');
+        const btn = document.getElementById('toggle3dBtn');
+        if (!agentsView) return;
+
+        const is3D = agentsView.classList.toggle('agents-view-3d');
+        
+        if (btn) {
+            btn.innerHTML = is3D ? '<span class="btn-glow"></span>👁️ 2D VIEW' : '<span class="btn-glow"></span>👁️ 3D VIEW';
+        }
+
+        this.triggerGlitch(400);
+        this.logToTerminal(`[UI] TETHERING NEURAL FABRIC TO ${is3D ? '3D' : '2D'} SPACE`, 'node');
     },
 
     // ============================================
@@ -361,6 +459,10 @@ const G5OS = {
         // Test connection button
         document.getElementById('testConnection')?.addEventListener('click', () => this.testApiConnection());
 
+        // API Settings change listeners
+        document.getElementById('googleApiKey')?.addEventListener('change', () => this.saveApiSettings());
+        document.getElementById('evolutionMode')?.addEventListener('change', () => this.saveApiSettings());
+
         // Asset items in sidebar
         document.querySelectorAll('.asset-mini').forEach(asset => {
             asset.addEventListener('click', () => this.previewAsset(asset.dataset.type, asset.querySelector('.asset-name')?.textContent));
@@ -483,6 +585,7 @@ const G5OS = {
              
              this.showToast('success', `IDENTITY UPDATED: ${name.toUpperCase()} (${role.toUpperCase()})`);
              this.logToTerminal(`[AUTH] User Identity Refreshed: ${name}`);
+             this.saveState();
         });
 
         // ============================
@@ -791,25 +894,43 @@ const G5OS = {
     },
 
     switchWorkspaceTab(tab) {
+        this.logToTerminal(`[UI] TRANSITIONING CONTEXT: ${tab.toUpperCase()}`);
+        
         document.querySelectorAll('.workspace-tab').forEach(t => {
             t.classList.toggle('active', t.dataset.tab === tab);
         });
         
-        document.querySelectorAll('.workspace-content').forEach(content => {
-            content.classList.add('hidden');
+        const contents = document.querySelectorAll('.workspace-content');
+        contents.forEach(content => {
+            content.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            content.style.opacity = '0';
+            content.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                content.classList.add('hidden');
+                
+                // Determine if this content should be visible
+                const viewMap = {
+                    'chat': 'chatView',
+                    'editor': 'editorView',
+                    'preview': 'previewView',
+                    'agents': 'agentsView',
+                    'workflows': 'workflowsView',
+                    'playground': 'playgroundView',
+                    'extensions': 'extensionsView'
+                };
+                
+                const targetId = viewMap[tab] || `${tab}View`;
+                
+                if (content.id === targetId) {
+                    content.classList.remove('hidden');
+                    setTimeout(() => {
+                        content.style.opacity = '1';
+                        content.style.transform = 'translateY(0)';
+                    }, 50);
+                }
+            }, 300);
         });
-        
-        // Map tab to view
-        const viewMap = {
-            'chat': 'chatView',
-            'editor': 'editorView',
-            'preview': 'previewView',
-            'agents': 'agentsView',
-            'workflows': 'workflowsView'
-        };
-        
-        const viewId = viewMap[tab] || `${tab}View`;
-        document.getElementById(viewId)?.classList.remove('hidden');
         this.state.activeWorkspaceTab = tab;
     },
 
@@ -860,16 +981,37 @@ const G5OS = {
         
         try {
             // Call API or simulate
-            const response = await this.processCommand(message);
+            const result = await this.processCommand(message);
+            const content = typeof result === 'string' ? result : (result.response || result.message);
             
             // Remove thinking
             this.removeThinking(thinkingId);
             
             // Add response
-            this.addChatMessage('assistant', response);
+            this.addChatMessage('assistant', content);
+            
+            // Handle Rich Assets (IMAGES)
+            if (result.generated_asset) {
+                this.addChatMessage('assistant', result.generated_asset);
+                this.logToTerminal(`[SYSTEM] New asset generated: ${result.generated_asset.name}`, 'success');
+            }
+            
+            // Update Metrics if available (REAL DATA)
+            if (result.metadata) {
+                const meta = result.metadata;
+                this.logToTerminal(`[IO] Tokens: ${meta.tokens || '---'} | Latency: ${meta.latency || '---'} | Cost: ${meta.cost || '$0.00'}`, 'node');
+                
+                if (meta.tokens) {
+                    const tokenDisplay = document.getElementById('tokenCount');
+                    if (tokenDisplay) tokenDisplay.textContent = `${meta.tokens} T`;
+                }
+            }
             
             // Deactivate nodes
             this.deactivateNodes(['SN-00', 'SP-01', 'RA-01', 'CC-01']);
+            
+            // Auto-save history
+            this.saveState();
             
         } catch (error) {
             this.removeThinking(thinkingId);
@@ -890,22 +1032,75 @@ const G5OS = {
         if (type === 'user') {
             msg.innerHTML = `<div class="msg-content">${this.escapeHtml(content)}</div>`;
         } else {
-            msg.innerHTML = `
-                <div class="msg-header">
-                    <span class="msg-icon">◆</span>
-                    <span class="msg-sender">${type === 'system' ? 'SYSTEM' : 'AGENTICUM G5'}</span>
-                    <span class="msg-time">${time}</span>
-                </div>
-                <div class="msg-content">${this.formatResponse(content)}</div>
-            `;
+            // Check if content is a rich asset object
+            if (typeof content === 'object' && content.type === 'image') {
+                msg.innerHTML = `
+                    <div class="msg-header">
+                        <span class="msg-icon">◆</span>
+                        <span class="msg-sender">AGENTICUM G5</span>
+                        <span class="msg-time">${time}</span>
+                    </div>
+                    <div class="msg-content">
+                        <div class="ai-asset-display">
+                            <p>[CC-06] ASSET_GENERATED: ${content.name}</p>
+                            <img src="data:${content.mimeType};base64,${content.data}" class="chat-generated-img" onclick="window.g5Instance.previewAssetFromData('${content.data}', 'image')">
+                            <div class="asset-actions">
+                                <button class="os-btn mini" onclick="window.g5Instance.addAssetToVault('${content.name}', 'image', 'data:${content.mimeType};base64,${content.data}')">SAVE TO VAULT</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                msg.innerHTML = `
+                    <div class="msg-header">
+                        <span class="msg-icon">◆</span>
+                        <span class="msg-sender">${type === 'system' ? 'SYSTEM' : 'AGENTICUM G5'}</span>
+                        <span class="msg-time">${time}</span>
+                    </div>
+                    <div class="msg-content">${this.formatResponse(content)}</div>
+                `;
+            }
         }
         
         container.appendChild(msg);
         container.scrollTop = container.scrollHeight;
         
-        this.state.chatHistory.push({ type, content, time: Date.now() });
-        // PERSIST
+        // Push to history (handle objects vs strings)
+        const historyItem = { type, content: typeof content === 'string' ? content : `[ASSET: ${content.name}]`, time: Date.now() };
+        this.state.chatHistory.push(historyItem);
+        
         if (this.saveState) this.saveState();
+    },
+
+    addAssetToVault(title, type, content) {
+        const id = `asset-${Date.now()}`;
+        const newAsset = {
+            id,
+            title,
+            type,
+            content, // This is the base64 or URI
+            timestamp: Date.now()
+        };
+        
+        if (!this.assets) this.assets = [];
+        this.assets.push(newAsset);
+        this.state.assets = this.assets; 
+        
+        this.renderVault();
+        this.showToast('success', `ASSET VAULTED: ${title}`);
+        this.logToTerminal(`[VAULT] New ${type} added: ${title}`);
+        
+        if (this.saveState) this.saveState();
+    },
+
+    previewAssetFromData(data, type) {
+        // Temporary preview for chat images
+        this.previewAsset({
+            id: 'temp',
+            title: 'Chat Preview',
+            type: type,
+            content: data.startsWith('data:') ? data : `data:image/png;base64,${data}`
+        });
     },
 
     showThinking() {
@@ -945,7 +1140,7 @@ const G5OS = {
         if (window.G5_API) {
             try {
                 const result = await G5_API.execute(command, this.state.activeAgent.briefing);
-                return result.response || result.message || 'Command processed.';
+                return result; // Return full object for metadata tracking
             } catch (e) {
                 // Fallback to simulation
             }
@@ -1248,8 +1443,14 @@ const G5OS = {
         if (window.listAssets) window.listAssets();
     },
 
-    previewAsset(id) {
-        const asset = this.assets.find(a => a.id === id);
+    previewAsset(input) {
+        let asset;
+        if (typeof input === 'string') {
+            asset = this.assets.find(a => a.id === input);
+        } else {
+            asset = input; // Input is the asset object itself
+        }
+        
         if (!asset) return;
         
         // Create Modal
@@ -1552,20 +1753,33 @@ const G5OS = {
     // SYSTEM CLOCK & DYNAMIC METRICS
     // ============================================
     startSystemClock() {
-        // 1. TEXT METRICS LOOP (5s)
+        // 1. DYNAMIC METRICS FLUTTER (1s)
         setInterval(() => {
-            const tokens = (1.7 + Math.random() * 0.1).toFixed(1);
-            const latency = Math.floor(80 + Math.random() * 20);
+            if (this.state.nodes.online < 52) return; // Wait for system ready
+            
+            const tokensBase = 1.7;
+            const tokenOsc = (Math.random() * 0.05).toFixed(2);
+            const tokens = (tokensBase + parseFloat(tokenOsc)).toFixed(2);
+            
+            const latency = Math.floor(12 + Math.random() * 8); // Lower, more "optimized" feel
             
             const tokenDisplay = document.getElementById('tokenCount');
             const latencyDisplay = document.getElementById('latencyDisplay');
             
-            if (tokenDisplay) tokenDisplay.textContent = `${tokens}M`;
-            if (latencyDisplay) latencyDisplay.textContent = `~${latency}ms`;
-        }, 5000);
+            if (tokenDisplay) {
+                tokenDisplay.textContent = `${tokens}M`;
+                // Subtle flicker effect on change
+                if (Math.random() > 0.8) tokenDisplay.style.opacity = '0.7';
+                else tokenDisplay.style.opacity = '1';
+            }
+            if (latencyDisplay) {
+                latencyDisplay.textContent = `~${latency}ms`;
+                if (Math.random() > 0.8) latencyDisplay.style.opacity = '0.7';
+                else latencyDisplay.style.opacity = '1';
+            }
+        }, 1000);
 
-        // 2. CHART ANIMATION LOOP (1s) - "ATOMIC DEPTH"
-        // Updates the canvas elements to show living data
+        // 2. CHART ANIMATION LOOP (1s)
         setInterval(() => {
             this.updateCharts();
         }, 1000);
@@ -3574,7 +3788,82 @@ const G5OS = {
         // const order = Array.from(document.querySelectorAll('.os-tab')).map(t => t.dataset.view);
         // localStorage.setItem('g5_dock_order', JSON.stringify(order));
         this.showToast('info', 'Dock Layout Saved');
-    }
+    },
+
+    // ============================================
+    // PERSISTENCE & REAL MODE CONFIG
+    // ============================================
+    loadState() {
+        console.log('⬡ G5 OS | LOADING DATA MATRIX...');
+        
+        // 1. API Configuration
+        const apiKey = localStorage.getItem('GOOGLE_API_KEY');
+        const forceSim = localStorage.getItem('G5_FORCE_SIM') === 'true';
+        
+        const keyInput = document.getElementById('googleApiKey');
+        const simToggle = document.getElementById('evolutionMode');
+        
+        if (keyInput) keyInput.value = apiKey || '';
+        if (simToggle) simToggle.checked = !forceSim; // Evolution Mode = !Simulation Mode
+
+        // 2. Chat History
+        const savedHistory = localStorage.getItem('g5_chat_history');
+        if (savedHistory) {
+            this.state.chatHistory = JSON.parse(savedHistory);
+            // Optional: Render last few messages
+        }
+
+        // 3. Assets
+        const savedAssets = localStorage.getItem('g5_assets');
+        if (savedAssets) {
+            this.state.assets = JSON.parse(savedAssets);
+            this.renderVault();
+        }
+
+        // 4. Operator Profile
+        const profile = localStorage.getItem('g5_operator_profile');
+        if (profile) {
+            const data = JSON.parse(profile);
+            this.state.operator = data;
+            const profileNameInput = document.getElementById('profileName');
+            const profileRoleInput = document.getElementById('profileRole');
+            if (profileNameInput) profileNameInput.value = data.name;
+            if (profileRoleInput) profileRoleInput.value = data.role;
+            
+            const osUser = document.querySelector('.os-user');
+            if (osUser) osUser.textContent = `OPERATOR: ${data.name.toUpperCase()}`;
+        }
+    },
+
+    saveState() {
+        localStorage.setItem('g5_chat_history', JSON.stringify(this.state.chatHistory));
+        localStorage.setItem('g5_assets', JSON.stringify(this.state.assets));
+        if (this.state.operator) {
+            localStorage.setItem('g5_operator_profile', JSON.stringify(this.state.operator));
+        }
+    },
+
+    saveApiSettings() {
+        const key = document.getElementById('googleApiKey').value.trim();
+        const evolutionActive = document.getElementById('evolutionMode').checked;
+        
+        localStorage.setItem('GOOGLE_API_KEY', key);
+        localStorage.setItem('G5_FORCE_SIM', (!evolutionActive).toString());
+        
+        if (window.G5_API) {
+            G5_API.forceSimulation = !evolutionActive;
+        }
+        
+        this.showToast('success', 'API Configuration Synchronized');
+        this.logToTerminal(`[SYSTEM] API Matrix Updated. Mode: ${evolutionActive ? 'LIVE' : 'SIMULATION'}`);
+        
+        if (key && evolutionActive) {
+            this.testApiConnection();
+        }
+    },
+
+    // Override setupEventListeners to include new listeners
+    // (I will actually just add them to the existing setupEventListenersChunk)
 
 };
 

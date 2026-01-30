@@ -10,6 +10,9 @@ const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const cors = require('cors')({origin: true});
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { helpers, ImageGenerationModel, ImageGenerationResponse } = require("@google-cloud/aiplatform");
+const aiplatform = require("@google-cloud/aiplatform");
+const { PredictionServiceClient } = aiplatform.v1;
 
 // ============================================
 // G5 SYSTEM PROMPT: THE 52-NODE FABRIC
@@ -120,7 +123,7 @@ function selectNodes(command) {
 // MAIN FUNCTION: AGENTIC SWARM
 // ============================================
 exports.agenticSwarm = onRequest({ 
-  // secrets: ["GEMINI_API_KEY"], // Disabled for initial deployment
+  secrets: ["GEMINI_API_KEY"],
   cors: true,
   maxInstances: 10
 }, async (req, res) => {
@@ -150,7 +153,7 @@ exports.agenticSwarm = onRequest({
       // Initialize Gemini
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-pro",
+        model: "gemini-1.5-flash",
         systemInstruction: G5_SYSTEM_PROMPT
       });
 
@@ -172,7 +175,54 @@ exports.agenticSwarm = onRequest({
 
       logger.info(`G5 >> Activating ${activeNodes.length} nodes`, { nodes: activeNodes.map(n => n.id) });
 
-      // Call Gemini API
+      // ============================================
+      // IMAGE GENERATION LAYER (IMAGEN 3)
+      // ============================================
+      const isImageRequest = command.toLowerCase().match(/generate|create|visualize|draw|make|design.*(image|picture|graphic|visual|poster|asset)/);
+      let generatedImageData = null;
+
+      if (isImageRequest) {
+        try {
+          logger.info("G5 >> Detected Image Vector. Activating CC-06 (Video Director/Visual Forge)...");
+          
+          // Use Vertex AI SDK directly for Imagen 3
+          // Note: This requires the service account of the function to have Vertex AI User role
+          const project = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT;
+          const location = "us-central1"; // Imagen 3 is widely available here
+          
+          const endpoint = `projects/${project}/locations/${location}/publishers/google/models/imagen-3.0-generate-001`;
+          
+          // Re-using Vertex AI logic
+          const clientOptions = { apiEndpoint: `${location}-aiplatform.googleapis.com` };
+          const predictionServiceClient = new PredictionServiceClient(clientOptions);
+
+          const instance = helpers.toValue({ prompt: command });
+          const instances = [instance];
+          const parameter = helpers.toValue({
+            sampleCount: 1,
+            aspectRatio: "1:1",
+            storageUri: "" // Return as base64
+          });
+          const parameters = parameter;
+
+          const [imgResult] = await predictionServiceClient.predict({
+            endpoint,
+            instances,
+            parameters,
+          });
+
+          if (imgResult.predictions && imgResult.predictions.length > 0) {
+            const prediction = helpers.fromValue(imgResult.predictions[0]);
+            generatedImageData = prediction.bytesBase64Encoded;
+            logger.info("G5 >> Image Generated Successfully via Imagen 3");
+          }
+        } catch (imgError) {
+          logger.error("G5 >> Imagen 3 Failure", { error: imgError.message });
+          // We'll still proceed with text generation as a fallback/context
+        }
+      }
+
+      // Call Gemini API (Reasoning)
       const result = await model.generateContent(fullPrompt);
       const response = await result.response;
       const text = response.text();
@@ -191,8 +241,14 @@ exports.agenticSwarm = onRequest({
         active_nodes: activeNodes.length,
         reasoning_trace: reasoningTrace,
         response: text,
+        generated_asset: generatedImageData ? {
+          type: "image",
+          data: generatedImageData,
+          mimeType: "image/png",
+          name: `g5_asset_${Date.now()}.png`
+        } : null,
         metadata: {
-          model: "gemini-1.5-pro",
+          model: generatedImageData ? "Gemini-1.5-Flash + Imagen-3" : "Gemini-1.5-Flash",
           mode: "LIVE",
           timestamp: new Date().toISOString()
         }

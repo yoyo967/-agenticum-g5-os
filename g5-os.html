@@ -136,9 +136,12 @@
 </head>
 <body class="g5-os-body">
     <!-- BOOT OVERLAY V2 (CINEMATIC BIOS) -->
-    <div id="boot-overlay" style="position:fixed; inset:0; background:#000; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;">
-        <!-- Matrix Rain Background (Simple CSS) -->
-        <div style="position:absolute; inset:0; opacity:0.1; pointer-events: none; background-image: linear-gradient(0deg, transparent 24%, rgba(32, 255, 77, .3) 25%, rgba(32, 255, 77, .3) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, .3) 75%, rgba(32, 255, 77, .3) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(32, 255, 77, .3) 25%, rgba(32, 255, 77, .3) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, .3) 75%, rgba(32, 255, 77, .3) 76%, transparent 77%, transparent); background-size: 50px 50px;"></div>
+    <div id="boot-overlay" style="position:fixed; inset:0; background:#000; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; backdrop-filter: blur(20px);">
+        <!-- Elite Shimmer Canvas -->
+        <canvas id="bootMesh" style="position:absolute; inset:0; opacity:0.3; pointer-events: none;"></canvas>
+        
+        <!-- CRT Scanline & Grain -->
+        <div class="crt-overlay" style="position:absolute; inset:0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); background-size: 100% 3px, 3px 100%; pointer-events: none; z-index: 10;"></div>
         
         <!-- CRT Scanline -->
         <div style="position:absolute; inset:0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 2px, 3px 100%; pointer-events: none;"></div>
@@ -157,16 +160,24 @@
             </div>
         </div>
 
-        <button id="boot-btn" onclick="G5OS.unlockSystem()" style="margin-top:3rem; background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 1rem 4rem; font-family:'JetBrains Mono'; cursor: pointer; transition: all 0.2s; letter-spacing: 2px; text-transform:uppercase; position:relative; overflow:hidden;">
-            <span style="position:relative; z-index:2;">[ INITIALIZE SYSTEM ]</span>
-            <div class="hover-fill" style="position:absolute; inset:0; background:#4ade80; transform:translateX(-100%); transition:transform 0.3s; z-index:1;"></div>
+        <button id="boot-btn" onclick="G5OS.unlockSystem()" class="featured-btn hidden" style="margin-top:3rem; padding: 1.25rem 5rem; font-size: 1.1rem; letter-spacing: 5px;">
+            <span style="position:relative; z-index:2;">INITIALIZE SYSTEM</span>
+            <div class="btn-glow"></div>
         </button>
         
         <style>
-            #boot-btn:hover { color: #000; box-shadow: 0 0 20px #4ade80; }
-            #boot-btn:hover .hover-fill { transform:translateX(0); }
+            .featured-btn.hidden { display: none; }
+            #boot-btn { transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); }
+            #boot-btn:hover { letter-spacing: 8px; }
         </style>
-    </div>    
+    </div>
+
+    <!-- GLOBAL NEURAL BACKGROUND -->
+    <div id="global-scenery" style="position:fixed; inset:0; z-index:-1; background: var(--bg-base); overflow:hidden;">
+        <canvas id="neuralCanvas"></canvas>
+        <div class="ambient-glow g1"></div>
+        <div class="ambient-glow g2"></div>
+    </div>
 
     <!-- BOOT SCRIPT MOVED TO CORE.JS -->
 
@@ -1751,6 +1762,11 @@
                             <span class="setting-hint">Configured via Firebase Functions</span>
                         </div>
                         <div class="setting-group">
+                            <label class="setting-label">Google API Key</label>
+                            <input type="password" class="setting-input" id="googleApiKey" placeholder="Enter your Gemini API Key...">
+                            <p class="setting-desc">Stored locally in your browser for secure API calls.</p>
+                        </div>
+                        <div class="setting-group">
                             <label class="setting-label">Connection Status</label>
                             <div class="connection-status">
                                 <span class="status-indicator pending"></span>
@@ -1758,14 +1774,13 @@
                                 <button class="btn-small" id="testConnection">Test Connection</button>
                             </div>
                         </div>
-                        </div>
                         <div class="setting-group">
                             <label class="setting-toggle-label">
-                                <input type="checkbox" id="evolutionMode">
+                                <input type="checkbox" id="evolutionMode" checked>
                                 <span class="toggle-slider"></span>
-                                <span class="highlight-text">Activate EVOLUTION MODE (Gemini 3 Integration)</span>
+                                <span class="highlight-text">Activate EVOLUTION MODE (Live Gemini Cluster)</span>
                             </label>
-                            <p class="setting-desc">Connects to live Gemini Reasoning Cluster. Costs tokens.</p>
+                            <p class="setting-desc">Directs all commands to the live reasoning backend. Disables local simulation.</p>
                         </div>
                     </div>
                     
@@ -2345,16 +2360,12 @@
     
     <script>
     function toggle3DView() {
-        const container = document.querySelector('.agents-container');
-        const btn = document.getElementById('toggle3dBtn');
-        container.classList.toggle('agents-view-3d');
-        
-        if (container.classList.contains('agents-view-3d')) {
-            btn.innerHTML = '<span class="btn-glow"></span>📋 GRID VIEW';
-            // Trigger 3D init if not already running
-            if (window.initNeural3D) window.initNeural3D();
-        } else {
-            btn.innerHTML = '<span class="btn-glow"></span>👁️ 3D VIEW';
+        if (window.G5OS) {
+            window.G5OS.toggle3DView();
+            // Optional: Re-init 3D if needed
+            if (document.getElementById('agentsView').classList.contains('agents-view-3d')) {
+                if (window.initNeural3D) window.initNeural3D();
+            }
         }
     }
     </script>

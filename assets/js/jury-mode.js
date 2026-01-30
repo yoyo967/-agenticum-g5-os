@@ -25,6 +25,7 @@ window.JuryMode = {
 
         // 1. CLEAR & PREPARE
         if (window.G5OS) {
+            window.G5OS.triggerGlitch(800);
             window.G5OS.clearTerminal();
             window.G5OS.logToTerminal('════════════════════════════════════════', 'system');
             window.G5OS.logToTerminal('   JURY MODE INITIATED :: HACKATHON 2026', 'system');
@@ -42,42 +43,47 @@ window.JuryMode = {
         await this.typeToTerminal('>> INITIALIZING 5-MINUTE AGENCY PIPELINE...');
         
         // Open Workflow Modal Programmatically
-        if (window.WorkflowEngine) {
-            window.WorkflowEngine.start('5min-agency');
-            // Mock Input
-            document.getElementById('wfmInput').value = "CLIENT: TechCorp | GOAL: Dominate Q3 Market | TONE: Aggressive Futurism";
-            
-            await this.wait(1500);
-            
-            // Click Execute
-            window.WorkflowEngine.execute();
+        if (window.G5OS && window.G5OS.openWorkflowModal) {
+            window.G5OS.triggerGlitch(400);
+            window.G5OS.switchView('workflows');
+            await this.wait(1000);
+            window.G5OS.openWorkflowModal('5min-agency');
         }
 
         // 4. SYNCED AUDIO/VISUALS DURING WORKFLOW
-        // We let the workflow engine run for a bit (it takes ~10s total)
         await this.wait(2000);
         if (window.G5Audio) window.G5Audio.startDrone();
         
         // Artificial "Moments of Awe"
-        if (window.G5OS) window.G5OS.showToast('info', 'DeepMind Gemini 2M Context Loaded');
+        if (window.G5OS) window.G5OS.showToast?.('info', 'DeepMind Gemini 2M Context Loaded');
         await this.wait(3000);
         
-        if (window.G5OS) window.G5OS.showToast('info', 'Veo 2 Video Generation Active');
+        if (window.G5OS) {
+            window.G5OS.triggerGlitch(1200);
+            window.G5OS.showToast?.('info', 'Veo 2 Video Generation Active');
+        }
         await this.wait(3000);
 
         if (window.G5Audio) window.G5Audio.stopDrone();
-        if (window.G5OS) window.G5OS.showToast('success', 'Campaign Generation Complete');
+        if (window.G5OS) window.G5OS.showToast?.('success', 'Campaign Generation Complete');
         if (window.G5Audio) window.G5Audio.playAccessGranted();
 
         // 5. ASSET REVEAL
         await this.wait(1000);
-        window.WorkflowEngine.close();
+        if (window.G5OS && window.G5OS.closeWorkflowModal) window.G5OS.closeWorkflowModal();
         
         await this.typeToTerminal('>> ACCESSING ASSET VAULT...');
-        // Simulate populating vault
-        this.populateVault();
+        if (window.G5OS) window.G5OS.switchView('assets');
         
-        // 6. FINALE
+        // 6. FINALE - SHOW 3D NEURAL FABRIC
+        await this.wait(2000);
+        await this.typeToTerminal('>> REVEALING NEURAL FABRIC (3D)');
+        if (window.G5OS) {
+            window.G5OS.switchView('agents');
+            setTimeout(() => window.G5OS.toggle3DView(), 500);
+        }
+
+        await this.wait(3000);
         this.showFinaleModal();
         this.active = false;
     },
