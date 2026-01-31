@@ -2592,14 +2592,22 @@
     </div>
 
     <!-- AUDIO SYSTEM -->
-    <script src="assets/js/audio-system.js?v=RELEASE_CANDIDATE"></script>
+    <script src="assets/js/audio-system.js?v=REALITY_CHECK_V1"></script>
     <!-- CORE LOGIC (VERSION 6.0) -->
-    <script src="assets/js/jury-mode.js?v=RELEASE_CANDIDATE"></script>
-    <script src="assets/js/g5_api.js?v=RELEASE_CANDIDATE"></script>
-    <script src="assets/js/g5-os-core.js?v=RELEASE_CANDIDATE"></script>
+    <script src="assets/js/jury-mode.js?v=REALITY_CHECK_V1"></script>
+    <script src="assets/js/g5_api.js?v=REALITY_CHECK_V1"></script>
+    <script src="assets/js/g5-os-core.js?v=REALITY_CHECK_V1"></script>
     
     <!-- 3D NAVIGATOR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- BOOT STRAP LOGIC -->
+    <script>
+        // Force scroll to top on load
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+        }
+    </script>
     <style>
         /* CONTEXT MENU & SYSTEM POLISH (PHASE 6) */
         .context-menu {
