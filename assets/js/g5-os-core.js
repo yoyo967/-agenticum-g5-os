@@ -448,6 +448,7 @@ const G5OS = {
         // ============================
         // LAYOUT CONTROLS (ANTIGRAVITY)
         // ============================
+        const sidebarSlider = document.getElementById('layoutSidebar');
         if (sidebarSlider) {
             sidebarSlider.addEventListener('input', (e) => {
                  const val = e.target.value;
@@ -547,8 +548,18 @@ const G5OS = {
         document.getElementById('resetLayout')?.addEventListener('click', () => {
              document.documentElement.style.removeProperty('--panel-left-width');
              document.documentElement.style.removeProperty('--footer-height');
-             if(sidebarSlider) { sidebarSlider.value = 260; document.getElementById('valSidebar').textContent = '260px'; }
-             if(terminalSlider) { terminalSlider.value = 200; document.getElementById('valTerminal').textContent = '200px'; }
+             
+             const sidebarSlider = document.getElementById('layoutSidebar');
+             const terminalSlider = document.getElementById('layoutTerminal');
+             
+             if(sidebarSlider) { 
+                 sidebarSlider.value = 260; 
+                 document.getElementById('valSidebar').textContent = '260px'; 
+             }
+             if(terminalSlider) { 
+                 terminalSlider.value = 200; 
+                 document.getElementById('valTerminal').textContent = '200px'; 
+             }
              this.showToast('info', 'Layout reset to defaults');
         });
 
