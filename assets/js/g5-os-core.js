@@ -46,36 +46,51 @@ const G5OS = {
     // INITIALIZATION
     // ============================================
     init() {
-        console.log('⬡ AGENTICUM G5 OS | INITIALIZING...');
-        
-        // EXPOSE FOR TERMINAL
-        window.g5Instance = this;
-        
-        this.setupEventListeners();
-        this.setupPanelResize();
-        this.startSystemClock();
-        this.loadNodes();
-        this.initNeuralMesh();
-        this.initAudio();
-        this.setupPlaygroundListeners();
-        this.renderExtensions();
-        this.setupMatrixListeners();
-        this.setupDockDragAndDrop();
-        
-        // Start Boot Sequence
-        this.runBootSequence();
+        try {
+            console.log('⬡ AGENTICUM G5 OS | INITIALIZING...');
+            
+            // EXPOSE FOR TERMINAL
+            window.g5Instance = this;
+            
+            this.setupEventListeners();
+            this.setupPanelResize();
+            this.startSystemClock();
+            this.loadNodes();
+            this.initNeuralMesh();
+            this.initAudio();
+            this.setupPlaygroundListeners();
+            this.renderExtensions();
+            this.setupMatrixListeners();
+            this.setupDockDragAndDrop();
+            
+            // Start Boot Sequence
+            this.runBootSequence();
 
-        // One-Click Demo Check
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('demo') === 'launch') {
-            setTimeout(() => {
-                this.runAutoDemo("Initiate Campaign Genesis for NEURA-FIZZ");
-            }, 2500); 
+            // One-Click Demo Check
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('demo') === 'launch') {
+                setTimeout(() => {
+                    this.runAutoDemo("Initiate Campaign Genesis for NEURA-FIZZ");
+                }, 2500); 
+            }
+
+            this.loadState();
+            this.initEliteBackground();
+            console.log('✅ G5 OS READY | 52 NODES ONLINE');
+        } catch (error) {
+            console.error('CRITICAL BOOT FAILURE:', error);
+            // Display error in boot terminal if possible
+            const terminal = document.getElementById('boot-terminal');
+            if (terminal) {
+                const errLine = document.createElement('div');
+                errLine.style.color = '#ff4444';
+                errLine.style.marginTop = '10px';
+                errLine.style.fontWeight = 'bold';
+                errLine.textContent = `> CRITICAL_ERROR: ${error.message}`;
+                terminal.appendChild(errLine);
+                terminal.scrollTop = terminal.scrollHeight;
+            }
         }
-
-        this.loadState();
-        this.initEliteBackground();
-        console.log('✅ G5 OS READY | 52 NODES ONLINE');
     },
 
     initEliteBackground() {
@@ -2431,7 +2446,10 @@ const G5OS = {
         const resizeObserver = new ResizeObserver(() => {
             this.resizeNeuralMesh();
         });
-        resizeObserver.observe(document.getElementById('agentsGrid'));
+        const agentsGrid = document.getElementById('agentsGrid');
+        if (agentsGrid) {
+            resizeObserver.observe(agentsGrid);
+        }
         
         this.resizeNeuralMesh();
         this.animateNeuralMesh();
@@ -2448,7 +2466,9 @@ const G5OS = {
     updateNodePositions() {
         this.nodePositions = [];
         const tiles = document.querySelectorAll('.agent-tile');
-        const gridRect = document.getElementById('agentsGrid').getBoundingClientRect();
+        const agentsGrid = document.getElementById('agentsGrid');
+        if (!agentsGrid) return;
+        const gridRect = agentsGrid.getBoundingClientRect();
         
         tiles.forEach(tile => {
             const rect = tile.getBoundingClientRect();
