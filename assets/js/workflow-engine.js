@@ -154,12 +154,23 @@ const WorkflowEngine = {
         this.runSimulation(workflow.steps, input);
     },
 
-    // Simulate workflow execution
+    // Execute real workflow
     runSimulation: async function(steps, input) {
         const progressFill = document.getElementById('wfmProgressFill');
         const percentDisplay = document.getElementById('wfmPercent');
         const totalDuration = steps.reduce((sum, s) => sum + s.duration, 0);
         let elapsed = 0;
+
+        // 1. INITIALIZE REAL AI CONTEXT
+        const workflowContext = {
+            id: this.currentWorkflow,
+            name: this.workflows[this.currentWorkflow].name,
+            steps: steps.map(s => s.name)
+        };
+        
+        // 2. PRE-FETCH AI RESULT (Parallel Processing)
+        // We start the AI request immediately but show the "Reasoning Steps" as a loading indicator
+        const aiPromise = window.G5_API.execute(input, JSON.stringify(workflowContext));
 
         for (let i = 0; i < steps.length; i++) {
             const step = steps[i];
@@ -169,76 +180,102 @@ const WorkflowEngine = {
             stepEl.dataset.status = 'running';
             stepEl.querySelector('.step-status').textContent = 'RUNNING';
             
-            // 1. ATOMIC: Trigger Grid Pulse for this Cluster
+            // Trigger Grid Pulse
             if (window.G5OS && window.G5OS.pulseCluster) {
-                window.G5OS.pulseCluster(step.cluster || 'active'); // Default to generic active if no cluster
+                window.G5OS.pulseCluster(step.cluster || 'active');
             }
 
-            // 2. ATOMIC: Trigger Typewriter Log
+            // Log to terminal
             const logMsg = `[${step.name}] ${step.desc}`;
-            this.log(logMsg); // Internal log
             if (window.G5OS && window.G5OS.logToTerminal) {
-                window.G5OS.logToTerminal(logMsg, 'info'); // External Typewriter Log
+                window.G5OS.logToTerminal(logMsg, 'info');
             }
 
-            // Simulate duration
-            await this.delay(step.duration);
+            // Minimum visual duration for UX (so users see the step happening)
+            const minDuration = 800; 
+            await this.delay(minDuration);
             
             // Mark as complete
             stepEl.dataset.status = 'complete';
             stepEl.querySelector('.step-status').textContent = 'COMPLETE';
             
-            // Audio Ping
-            if (window.G5Audio) window.G5Audio.playTypingSound(); // Use typing sound as subtle step complete click
+            if (window.G5Audio) window.G5Audio.playTypingSound();
             
-            // Update progress
-            elapsed += step.duration;
-            const percent = Math.round((elapsed / totalDuration) * 100);
+            // Update progress bar
+            elapsed += step.duration; // Keep original duration scaling for the bar visual
+            const percent = Math.min(95, Math.round((i + 1) / steps.length * 100)); // Cap at 95 until AI returns
             progressFill.style.width = `${percent}%`;
             percentDisplay.textContent = `${percent}%`;
         }
         
-        // Reset Pulse at end
+        // Reset Pulse
         if (window.G5OS && window.G5OS.pulseCluster) {
              window.G5OS.pulseCluster(null);
         }
 
-        // Show output
-        this.showOutput(input);
+        // 3. AWAIT REAL AI RESULT
+        try {
+            document.getElementById('wfmSteps').innerHTML += `<div class="wfm-step"><span class="step-name">FINALIZING OUTPUT...</span></div>`;
+            const result = await aiPromise;
+            
+            progressFill.style.width = '100%';
+            percentDisplay.textContent = '100%';
+            
+            // 4. SHOW REAL OUTPUT
+            this.showOutput(result);
+            
+        } catch (error) {
+            console.error('Workflow Failed:', error);
+            this.log('[ERROR] AI Processing Failed', 'error');
+            alert('AI Error: ' + error.message);
+        }
     },
 
     // Show generated output
-    showOutput: function(input) {
+    showOutput: function(result) {
         const workflow = this.workflows[this.currentWorkflow];
         
         document.getElementById('wfmProgressSection').classList.add('hidden');
         document.getElementById('wfmOutputSection').classList.remove('hidden');
 
         const outputContainer = document.getElementById('wfmOutput');
-        
-        // Generate mock output based on workflow type
-        let output = '';
-        switch(this.currentWorkflow) {
-            case '5min-agency':
-                output = this.generate5MinAgencyOutput(input);
-                break;
-            case 'senate':
-                output = this.generateSenateOutput(input);
-                break;
-            case 'morphosis':
-                output = this.generateMorphosisOutput(input);
-                break;
-            case 'jit-reality':
-                output = this.generateJITOutput(input);
-                break;
-            case 'autopoiesis':
-                output = this.generateAutopoiesisOutput();
-                break;
-            default:
-                output = '<p>Workflow completed successfully.</p>';
+        let outputHTML = '';
+
+        // Check if we have a structured G5 response
+        if (result && result.response) {
+            // Render text response
+             const safeText = result.response.replace(/\n/g, '<br>');
+             outputHTML += `<div class="output-section"><h4>⚡ STRATEGIC OUTPUT</h4><div class="content-block"><p>${safeText}</p></div></div>`;
+             
+             // Render generated asset (Image)
+             if (result.generated_asset) {
+                 outputHTML += `
+                 <div class="output-section">
+                    <h4>🎨 GENERATED ASSET (IMAGEN 3)</h4>
+                    <div class="asset-grid">
+                        <div class="asset-item full-width">
+                            <img src="data:${result.generated_asset.mimeType};base64,${result.generated_asset.data}" class="generated-img-preview" />
+                            <span class="asset-name">${result.generated_asset.name}</span>
+                        </div>
+                    </div>
+                 </div>`;
+             }
+
+             // Render Audio
+             if (result.audio_stream) {
+                 outputHTML += `
+                 <div class="output-section">
+                    <h4>🔊 AUDIO BRIEFING</h4>
+                    <audio controls src="data:audio/mp3;base64,${result.audio_stream}"></audio>
+                 </div>`;
+             }
+
+        } else {
+            // Fallback for simulation mode text
+            outputHTML = `<div class="output-section"><h4>SIMULATION OUTPUT</h4><p>${JSON.stringify(result)}</p></div>`;
         }
 
-        outputContainer.innerHTML = output;
+        outputContainer.innerHTML = outputHTML;
         this.log(`[COMPLETE] ${workflow.name} finished successfully.`);
     },
 
