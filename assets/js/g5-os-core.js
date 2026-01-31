@@ -400,6 +400,21 @@ const G5OS = {
             document.getElementById('contextFileInput').click();
         });
 
+        // ============================
+        // BOOT & SYSTEM ACCESS (CRITICAL)
+        // ============================
+        const bootBtn = document.getElementById('boot-btn');
+        if (bootBtn) {
+            bootBtn.addEventListener('click', () => {
+                console.log('[SYSTEM] BOOT OVERRIDE INITIATED');
+                this.unlockSystem();
+            });
+        } else {
+             console.warn('[SYSTEM] BOOT BTN NOT FOUND - AUTO-UNLOCKING');
+             // Fallback if button missing in DOM
+             setTimeout(() => this.unlockSystem(), 2000);
+        }
+
         document.getElementById('contextFileInput')?.addEventListener('change', (e) => {
             this.handleContextFileUpload(e.target.files);
             e.target.value = '';
